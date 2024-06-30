@@ -36,7 +36,7 @@ class NewMatchPageTestCase(TestCase):
         old_match_count = Match.objects.count()
         self.client.post(reverse('matchmaking:new_match'), {
             'title': 'new game',
-            'map': 'autumn'
+            'board_map': 'autumn'
         })
         new_match_count = Match.objects.count()
         self.assertEqual(new_match_count, old_match_count+1)
@@ -46,7 +46,7 @@ class NewMatchPageTestCase(TestCase):
         old_match_count = Match.objects.count()
         self.client.post(reverse('matchmaking:new_match'), {
             'title': 'new game',
-            'map': 'invalid'
+            'board_map': 'invalid'
         })
         new_match_count = Match.objects.count()
         self.assertEqual(new_match_count, old_match_count)

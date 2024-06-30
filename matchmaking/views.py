@@ -50,10 +50,10 @@ def new_match(request):
         match_form = MatchForm(request.POST)
         if match_form.is_valid():
             title = match_form.cleaned_data['title']
-            map = match_form.cleaned_data['map']
+            board_map = match_form.cleaned_data['board_map']
             closed = match_form.cleaned_data['closed']
             match = Match.objects.create(title = title,
-                                         map = map,
+                                         board_map = board_map,
                                          closed = closed)
             if (closed):
                 match.closed_at = match.created_at
