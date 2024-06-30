@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY',
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('ROOTLEAGUE_ENV') != 'PRODUCTION')
 
-ALLOWED_HOSTS = [os.environ.get('ROOTLEAGUE_ALLOWED_HOSTS').split(' ')]
+ALLOWED_HOSTS = os.environ.get('ROOTLEAGUE_ALLOWED_HOSTS', '').split(' ')
 
 
 # Application definition
