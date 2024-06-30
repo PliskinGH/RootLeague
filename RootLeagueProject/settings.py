@@ -28,7 +28,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY',
                         'cfc=c8^234om(oe6@2y(tvft%n+_94zmk#zp5!8=e1u2+x$vzl')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ.get('ROOTLEAGUE_ENV') != 'PRODUCTION')
+ROOTLEAGUE_DEBUG_GETENV = os.environ.get('ROOTLEAGUE_DEBUG')
+DEBUG = (ROOTLEAGUE_DEBUG_GETENV is not None and ROOTLEAGUE_DEBUG_GETENV != "False")
 
 ALLOWED_HOSTS = os.environ.get('ROOTLEAGUE_ALLOWED_HOSTS', '').split(' ')
 
