@@ -30,6 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY',
 # SECURITY WARNING: don't run with debug turned on in production!
 ROOTLEAGUE_DEBUG_GETENV = os.environ.get('ROOTLEAGUE_DEBUG')
 DEBUG = (ROOTLEAGUE_DEBUG_GETENV is not None and ROOTLEAGUE_DEBUG_GETENV != "False")
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = os.environ.get('ROOTLEAGUE_ALLOWED_HOSTS', '').split(' ')
 
