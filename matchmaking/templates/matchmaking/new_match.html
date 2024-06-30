@@ -1,0 +1,61 @@
+{% extends 'matchmaking/base.html' %}
+
+{% load static %}
+
+{% block content %}
+        <section class="page-section about-heading">
+            <div class="container">
+                <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="{% static 'matchmaking/assets/img/about.jpg' %}" alt="..." />
+                <div class="about-heading-content">
+                    <div class="row">
+                        <div class="col-xl-9 col-lg-10 mx-auto">
+                            <div class="bg-medium rounded p-5">
+                                <h2 class="section-heading mb-4">
+                                    <span class="section-heading-upper">New match</span>
+                                    <span class="section-heading-lower">Form</span>
+                                </h2>
+                                <form class="form-inline" action="{% url 'matchmaking:new_match' %}" method="post">
+                                  {% csrf_token %}
+                                  
+                                  <div class="form-group  {% if match_form.title.errors %}has-warning has-feedback{% endif %}">
+                                    <label for="{{ match_form.title.id_for_label }}" class="control-label">Title</label>
+                                    {{ match_form.title }}
+                                  </div>
+                                  <div class="form-group  {% if match_form.map.errors %}has-warning has-feedback{% endif %}">
+                                    <label for="{{ match_form.map.id_for_label }}" class="control-label">Map</label>
+                                    {{ match_form.board_map }}
+                                  </div>
+                                  <div class="form-group  {% if match_form.closed.errors %}has-warning has-feedback{% endif %}">
+                                    <label for="{{ match_form.closed.id_for_label }}" class="control-label">Closed</label>
+                                    {{ match_form.closed }}
+                                  </div>
+                                  
+                                  {{ participants_formset.as_p }}
+                                
+                                  <button type="submit" class="btn btn-success">Start</button>
+                                </form> 
+                                {% if match_errors %}
+                                <div>
+                                  {% for key, error in match_errors %}
+                                  {% autoescape off %}
+                                    {{ error }}
+                                  {% endautoescape %}
+                                  {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if participants_errors %}
+                                <div>
+                                  {% for key, error in participants_errors %}
+                                  {% autoescape off %}
+                                    {{ error }}
+                                  {% endautoescape %}
+                                  {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}

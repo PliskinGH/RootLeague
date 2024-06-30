@@ -1,0 +1,7 @@
+__pycache__/
+RootLeagueProject/__pycache__/
+matchmaking/__pycache__/
+matchmaking/migrations/__pycache__/
+misc/__pycache__/
+misc/migrations/__pycache__/
+.env
