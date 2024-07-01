@@ -16,6 +16,8 @@ import dj_database_url
 
 load_dotenv()
 
+ROOTLEAGUE_ENV = os.environ.get('ROOTLEAGUE_ENV')
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -29,8 +31,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY',
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ROOTLEAGUE_DEBUG_GETENV = os.environ.get('ROOTLEAGUE_DEBUG')
-DEBUG = (ROOTLEAGUE_DEBUG_GETENV is not None and ROOTLEAGUE_DEBUG_GETENV != "False")
-DEBUG_PROPAGATE_EXCEPTIONS = True
+if (ROOTLEAGUE_DEBUG_GETENV == "False" or ROOTLEAGUE_DEBUG_GETENV == "0"):
+    DEBUG = False
+elif (ROOTLEAGUE_DEBUG_GETENV == "True" or ROOTLEAGUE_DEBUG_GETENV == "1"):
+    DEBUG = True
+elif (ROOTLEAGUE_ENV == 'PRODUCTION' or ROOTLEAGUE_ENV == 'TEST'):
+    DEBUG = False
+else:
+    DEBUG = True
+
+DEBUG_PROPAGATE_EXCEPTIONS = (os.environ.get('ROOTLEAGUE_EXCEPTIONS') in ['True', '1'])
 
 ALLOWED_HOSTS = os.environ.get('ROOTLEAGUE_ALLOWED_HOSTS', '').split(' ')
 
@@ -154,7 +164,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if os.environ.get('ROOTLEAGUE_ENV') == 'PRODUCTION':
+if ROOTLEAGUE_ENV == 'PRODUCTION':
     # Static files settings
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
