@@ -84,8 +84,8 @@ def new_match(request):
     else:
         match_form = MatchForm()
         participants_formset = ParticipantsFormSet()
-    context['match_form'] = match_form
-    context['participants_formset'] = participants_formset
+        context['match_form'] = match_form
+        context['participants_formset'] = participants_formset
     return render(request, 'matchmaking/new_match.html', context)
 
 def search(request):

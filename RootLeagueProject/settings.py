@@ -30,10 +30,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY',
                         'cfc=c8^234om(oe6@2y(tvft%n+_94zmk#zp5!8=e1u2+x$vzl')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ROOTLEAGUE_DEBUG_GETENV = os.environ.get('ROOTLEAGUE_DEBUG')
-if (ROOTLEAGUE_DEBUG_GETENV == "False" or ROOTLEAGUE_DEBUG_GETENV == "0"):
+ROOTLEAGUE_DEBUG = os.environ.get('ROOTLEAGUE_DEBUG')
+if (ROOTLEAGUE_DEBUG == "False" or ROOTLEAGUE_DEBUG == "0"):
     DEBUG = False
-elif (ROOTLEAGUE_DEBUG_GETENV == "True" or ROOTLEAGUE_DEBUG_GETENV == "1"):
+elif (ROOTLEAGUE_DEBUG == "True" or ROOTLEAGUE_DEBUG == "1"):
     DEBUG = True
 elif (ROOTLEAGUE_ENV == 'PRODUCTION' or ROOTLEAGUE_ENV == 'TEST'):
     DEBUG = False
@@ -79,6 +79,8 @@ if DEBUG:
     MIDDLEWARE += [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
     ]
+DEBUG_TOOLBAR_CONFIG = {}
+DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False
 
 INTERNAL_IPS = [
     # ...

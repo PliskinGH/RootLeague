@@ -42,11 +42,11 @@ class NewMatchPageTestCase(TestCase):
         self.assertEqual(new_match_count, old_match_count+1)
 
     # test that a new match is not made
-    # def test_new_match_is_not_registered(self):
-    #     old_match_count = Match.objects.count()
-    #     self.client.post(reverse('matchmaking:new_match'), {
-    #         'title': 'new game',
-    #         'board_map': 'invalid'
-    #     })
-    #     new_match_count = Match.objects.count()
-    #     self.assertEqual(new_match_count, old_match_count)
+    def test_new_match_is_not_registered(self):
+        old_match_count = Match.objects.count()
+        self.client.post(reverse('matchmaking:new_match'), {
+            'title': 'new game',
+            'board_map': 'test'
+        })
+        new_match_count = Match.objects.count()
+        self.assertEqual(new_match_count, old_match_count)
