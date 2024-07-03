@@ -8,7 +8,7 @@
                 <div class="about-heading-content">
                     <div class="row">
                         <div class="col-xl-9 col-lg-10 mx-auto">
-                            <div class="bg-medium rounded p-5">
+                            <div class="bg-faded rounded p-5">
                                 <h2 class="section-heading mb-4">
                                     <span class="section-heading-upper">New match</span>
                                     <span class="section-heading-lower">Form</span>
@@ -17,21 +17,36 @@
                                   {% csrf_token %}
                                   
                                   <div class="form-group  {% if match_form.title.errors %}has-warning has-feedback{% endif %}">
-                                    <label for="{{ match_form.title.id_for_label }}" class="control-label">Title</label>
-                                    {{ match_form.title }}
+                                    {{ match_form.title.as_field_group }}
                                   </div>
                                   <div class="form-group  {% if match_form.board_map.errors %}has-warning has-feedback{% endif %}">
-                                    <label for="{{ match_form.board_map.id_for_label }}" class="control-label">Map</label>
+                                    {{ match_form.board_map.label_tag }}
                                     {{ match_form.board_map }}
                                   </div>
                                   <div class="form-group  {% if match_form.closed.errors %}has-warning has-feedback{% endif %}">
-                                    <label for="{{ match_form.closed.id_for_label }}" class="control-label">Closed</label>
+                                    {{ match_form.closed.label_tag }}
                                     {{ match_form.closed }}
                                   </div>
                                   
-                                  {{ participants_formset.as_p }}
+                                  <div class="form-group">
+                                      {{ participants_formset.management_form }}
+                                      <table>
+                                          <tr>
+                                          {% for field in participants_formset.0 %}
+                                              <th scope="col">{{ field.label_tag }}</th>
+                                          {% endfor %}
+                                          </tr>
+                                      {% for participant_form in participants_formset %}
+                                          <tr>
+                                          {% for field in participant_form %}
+                                              <td>{{ field }}</td>
+                                          {% endfor %}
+                                          </tr>
+                                      {% endfor %}
+                                      </table>
+                                  </div>
                                 
-                                  <button type="submit" class="btn btn-success">Start</button>
+                                  <button type="submit" class="btn btn-success">Register match</button>
                                 </form> 
                                 {% if match_errors %}
                                 <div>

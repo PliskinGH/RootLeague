@@ -61,6 +61,7 @@ def new_match(request):
             participants_formset = ParticipantsFormSet(request.POST,
                                                        instance=match)
             if (participants_formset.is_valid()):
+                participants=[]
                 for form in participants_formset.forms:
                     player = form.cleaned_data['player']
                     faction = form.cleaned_data['faction']
@@ -77,6 +78,18 @@ def new_match(request):
                                                              turn_order = turn_order,
                                                              )
                     match.participants.add(participant)
+                    participants.append(participant)
+                index_participant = 0
+                for form in participants_formset.forms:
+                    index_participant += 1
+                    index_coalitioned = form.cleaned_data['coalitioned_player']
+                    if (not(index_coalitioned in [None, ''])):
+                        index_coalitioned = int(index_coalitioned)
+                        participant = participants[index_participant-1]
+                        coalitioned_player = participants[index_coalitioned-1]
+                        if (coalitioned_player is not None):
+                            participant.coalition = coalitioned_player
+                            participant.save()
                 match.save()
             return match_details(request, match.id)
         else:

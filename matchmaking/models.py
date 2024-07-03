@@ -57,6 +57,17 @@ MAPS = [
     (MAP_LAKE, "Lake"),
     ]
 
+SUIT_BIRD = "bird"
+SUIT_FOX = "fox"
+SUIT_MOUSE = "mouse"
+SUIT_RABBIT = "rabbit"
+DOMINANCE_SUITS = [
+    (SUIT_BIRD, "Bird dominance"),
+    (SUIT_FOX, "Fox dominance"),
+    (SUIT_MOUSE, "Mouse dominance"),
+    (SUIT_RABBIT, "Rabbit dominance"),
+    ]
+
 TURN_ORDERS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
     
 # Create your models here.
@@ -70,7 +81,7 @@ class Match(models.Model):
     title = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     closed_at = models.DateTimeField(blank=True, null=True, default=timezone.now)
-    closed = models.BooleanField(default=False)
+    closed = models.BooleanField(default=True)
     
     board_map = models.CharField(max_length=20, choices=MAPS, blank=True)
     random_suits = models.BooleanField(default=True, blank=True, null=True)
@@ -97,7 +108,7 @@ class Participant(models.Model):
     if the participant is already registered.
     """
     player = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True,
-                               blank=False, related_name="participations")
+                               blank=True, related_name="participations")
     match = models.ForeignKey(Match, on_delete=models.CASCADE,
                               related_name="participants")
     
@@ -106,7 +117,10 @@ class Participant(models.Model):
     
     winner = models.BooleanField(blank=True, null=True)
     score = models.IntegerField(blank=True, null=True)
-    dominance = models.BooleanField(blank=True, null=True)
+    dominance = models.CharField(max_length=100, choices=DOMINANCE_SUITS,
+                                 blank=True)
+    coalition = models.OneToOneField('Participant', on_delete=models.SET_NULL,
+                                     null=True, blank=True)
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
                                                   blank=True, null=True)

@@ -8,7 +8,7 @@ class Player(AbstractUser):
     """
     Model for players registered in the league database.
     """
-    ig_name = models.CharField(max_length=200)
+    ig_name = models.CharField(max_length=200, blank=True)
     ig_id = models.IntegerField(blank=True, null=True)
     
     def __str__(self):
@@ -16,7 +16,7 @@ class Player(AbstractUser):
         if (self.ig_name not in [None, ""]):
             result = self.ig_name
             if (self.ig_id is not None):
-                result = result + "#" + str(self.ig_id)
+                result = result + "+" + str(self.ig_id)
         if (result == ""):
             result = super().__str__()
         return result
