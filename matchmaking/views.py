@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+# from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
 
 from .models import Match, Participant
 from .forms import MatchForm, ParticipantsFormSet
@@ -7,31 +10,19 @@ from .forms import MatchForm, ParticipantsFormSet
 # Create your views here.
 
 def index(request):
-    matchs = Match.objects.all().order_by('-created_at')[:12]
+    matchs = Match.objects.all().order_by('-created_at')[:5]
     return listing(request, matchs=matchs,
-                   title="Last matches", paginate=False)
+                   title="Last matches", number_per_page=5)
 
-def listing(request, matchs = None, title = "All matches",
-            number_per_page = 3, paginate = True):
+def listing(request, matchs = None, title = "All games",
+            number_per_page = 10):
     if (matchs is None):
         matchs = Match.objects.all().order_by('-created_at')
-    if paginate:
-        paginator = Paginator(matchs, number_per_page)
-        page = request.GET.get('page')
-        try:
-            matchs = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            matchs = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            matchs = paginator.page(paginator.num_pages)
-    context = {
-        "list_title" : title,
-        'matchs': matchs,
-        'paginate': paginate,
-    }
-    return render(request, 'matchmaking/index.html', context)
+    return ListView.as_view(model=Match,
+                            queryset=matchs,
+                            paginate_by=number_per_page,
+                            extra_context={'title' : title}
+                     )(request)
 
 def match_details(request, match_id):
     match = get_object_or_404(Match, pk=match_id)
@@ -44,6 +35,7 @@ def match_details(request, match_id):
     }
     return render(request, 'matchmaking/match_details.html', context)
 
+@login_required
 def new_match(request):
     context = {}
     if request.method == 'POST':
@@ -106,12 +98,9 @@ def search(request):
     if not query:
         matchs = Match.objects.all()
     else:
-        matchs = Match.objects.filter(title__icontains=query)
-    if not matchs.exists():
-        matchs = Match.objects.filter(participants__player__ig_name__icontains=query)
-    if not matchs.exists():
-        matchs = Match.objects.filter(participants__player__ig_id__icontains=query)
+        matchs = Match.objects.filter(Q(title__icontains=query) |
+                                      Q(participants__player__in_game_name__icontains=query))
     if matchs.exists():
         matchs = matchs.order_by('-created_at')
     title = "Search results for the request %s"%query
-    return listing(request, matchs=matchs, title=title, paginate=False)
+    return listing(request, matchs=matchs, title=title)

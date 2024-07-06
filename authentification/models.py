@@ -4,19 +4,33 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+class Role(models.Model):
+    """
+    Model for roles to give players, such as "Champion", "Beginner", etc.
+    """
+    name = models.CharField(max_length=200, blank=False)
+    icon = models.ImageField(blank=True, null=True)
+    
+
 class Player(AbstractUser):
     """
     Model for players registered in the league database.
     """
-    ig_name = models.CharField(max_length=200, blank=True)
-    ig_id = models.IntegerField(blank=True, null=True)
+    discord_name = models.CharField(max_length=200, blank=True,
+                                    verbose_name="Discord Username")
+    in_game_name = models.CharField(max_length=200, blank=True,
+                                    verbose_name="In-game Username")
+    in_game_id = models.IntegerField(blank=True, null=True,
+                                     verbose_name="In-game ID")
+    roles = models.ManyToManyField(Role, related_name='players',
+                                   blank=True)
     
     def __str__(self):
         result = ""
-        if (self.ig_name not in [None, ""]):
-            result = self.ig_name
-            if (self.ig_id is not None):
-                result = result + "+" + str(self.ig_id)
+        if (self.in_game_name not in [None, ""]):
+            result = self.in_game_name
+            if (self.in_game_id not in [None, ""]):
+                result = result + "+" + str(self.in_game_id)
         if (result == ""):
             result = super().__str__()
         return result

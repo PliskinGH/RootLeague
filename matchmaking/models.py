@@ -86,6 +86,9 @@ class Match(models.Model):
     board_map = models.CharField(max_length=20, choices=MAPS, blank=True)
     random_suits = models.BooleanField(default=True, blank=True, null=True)
     
+    class Meta:
+        ordering = ['-created_at']
+    
     def __str__(self, mention_participants=True):
         result = ""
         if (self.title not in [None, ""]):

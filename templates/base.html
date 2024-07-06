@@ -35,12 +35,47 @@
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">Leaderboard</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">Faction stats</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">About</a></li>
+                        {%  if user.is_authenticated %}
+                        <li class="nav-item px-lg-4">
+                            <form method="post" action="{% url 'auth:logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Log out</button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li class="nav-item px-lg-4">
+                            <a class="nav-link text-uppercase" href="{% url 'auth:login' %}">Log in</a>
+                        </li>
+                        <li class="nav-item px-lg-4">
+                            <a class="nav-link text-uppercase" href="{% url 'auth:register' %}">Sign up</a>
+                        </li>
+                        {% endif %}
                     </ul>
+                    
                 </div>
             </div>
         </nav>
 
-{% block content %}{% endblock %}
+        <section class="page-section about-heading">
+            <div class="container">
+                <div class="about-heading-content">
+                    <div class="row">
+                        <div class="col-xl-9 col-lg-10 mx-auto">
+                            <div class="bg-faded rounded p-5">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="text-center alert alert-{{ message.tags }}">
+                                            {{ message|safe }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% block content %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         
         <footer class="footer text-faded text-center py-5">
             <div class="container"><p class="m-0 small">Copyright &copy; Your Website 2021</p></div>

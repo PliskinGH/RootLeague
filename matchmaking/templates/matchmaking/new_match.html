@@ -1,75 +1,43 @@
-{% extends 'matchmaking/base.html' %}
+{% extends 'base.html' %}
 
 {% load static %}
 
 {% block content %}
-        <section class="page-section about-heading">
-            <div class="container">
-                <div class="about-heading-content">
-                    <div class="row">
-                        <div class="col-xl-9 col-lg-10 mx-auto">
-                            <div class="bg-faded rounded p-5">
-                                <h2 class="section-heading mb-4">
-                                    <span class="section-heading-upper">New match</span>
-                                    <span class="section-heading-lower">Form</span>
-                                </h2>
-                                <form class="form-inline" action="{% url 'matchmaking:new_match' %}" method="post">
-                                  {% csrf_token %}
-                                  
-                                  <div class="form-group  {% if match_form.title.errors %}has-warning has-feedback{% endif %}">
-                                    {{ match_form.title.as_field_group }}
-                                  </div>
-                                  <div class="form-group  {% if match_form.board_map.errors %}has-warning has-feedback{% endif %}">
-                                    {{ match_form.board_map.label_tag }}
-                                    {{ match_form.board_map }}
-                                  </div>
-                                  <div class="form-group  {% if match_form.closed.errors %}has-warning has-feedback{% endif %}">
-                                    {{ match_form.closed.label_tag }}
-                                    {{ match_form.closed }}
-                                  </div>
-                                  
-                                  <div class="form-group">
-                                      {{ participants_formset.management_form }}
-                                      <table>
-                                          <tr>
-                                          {% for field in participants_formset.0 %}
-                                              <th scope="col">{{ field.label_tag }}</th>
-                                          {% endfor %}
-                                          </tr>
-                                      {% for participant_form in participants_formset %}
-                                          <tr>
-                                          {% for field in participant_form %}
-                                              <td>{{ field }}</td>
-                                          {% endfor %}
-                                          </tr>
-                                      {% endfor %}
-                                      </table>
-                                  </div>
-                                
-                                  <button type="submit" class="btn btn-success">Register match</button>
-                                </form> 
-                                {% if match_errors %}
-                                <div>
-                                  {% for key, error in match_errors %}
-                                  {% autoescape off %}
-                                    {{ error }}
-                                  {% endautoescape %}
-                                  {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if participants_errors %}
-                                <div>
-                                  {% for key, error in participants_errors %}
-                                  {% autoescape off %}
-                                    {{ error }}
-                                  {% endautoescape %}
-                                  {% endfor %}
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<h2 class="section-heading mb-4">
+    <span class="section-heading-upper">New match</span>
+    <span class="section-heading-lower">Form</span>
+</h2>
+<form class="form-inline" action="{% url 'matchmaking:new_match' %}" method="post">
+  {% csrf_token %}
+  
+  <div class="form-group  {% if match_form.title.errors %}has-warning has-feedback{% endif %}">
+    {{ match_form.title.as_field_group }}
+  </div>
+  <div class="form-group  {% if match_form.board_map.errors %}has-warning has-feedback{% endif %}">
+    {{ match_form.board_map.as_field_group }}
+  </div>
+  <div class="form-group  {% if match_form.closed.errors %}has-warning has-feedback{% endif %}">
+    {{ match_form.closed.as_field_group }}
+  </div>
+  
+  <div class="form-group">
+      {{ participants_formset.management_form }}
+      <table>
+          <tr>
+          {% for field in participants_formset.0 %}
+              <th scope="col">{{ field.label_tag }}</th>
+          {% endfor %}
+          </tr>
+      {% for participant_form in participants_formset %}
+          <tr>
+          {% for field in participant_form %}
+              <td>{{ field }}</td>
+          {% endfor %}
+          </tr>
+      {% endfor %}
+      </table>
+  </div>
+
+  <button type="submit" class="btn btn-secondary">Register match</button>
+</form> 
 {% endblock %}

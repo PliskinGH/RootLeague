@@ -8,4 +8,4 @@ from matchmaking.admin import ParticipationInline
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
     inlines = [ParticipationInline,] # list of participants in the match
-    search_fields = ['ig_name', 'email']
+    search_fields = ['username', 'in_game_name', 'email']

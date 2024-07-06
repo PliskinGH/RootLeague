@@ -93,7 +93,9 @@ ROOT_URLCONF = 'RootLeagueProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -151,6 +153,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Auth and user management
+LOGIN_URL = '/auth/'
+LOGIN_REDIRECT_URL = 'index'
 AUTH_USER_MODEL = 'authentification.Player'
 
 

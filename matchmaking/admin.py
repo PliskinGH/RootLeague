@@ -14,7 +14,10 @@ class AdminURLMixin(object):
             args=(obj.id,))
 
 # Register your models here.
-admin.site.register(Participant)
+
+@admin.register(Participant)
+class ParticipantAdmin(admin.ModelAdmin):
+    search_fields = ['player__username', 'player__in_game_name', 'player__email']
 
 class ParticipantInline(admin.TabularInline, AdminURLMixin):
     model = Participant

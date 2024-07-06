@@ -14,7 +14,8 @@ class MatchForm(ModelForm):
                   ]
 
 class ParticipantForm(ModelForm):
-    coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS)
+    coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,
+                                     label='Coalition with')
     
     class Meta:
         model = models.Participant

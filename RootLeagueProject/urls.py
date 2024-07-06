@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('matchmaking/', include('matchmaking.urls', namespace='matchmaking')),
     path('misc/', include('misc.urls', namespace='misc')),
+    path('auth/', include('authentification.urls', namespace='auth')),
     path('admin/', admin.site.urls),
 ]
 
