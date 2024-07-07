@@ -38,7 +38,7 @@ def match_detail(*args, **kwargs):
 @login_required
 def register_match(*args, **kwargs):
     return CreateView.as_view(model=Match,
-                              fields=('title', 'closed',
+                              fields=('title', 'closed', 'deck'
                                       'board_map', 'random_suits',
                                       )
                               )(*args, **kwargs)
@@ -49,34 +49,17 @@ def new_match(request):
     if request.method == 'POST':
         match_form = MatchForm(request.POST)
         if match_form.is_valid():
-            title = match_form.cleaned_data['title']
-            board_map = match_form.cleaned_data['board_map']
-            closed = match_form.cleaned_data['closed']
-            match = Match.objects.create(title = title,
-                                         board_map = board_map,
-                                         closed = closed)
-            if (closed):
+            match = match_form.save()
+            if (match.closed):
                 match.closed_at = match.created_at
                 match.save()
-            participants_formset = ParticipantsFormSet(request.POST,
-                                                       instance=match)
+            participants_formset = ParticipantsFormSet(request.POST)
             if (participants_formset.is_valid()):
                 participants=[]
                 for form in participants_formset.forms:
-                    player = form.cleaned_data.get('player')
-                    faction = form.cleaned_data.get('faction', '')
-                    winner = form.cleaned_data.get('winner')
-                    score = form.cleaned_data.get('score')
-                    dominance = form.cleaned_data.get('dominance', '')
-                    turn_order = form.cleaned_data.get('turn_order')
-                    participant = Participant.objects.create(match = match,
-                                                             player = player,
-                                                             faction = faction,
-                                                             winner = winner,
-                                                             score = score,
-                                                             dominance = dominance,
-                                                             turn_order = turn_order,
-                                                             )
+                    participant = form.save(commit=False)
+                    participant.match = match
+                    participant.save()
                     match.participants.add(participant)
                     participants.append(participant)
                 index_participant = 0

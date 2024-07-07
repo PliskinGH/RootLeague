@@ -32,7 +32,7 @@
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'matchmaking:listing' %}">Match list</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'matchmaking:new_match' %}">New match</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">Leaderboard</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'leaderboards:leaderboard' %}">Leaderboard</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">Faction stats</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">About</a></li>
                         {%  if user.is_authenticated %}

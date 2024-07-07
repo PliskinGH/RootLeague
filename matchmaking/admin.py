@@ -24,7 +24,7 @@ class ParticipantInline(admin.TabularInline, AdminURLMixin):
     extra = 0
     readonly_fields = ['player_link']
     fields = ['player', 'player_link', 'faction', 'turn_order',
-              'winner', 'score','dominance', 'coalition']
+              'game_score','dominance', 'coalition','league_score']
     def player_link(self, participant):
         if (participant.player is None):
             url = self.get_admin_url(participant)
@@ -37,7 +37,7 @@ class ParticipantInline(admin.TabularInline, AdminURLMixin):
 class ParticipationInline(ParticipantInline):
     readonly_fields = ['match_link']
     fields = ['match', 'match_link', 'faction', 'turn_order',
-              'winner', 'score', 'dominance', 'coalition']
+              'game_score', 'dominance', 'coalition','league_score']
     verbose_name = "Participation"
     verbose_name_plural = "Participations"
     def match_link(self, participant):

@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory, ChoiceField
+from django.forms import ModelForm, ChoiceField, formset_factory
 from . import models
 
 PLAYERS_SEATS = [(i,i) for i in range(1, models.MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
@@ -9,7 +9,9 @@ class MatchForm(ModelForm):
         model = models.Match
         fields = [
                    'title',
-                   'board_map', 
+                   'deck',
+                   'board_map',
+                   'random_suits',
                    'closed',
                   ]
 
@@ -23,18 +25,20 @@ class ParticipantForm(ModelForm):
             'turn_order',
             'player',
             'faction',
-            'winner',
-            'score',
-            'dominance'
+            'game_score',
+            'dominance',
+            'league_score'
             ]
         exclude = [
             'match',
             'coalition',
             ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["turn_order"].disabled = True
         
-ParticipantsFormSet = inlineformset_factory(models.Match, models.Participant,
-                                            form=ParticipantForm,
+ParticipantsFormSet = formset_factory(ParticipantForm,
                                             extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
                                             max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                            absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                            exclude=('match','coalition'))
+                                            absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH)

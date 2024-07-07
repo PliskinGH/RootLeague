@@ -13,8 +13,14 @@
   <div class="form-group  {% if match_form.title.errors %}has-warning has-feedback{% endif %}">
     {{ match_form.title.as_field_group }}
   </div>
+  <div class="form-group  {% if match_form.deck.errors %}has-warning has-feedback{% endif %}">
+    {{ match_form.deck.as_field_group }}
+  </div>
   <div class="form-group  {% if match_form.board_map.errors %}has-warning has-feedback{% endif %}">
     {{ match_form.board_map.as_field_group }}
+  </div>
+  <div class="form-group  {% if match_form.random_suits.errors %}has-warning has-feedback{% endif %}">
+    {{ match_form.random_suits.as_field_group }}
   </div>
   <div class="form-group  {% if match_form.closed.errors %}has-warning has-feedback{% endif %}">
     {{ match_form.closed.as_field_group }}

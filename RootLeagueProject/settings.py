@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentification',
     'matchmaking',
+    'leaderboards',
     'misc',
 ]
 

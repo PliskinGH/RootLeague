@@ -57,6 +57,13 @@ MAPS = [
     (MAP_LAKE, "Lake"),
     ]
 
+DECK_STANDARD = "standard"
+DECK_EP = "e&p"
+DECKS = [
+    (DECK_STANDARD, "Standard"),
+    (DECK_EP, "Exiles and Partisans"),
+    ]
+
 SUIT_BIRD = "bird"
 SUIT_FOX = "fox"
 SUIT_MOUSE = "mouse"
@@ -66,6 +73,15 @@ DOMINANCE_SUITS = [
     (SUIT_FOX, "Fox dominance"),
     (SUIT_MOUSE, "Mouse dominance"),
     (SUIT_RABBIT, "Rabbit dominance"),
+    ]
+
+SCORE_WIN = 1.0
+SCORE_COALITION = 0.5
+SCORE_LOSS = 0.0
+SCORES = [
+    (SCORE_WIN, 1),
+    (SCORE_COALITION, 0.5),
+    (SCORE_LOSS, 0),
     ]
 
 TURN_ORDERS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
@@ -83,7 +99,10 @@ class Match(models.Model):
     closed_at = models.DateTimeField(blank=True, null=True, default=timezone.now)
     closed = models.BooleanField(default=True, db_default=True)
     
-    board_map = models.CharField(max_length=20, choices=MAPS, blank=True)
+    deck = models.CharField(max_length=200, choices=DECKS,
+                            blank=True, default=DECK_EP)
+    board_map = models.CharField(max_length=20, choices=MAPS, blank=True,
+                                 verbose_name="Map")
     random_suits = models.BooleanField(default=True, blank=True, null=True)
     
     class Meta:
@@ -118,12 +137,14 @@ class Participant(models.Model):
     faction = models.CharField(max_length=100, choices=FACTIONS,
                                blank=True)
     
-    winner = models.BooleanField(blank=True, null=True)
-    score = models.IntegerField(blank=True, null=True)
+    game_score = models.IntegerField(blank=True, null=True)
     dominance = models.CharField(max_length=100, choices=DOMINANCE_SUITS,
                                  blank=True)
     coalition = models.OneToOneField('Participant', on_delete=models.SET_NULL,
                                      null=True, blank=True)
+    league_score = models.DecimalField(max_digits=2, decimal_places=1,
+                                       choices = SCORES,
+                                       blank=True, null=True)
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
                                                   blank=True, null=True)

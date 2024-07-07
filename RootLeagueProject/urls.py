@@ -24,6 +24,7 @@ urlpatterns = [
     path('matchmaking/', include('matchmaking.urls', namespace='matchmaking')),
     path('misc/', include('misc.urls', namespace='misc')),
     path('auth/', include('authentification.urls', namespace='auth')),
+    path('leaderboards/', include('leaderboards.urls', namespace='leaderboards')),
     path('admin/', admin.site.urls),
 ]
 

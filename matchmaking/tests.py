@@ -39,11 +39,10 @@ class NewMatchPageTestCase(TestCase):
     # test that a new match is made
     def test_new_match_is_registered(self):
         old_match_count = models.Match.objects.count()
-        response = self.client.post(reverse('matchmaking:new_match'), {
+        self.client.post(reverse('matchmaking:new_match'), {
             'title': 'new game',
             'board_map': models.MAP_AUTUMN
         })
-        print(response)
         new_match_count = models.Match.objects.count()
         self.assertEqual(new_match_count, old_match_count+1)
 
