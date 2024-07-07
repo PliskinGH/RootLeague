@@ -6,7 +6,8 @@ app_name = "matchmaking"
 
 urlpatterns = [
     path('', views.listing, name='listing'),
-    path('<int:match_id>/', views.match_details, name='match_details'),
+    path('<int:match_id>/', views.match_detail, name='match_detail'),
     path('new_match', views.new_match, name='new_match'),
+    path('register', views.register_match, name='register'),
     path('search/', views.search, name='search'),
 ]

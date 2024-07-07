@@ -20,12 +20,12 @@ class ParticipantForm(ModelForm):
     class Meta:
         model = models.Participant
         fields = [
+            'turn_order',
             'player',
             'faction',
             'winner',
             'score',
-            'dominance',
-            'turn_order'
+            'dominance'
             ]
         exclude = [
             'match',
@@ -34,6 +34,7 @@ class ParticipantForm(ModelForm):
         
 ParticipantsFormSet = inlineformset_factory(models.Match, models.Participant,
                                             form=ParticipantForm,
-                                            extra=4,
+                                            extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
                                             max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
+                                            absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
                                             exclude=('match','coalition'))

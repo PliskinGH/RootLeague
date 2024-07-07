@@ -8,7 +8,7 @@
 {% include 'matchmaking/search_form.html' %}
 <ul>
 {% for match in page_obj  %}
-    <li><a href="{% url 'matchmaking:match_details' match_id=match.id %}">{{ match.title }}</a></li>
+    <li><a href="{% url 'matchmaking:match_detail' match_id=match.id %}">{{ match.title }}</a></li>
 {% endfor %}
 </ul>
 <div class="clearfix"></div>

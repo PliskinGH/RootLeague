@@ -81,7 +81,7 @@ class Match(models.Model):
     title = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     closed_at = models.DateTimeField(blank=True, null=True, default=timezone.now)
-    closed = models.BooleanField(default=True)
+    closed = models.BooleanField(default=True, db_default=True)
     
     board_map = models.CharField(max_length=20, choices=MAPS, blank=True)
     random_suits = models.BooleanField(default=True, blank=True, null=True)

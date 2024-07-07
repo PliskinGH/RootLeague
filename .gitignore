@@ -6,3 +6,4 @@ misc/__pycache__/
 misc/migrations/__pycache__/
 .env
 dumps/
+.spyproject/

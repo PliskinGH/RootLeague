@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView
 
 from .models import Match, Participant
 from .forms import MatchForm, ParticipantsFormSet
@@ -24,16 +24,24 @@ def listing(request, matchs = None, title = "All games",
                             extra_context={'title' : title}
                      )(request)
 
-def match_details(request, match_id):
-    match = get_object_or_404(Match, pk=match_id)
-    participants = [participant.player.__str__()
-                    for participant in match.participants.all()]
-    participants_names = ", ".join(participants)
-    context = {
-        'match_title': match.title,
-        'participants_names': participants_names,
-    }
-    return render(request, 'matchmaking/match_details.html', context)
+class MatchDetailView(DetailView):
+    model = Match
+    queryset = Match.objects.all()
+    pk_url_kwarg='match_id'
+    
+    def post(self, *args, **kwargs):
+        return self.get(*args, **kwargs)
+
+def match_detail(*args, **kwargs):
+    return MatchDetailView.as_view()(*args, **kwargs)
+
+@login_required
+def register_match(*args, **kwargs):
+    return CreateView.as_view(model=Match,
+                              fields=('title', 'closed',
+                                      'board_map', 'random_suits',
+                                      )
+                              )(*args, **kwargs)
 
 @login_required
 def new_match(request):
@@ -55,12 +63,12 @@ def new_match(request):
             if (participants_formset.is_valid()):
                 participants=[]
                 for form in participants_formset.forms:
-                    player = form.cleaned_data['player']
-                    faction = form.cleaned_data['faction']
-                    winner = form.cleaned_data['winner']
-                    score = form.cleaned_data['score']
-                    dominance = form.cleaned_data['dominance']
-                    turn_order = form.cleaned_data['turn_order']
+                    player = form.cleaned_data.get('player')
+                    faction = form.cleaned_data.get('faction', '')
+                    winner = form.cleaned_data.get('winner')
+                    score = form.cleaned_data.get('score')
+                    dominance = form.cleaned_data.get('dominance', '')
+                    turn_order = form.cleaned_data.get('turn_order')
                     participant = Participant.objects.create(match = match,
                                                              player = player,
                                                              faction = faction,
@@ -74,7 +82,7 @@ def new_match(request):
                 index_participant = 0
                 for form in participants_formset.forms:
                     index_participant += 1
-                    index_coalitioned = form.cleaned_data['coalitioned_player']
+                    index_coalitioned = form.cleaned_data.get('coalitioned_player')
                     if (not(index_coalitioned in [None, ''])):
                         index_coalitioned = int(index_coalitioned)
                         participant = participants[index_participant-1]
@@ -83,12 +91,16 @@ def new_match(request):
                             participant.coalition = coalitioned_player
                             participant.save()
                 match.save()
-            return match_details(request, match.id)
+            return match_detail(request, match_id=match.id)
         else:
             context['match_errors'] = match_form.errors.items()
     else:
         match_form = MatchForm()
-        participants_formset = ParticipantsFormSet()
+        participants_formset = ParticipantsFormSet(initial=[
+                                { 'turn_order': 1},
+                                { 'turn_order': 2},
+                                { 'turn_order': 3},
+                                { 'turn_order': 4},])
         context['match_form'] = match_form
         context['participants_formset'] = participants_formset
     return render(request, 'matchmaking/new_match.html', context)
