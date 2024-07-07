@@ -18,6 +18,7 @@ class AdminURLMixin(object):
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
     search_fields = ['player__username', 'player__in_game_name', 'player__email']
+    autocomplete_fields = ['player']
 
 class ParticipantInline(admin.TabularInline, AdminURLMixin):
     model = Participant
@@ -25,6 +26,7 @@ class ParticipantInline(admin.TabularInline, AdminURLMixin):
     readonly_fields = ['player_link']
     fields = ['player', 'player_link', 'faction', 'turn_order',
               'game_score','dominance', 'coalition','league_score']
+    autocomplete_fields = ['player']
     def player_link(self, participant):
         if (participant.player is None):
             url = self.get_admin_url(participant)

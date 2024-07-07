@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView
 
-from .models import Match, Participant
+from .models import Match
 from .forms import MatchForm, ParticipantsFormSet
 
 # Create your views here.

@@ -1,4 +1,7 @@
 from django.forms import ModelForm, ChoiceField, formset_factory
+from django.contrib.admin.widgets import AutocompleteSelect
+from django.contrib import admin
+
 from . import models
 
 PLAYERS_SEATS = [(i,i) for i in range(1, models.MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
@@ -33,6 +36,9 @@ class ParticipantForm(ModelForm):
             'match',
             'coalition',
             ]
+        widgets = {
+            'player' : AutocompleteSelect(models.Participant._meta.get_field('player'), admin.site)
+            }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
