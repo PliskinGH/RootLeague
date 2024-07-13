@@ -1,7 +1,7 @@
 from django.forms import ModelForm, ChoiceField, BooleanField, formset_factory
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.contrib import admin
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from . import models
 
