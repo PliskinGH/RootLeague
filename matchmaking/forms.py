@@ -1,6 +1,7 @@
-from django.forms import ModelForm, ChoiceField, formset_factory
+from django.forms import ModelForm, ChoiceField, BooleanField, formset_factory
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.contrib import admin
+from django.utils.translation import gettext as _
 
 from . import models
 
@@ -8,6 +9,8 @@ PLAYERS_SEATS = [(i,i) for i in range(1, models.MAX_NUMBER_OF_PLAYERS_IN_MATCH +
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 
 class MatchForm(ModelForm):
+    closed = BooleanField(required=False, initial=True, label=_("Closed"))
+    
     class Meta:
         model = models.Match
         fields = [
@@ -15,12 +18,11 @@ class MatchForm(ModelForm):
                    'deck',
                    'board_map',
                    'random_suits',
-                   'closed',
                   ]
 
 class ParticipantForm(ModelForm):
     coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,
-                                     label='Coalition with')
+                                     label=_('Coalition with'))
     
     class Meta:
         model = models.Participant
@@ -45,6 +47,6 @@ class ParticipantForm(ModelForm):
         self.fields["turn_order"].disabled = True
         
 ParticipantsFormSet = formset_factory(ParticipantForm,
-                                            extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                            max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                            absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH)
+                                      extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
+                                      max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
+                                      absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH)

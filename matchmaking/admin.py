@@ -17,7 +17,8 @@ class AdminURLMixin(object):
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    search_fields = ['player__username', 'player__in_game_name', 'player__email']
+    search_fields = ['player__username', 'player__in_game_name',
+                     'player__discord_name', 'player__email']
     autocomplete_fields = ['player']
 
 class ParticipantInline(admin.TabularInline, AdminURLMixin):
@@ -49,6 +50,10 @@ class ParticipationInline(ParticipantInline):
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
     inlines = [ParticipantInline,] # list of participants in the match
-    search_fields = ['title']
-    list_filter = ['created_at', 'closed', 'closed_at', 'board_map']
-    readonly_fields = ["created_at"]
+    search_fields = ['title', 'participants__player__username',
+                     'participants__player__in_game_name',
+                     'participants__player__discord_name',
+                     'participants__player__email']
+    list_filter = ['date_registered', 'date_closed',
+                   'board_map', 'deck', 'random_suits']
+    readonly_fields = ["date_registered"]

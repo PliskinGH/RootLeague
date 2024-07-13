@@ -10,14 +10,14 @@ from .forms import MatchForm, ParticipantsFormSet
 # Create your views here.
 
 def index(request):
-    matchs = Match.objects.all().order_by('-created_at')[:5]
+    matchs = Match.objects.all().order_by('-date_registered')[:5]
     return listing(request, matchs=matchs,
                    title="Last matches", number_per_page=5)
 
 def listing(request, matchs = None, title = "All games",
             number_per_page = 10):
     if (matchs is None):
-        matchs = Match.objects.all().order_by('-created_at')
+        matchs = Match.objects.all().order_by('-date_registered')
     return ListView.as_view(model=Match,
                             queryset=matchs,
                             paginate_by=number_per_page,
@@ -38,7 +38,7 @@ def match_detail(*args, **kwargs):
 @login_required
 def register_match(*args, **kwargs):
     return CreateView.as_view(model=Match,
-                              fields=('title', 'closed', 'deck'
+                              fields=('title', 'deck',
                                       'board_map', 'random_suits',
                                       )
                               )(*args, **kwargs)
@@ -50,8 +50,8 @@ def new_match(request):
         match_form = MatchForm(request.POST)
         if match_form.is_valid():
             match = match_form.save()
-            if (match.closed):
-                match.closed_at = match.created_at
+            if (match_form.cleaned_data['closed']):
+                match.date_closed = match.date_registered
                 match.save()
             participants_formset = ParticipantsFormSet(request.POST)
             if (participants_formset.is_valid()):
@@ -96,6 +96,6 @@ def search(request):
         matchs = Match.objects.filter(Q(title__icontains=query) |
                                       Q(participants__player__in_game_name__icontains=query))
     if matchs.exists():
-        matchs = matchs.order_by('-created_at')
+        matchs = matchs.order_by('-date_registered')
     title = "Search results for the request %s"%query
     return listing(request, matchs=matchs, title=title)

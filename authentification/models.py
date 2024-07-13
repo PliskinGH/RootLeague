@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext as _
 
 # Create your models here.
 
@@ -8,22 +9,26 @@ class Role(models.Model):
     """
     Model for roles to give players, such as "Champion", "Beginner", etc.
     """
-    name = models.CharField(max_length=200, blank=False)
-    icon = models.ImageField(blank=True, null=True)
+    name = models.CharField(max_length=200, blank=False,
+                            verbose_name=_('name'))
+    icon = models.ImageField(blank=True, null=True,
+                             verbose_name=_('icon'))
     
 
 class Player(AbstractUser):
     """
     Model for players registered in the league database.
     """
+    email = models.EmailField(_('email address'), unique=True)
     discord_name = models.CharField(max_length=200, blank=True,
-                                    verbose_name="Discord Username")
+                                    verbose_name=_("discord username"))
     in_game_name = models.CharField(max_length=200, blank=True,
-                                    verbose_name="In-game Username")
+                                    verbose_name=_("in-game Username"))
     in_game_id = models.IntegerField(blank=True, null=True,
-                                     verbose_name="In-game ID")
+                                     verbose_name=_("in-game ID"))
     roles = models.ManyToManyField(Role, related_name='players',
-                                   blank=True)
+                                   blank=True,
+                                   verbose_name=_('roles'))
     
     def __str__(self):
         result = ""
