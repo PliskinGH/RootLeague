@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-13 16:17+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\authentification\models.py:13
+msgid "name"
+msgstr "nom"
+
+#: .\authentification\models.py:15
+msgid "icon"
+msgstr "icone"
+
+#: .\authentification\models.py:22
+msgid "email address"
+msgstr "adresse e-mail"
+
+#: .\authentification\models.py:24
+msgid "discord username"
+msgstr "nom discord"
+
+#: .\authentification\models.py:26
+msgid "in-game Username"
+msgstr "nom dans le jeu"
+
+#: .\authentification\models.py:28
+msgid "in-game ID"
+msgstr "ID dans le jeu"
+
+#: .\authentification\models.py:31
+msgid "roles"
+msgstr ""

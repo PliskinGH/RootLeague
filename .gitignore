@@ -7,3 +7,4 @@ misc/migrations/__pycache__/
 .env
 dumps/
 .spyproject/
+**/*.mo

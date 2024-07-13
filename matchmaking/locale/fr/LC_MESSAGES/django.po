@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-13 16:17+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\matchmaking\forms.py:12
+msgid "Closed"
+msgstr "Terminé"
+
+#: .\matchmaking\forms.py:25
+msgid "Coalition with"
+msgstr "Coalition avec"
+
+#: .\matchmaking\models.py:29
+msgid "Marquise de Cat"
+msgstr "Marquise de Chat"
+
+#: .\matchmaking\models.py:30
+msgid "Eyrie Dynasties"
+msgstr "Dynastie de la Canopée"
+
+#: .\matchmaking\models.py:31
+msgid "Woodland Alliance"
+msgstr "Alliance de la forêt"
+
+#: .\matchmaking\models.py:32
+msgid "Riverfolk"
+msgstr "Compagnie de la rivière"
+
+#: .\matchmaking\models.py:33
+msgid "Lizard Cult"
+msgstr "Culte des lézards"
+
+#: .\matchmaking\models.py:34
+msgid "Underground Duchy"
+msgstr "Duché souterrain"
+
+#: .\matchmaking\models.py:35
+msgid "Corvid Conspiracy"
+msgstr "Conspiration des corvidés"
+
+#: .\matchmaking\models.py:36
+msgid "Lord of the Hundreds"
+msgstr "Seigneur des Cents"
+
+#: .\matchmaking\models.py:37
+msgid "Keepers in Iron"
+msgstr "Gardiens de Fer"
+
+#: .\matchmaking\models.py:38
+msgid "Vagabond: Ranger"
+msgstr ""
+
+#: .\matchmaking\models.py:39
+msgid "Vagabond: Thief"
+msgstr ""
+
+#: .\matchmaking\models.py:40
+msgid "Vagabond: Tinker"
+msgstr ""
+
+#: .\matchmaking\models.py:41
+msgid "Vagabond: Vagrant"
+msgstr ""
+
+#: .\matchmaking\models.py:42
+msgid "Vagabond: Arbiter"
+msgstr ""
+
+#: .\matchmaking\models.py:43
+msgid "Vagabond: Scoundrel"
+msgstr ""
+
+#: .\matchmaking\models.py:44
+msgid "Vagabond: Adventurer"
+msgstr ""
+
+#: .\matchmaking\models.py:45
+msgid "Vagabond: Ronin"
+msgstr ""
+
+#: .\matchmaking\models.py:46
+msgid "Vagabond: Harrier"
+msgstr ""
+
+#: .\matchmaking\models.py:54
+msgid "Autumn"
+msgstr "Automne"
+
+#: .\matchmaking\models.py:55
+msgid "Winter"
+msgstr "Hiver"
+
+#: .\matchmaking\models.py:56
+msgid "Mountain"
+msgstr "Montagne"
+
+#: .\matchmaking\models.py:57
+msgid "Lake"
+msgstr "Lac"
+
+#: .\matchmaking\models.py:63
+msgid "Standard"
+msgstr ""
+
+#: .\matchmaking\models.py:64
+msgid "Exiles and Partisans"
+msgstr "Exilés et Partisans"
+
+#: .\matchmaking\models.py:72
+msgid "Bird dominance"
+msgstr "Domination oiseau"
+
+#: .\matchmaking\models.py:73
+msgid "Fox dominance"
+msgstr "Domination renard"
+
+#: .\matchmaking\models.py:74
+msgid "Mouse dominance"
+msgstr "Domination souris"
+
+#: .\matchmaking\models.py:75
+msgid "Rabbit dominance"
+msgstr "Domination lapin"
+
+#: .\matchmaking\models.py:98
+msgid "title"
+msgstr "titre"
+
+#: .\matchmaking\models.py:100
+msgid "date registered"
+msgstr "date de création"
+
+#: .\matchmaking\models.py:102
+msgid "date closed"
+msgstr "date de fin"
+
+#: .\matchmaking\models.py:106
+msgid "deck"
+msgstr ""
+
+#: .\matchmaking\models.py:108
+msgid "map"
+msgstr "plateau"
+
+#: .\matchmaking\models.py:110
+msgid "random suits"
+msgstr "distribution aléatoire"
+
+#: .\matchmaking\models.py:120
+msgid "Match"
+msgstr ""
+
+#: .\matchmaking\models.py:138
+msgid "player"
+msgstr "joueur"
+
+#: .\matchmaking\models.py:141
+msgid "match"
+msgstr ""
+
+#: .\matchmaking\models.py:145
+msgid "faction"
+msgstr ""
+
+#: .\matchmaking\models.py:148
+msgid "game score"
+msgstr "score de jeu"
+
+#: .\matchmaking\models.py:151
+msgid "dominance"
+msgstr "domination"
+
+#: .\matchmaking\models.py:154
+msgid "coalition"
+msgstr ""
+
+#: .\matchmaking\models.py:158
+msgid "league score"
+msgstr "score de ligue"
+
+#: .\matchmaking\models.py:162
+msgid "turn order"
+msgstr "tour de jeu"
+
+#: .\matchmaking\models.py:169
+msgid " in "
+msgstr " dans "
+
+#: .\matchmaking\models.py:171
+msgid "UnknownParticipant"
+msgstr "ParticipantInconnu"
