@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block extra-css %}
+  {{participants_formset.media.css}}
+{% endblock %}
+
 {% block content %}
 <h2 class="section-heading mb-4">
     <span class="section-heading-upper">New match</span>
@@ -27,7 +31,6 @@
   </div>
   
   <div class="form-group">
-  {{participants_formset.media}}
       {{ participants_formset.management_form }}
       <table>
           <tr>
@@ -47,4 +50,8 @@
 
   <button type="submit" class="btn btn-secondary">Register match</button>
 </form> 
+{% endblock %}
+
+{% block extra-js %}
+  {{participants_formset.media.js}}
 {% endblock %}

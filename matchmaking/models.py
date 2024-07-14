@@ -85,6 +85,13 @@ SCORES = [
     ]
 
 TURN_ORDERS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
+
+TABLETALK_LIVE = "live"
+TABLETALK_ASYNC = "async"
+TABLETALK_TYPES = [
+    (TABLETALK_LIVE, _("Live")),
+    (TABLETALK_ASYNC, _("Async")),
+    ]
     
 # Create your models here.
 
@@ -95,19 +102,29 @@ class Match(models.Model):
     and holds a OneToMany relation to participants.
     """
     title = models.CharField(max_length=200, blank=True,
-                                 verbose_name=_('title'))
+                             verbose_name=_('title'))
     date_registered = models.DateTimeField(auto_now_add=True,
-                                 verbose_name=_('date registered'))
+                                           verbose_name=_('date registered'))
     date_closed = models.DateTimeField(blank=True, null=True,
-                                     verbose_name=_('date closed'))
+                                       verbose_name=_('date closed'))
+    tournament = models.ForeignKey('Tournament', on_delete=models.SET_NULL,
+                                   null=True, blank=False,
+                                   related_name="matches",
+                                   verbose_name=_('tournament'))
+    
+    table_talk = models.CharField(max_length=20,
+                                  blank=True, default=TABLETALK_ASYNC,
+                                  choices=TABLETALK_TYPES,
+                                  verbose_name=_('table talk'))
     
     deck = models.CharField(max_length=200, choices=DECKS,
                             blank=True, default=DECK_EP,
                             verbose_name=_('deck'))
-    board_map = models.CharField(max_length=20, choices=MAPS, blank=True,
+    board_map = models.CharField(max_length=20, choices=MAPS,
+                                 blank=True, default=MAP_AUTUMN,
                                  verbose_name=_('map'))
     random_suits = models.BooleanField(default=True, blank=True, null=True,
-                                 verbose_name=_('random suits'))
+                                       verbose_name=_('random suits'))
     
     class Meta:
         ordering = ['-date_registered']
@@ -168,5 +185,47 @@ class Participant(models.Model):
             if (mention_match and self.match is not None):
                 result = result + _(" in ") + self.match.__str__(mention_participants=False)
         else:
-            result = _("UnknownParticipant") + str(self.id)
+            result = _("UnknownPlayer") + str(self.id)
+        return result
+    
+class Tournament(models.Model):
+    """
+    Model for a tournament, which is a set of matches,
+    but could be part (= season) of a league if applicable,
+    i.e. represent a set of league matches in a given period of time.
+    """
+    name = models.CharField(max_length=200, blank=False, unique=True,
+                            verbose_name=_('name'))
+    league = models.ForeignKey('League', on_delete=models.SET_NULL,
+                               null=True, blank=True,
+                               related_name="seasons",
+                               verbose_name=_('league'))
+    
+    start_date = models.DateTimeField(blank=True, null=True,
+                                      verbose_name=_('start date'))
+    end_date = models.DateTimeField(blank=True, null=True,
+                                     verbose_name=_('end date'))
+
+    def __str__(self):
+        result = super(Tournament, self).__str__()
+        if (self.name not in ['', None]):
+            result = self.name
+        return result
+
+class League(models.Model):
+    """
+    Model for a league, which is a set of matches,
+    that could be divided into seasons.
+    """
+    name = models.CharField(max_length=200, blank=False, unique=True,
+                            verbose_name=_('name'))
+    active_season = models.OneToOneField(Tournament, on_delete=models.SET_NULL,
+                                         null=True, blank=True,
+                                         related_name="active_in_league",
+                                         verbose_name=_('active season'))
+
+    def __str__(self):
+        result = super(League, self).__str__()
+        if (self.name not in ['', None]):
+            result = self.name
         return result

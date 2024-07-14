@@ -3,7 +3,8 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Match, Participant
+from .models import Match, Participant, League, Tournament
+from .forms import LeagueForm
 
 # Mixn
 class AdminURLMixin(object):
@@ -57,3 +58,9 @@ class MatchAdmin(admin.ModelAdmin):
     list_filter = ['date_registered', 'date_closed',
                    'board_map', 'deck', 'random_suits']
     readonly_fields = ["date_registered"]
+
+@admin.register(League)
+class LeagueAdmin(admin.ModelAdmin):
+    form = LeagueForm
+    
+admin.site.register(Tournament)

@@ -20,6 +20,7 @@ from django.urls import include, path
 from matchmaking import views # import views so we can use them in urls.
 
 urlpatterns = [
+    path("select2/", include("django_select2.urls")),
     path('', views.index, name='index'),
     path('matchmaking/', include('matchmaking.urls', namespace='matchmaking')),
     path('misc/', include('misc.urls', namespace='misc')),
