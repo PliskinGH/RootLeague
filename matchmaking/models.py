@@ -5,6 +5,7 @@ from authentification.models import Player
 
 # Constants subject to change
 MAX_NUMBER_OF_PLAYERS_IN_MATCH = 4
+DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH = 4
 
 FACTION_CATS = "cats"
 FACTION_BIRDS = "birds"

@@ -1,8 +1,10 @@
-from django.forms import ModelForm, ChoiceField, BooleanField, formset_factory
+from django.forms import ModelForm, ChoiceField, BooleanField, inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
+from crispy_forms.layout import Column, Fieldset, Layout, Row, Submit
+from crispy_formset_modal.helper import ModalEditFormHelper
+from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
 from . import models
 
@@ -11,6 +13,29 @@ PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 
 class MatchForm(ModelForm):
     closed = BooleanField(required=False, initial=True, label=_("Closed"))
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(Column("title", css_class='col-10'), Column("closed", css_class='col-2')),
+            Row(Column("table_talk"), Column("deck"), Column("board_map"), Column("random_suits")),
+            Fieldset(
+                "Participants",
+                ModalEditFormsetLayout(
+                    "ParticipantInline",
+                    list_display=[
+                        'turn_order',
+                        'player',
+                        'faction',
+                        'game_score',
+                        'dominance',
+                        'coalitioned_player',
+                        'league_score'],
+                ),
+            ),
+            Submit("submit", "Register match", css_class="btn btn-secondary"),
+        )
     
     class Meta:
         model = models.Match
@@ -50,12 +75,32 @@ class ParticipantForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["turn_order"].disabled = True
+        # self.fields["turn_order"].disabled = True
+        self.helper = ModalEditFormHelper()
+        self.helper.layout = ModalEditLayout(
+            'turn_order',
+            'player',
+            'faction',
+            'game_score',
+            'dominance',
+            'coalitioned_player',
+            'league_score'
+        )
+
+    def has_changed(self):
+        """
+        Overriding this, as the initial data passed to the form does not get noticed, 
+        and so does not get saved, unless it actually changes
+        """
+        changed_data = super(ParticipantForm, self).has_changed()
+        return bool(self.initial or changed_data)
         
-ParticipantsFormSet = formset_factory(ParticipantForm,
-                                      extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                      max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                      absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH)
+ParticipantsFormSet = inlineformset_factory(model = models.Participant,
+                                            parent_model = models.Match,
+                                            form = ParticipantForm,
+                                            extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
+                                            max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
+                                            absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH)
 
 class ParticipantsFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):

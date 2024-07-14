@@ -41,8 +41,10 @@ class NewMatchPageTestCase(TestCase):
         old_match_count = models.Match.objects.count()
         self.client.post(reverse('matchmaking:register'), {
             'title': 'new game',
-            'board_map': models.MAP_AUTUMN
-        })
+            'board_map': models.MAP_AUTUMN,
+            "participants-TOTAL_FORMS": "1",
+            "participants-INITIAL_FORMS": "0",}
+        )
         new_match_count = models.Match.objects.count()
         self.assertEqual(new_match_count, old_match_count+1)
 

@@ -5,7 +5,9 @@
 {% load crispy_forms_tags %}
 
 {% block extra-css %}
-  {{participants_formset.media.css}}
+{% for formset in inlines %}
+  {{formset.media.css}}
+{% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -13,40 +15,15 @@
     <span class="section-heading-upper">Register match</span>
     <span class="section-heading-lower">Form</span>
 </h2>
-<form class="form-inline" action="{% url 'matchmaking:register' %}" method="post">
-  {% csrf_token %}
-  
-  <div class="row">
-    <div class="col-10">
-      {{ match_form.title|as_crispy_field }}
-    </div>
-    <div class="col">
-      {{ match_form.closed|as_crispy_field }}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-       {{ match_form.table_talk|as_crispy_field }}
-    </div>
-    <div class="col">
-       {{ match_form.deck|as_crispy_field }}
-    </div>
-    <div class="col">
-      {{ match_form.board_map|as_crispy_field }}
-    </div>
-    <div class="col">
-      {{ match_form.random_suits|as_crispy_field }}
-    </div>
-  </div>
-  
-  <div class="form-group">
-    {% crispy participants_formset participants_helper %}
-  </div>
-
-  <button type="submit" class="btn btn-secondary">Register match</button>
-</form> 
+{% crispy form %}
 {% endblock %}
 
 {% block extra-js %}
-  {{participants_formset.media.js}}
+{% for formset in inlines %}
+  {{formset.media.js}}
+{% endfor %}
+    <!-- Include Django Crispy Formset Modal's JS -->
+    <script src="{% static 'crispy_formset_modal/js/crispy-formset-modal.min.js' %}"></script>
+    
 {% endblock %}
+

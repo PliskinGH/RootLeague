@@ -2,10 +2,13 @@ from django.shortcuts import render
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from extra_views import InlineFormSetFactory, CreateWithInlinesView, SuccessMessageMixin
 
-from .models import Match
-from .forms import MatchForm, ParticipantsFormSet, ParticipantsFormSetHelper
+from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
+from .forms import MatchForm, ParticipantForm, ParticipantsFormSet, ParticipantsFormSetHelper
 
 # Create your views here.
 
@@ -34,6 +37,33 @@ class MatchDetailView(DetailView):
 
 def match_detail(*args, **kwargs):
     return MatchDetailView.as_view()(*args, **kwargs)
+
+class ParticipantInline(InlineFormSetFactory):
+    model = Participant
+    form_class = ParticipantForm
+    fields = [
+        'turn_order',
+        'player',
+        'faction',
+        'game_score',
+        'dominance',
+        'league_score']
+    factory_kwargs = {"extra" : DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH, 
+                      "max_num" : MAX_NUMBER_OF_PLAYERS_IN_MATCH,
+                      "absolute_max" : MAX_NUMBER_OF_PLAYERS_IN_MATCH}
+    initial = [{ 'turn_order': 1},
+               { 'turn_order': 2},
+               { 'turn_order': 3},
+               { 'turn_order': 4},]
+
+class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
+    model = Match
+    inlines = [ParticipantInline]
+    form_class = MatchForm
+    success_message = "Match successfully registered!"
+    
+    def get_success_url(self):
+        return reverse_lazy('matchmaking:match_detail', args=(self.object.id,))
 
 @login_required
 def register_match(request):
@@ -78,7 +108,7 @@ def register_match(request):
     context['match_form'] = match_form
     context['participants_formset'] = participants_formset
     context['participants_helper'] = participants_helper
-    return render(request, 'matchmaking/match_form.html', context)
+    return render(request, 'matchmaking/match_register.html', context)
 
 def search(request):
     query = request.GET.get('query')
