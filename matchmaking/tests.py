@@ -39,7 +39,7 @@ class NewMatchPageTestCase(TestCase):
     # test that a new match is made
     def test_new_match_is_registered(self):
         old_match_count = models.Match.objects.count()
-        self.client.post(reverse('matchmaking:new_match'), {
+        self.client.post(reverse('matchmaking:register'), {
             'title': 'new game',
             'board_map': models.MAP_AUTUMN
         })
@@ -49,7 +49,7 @@ class NewMatchPageTestCase(TestCase):
     # test that a new match is not made
     def test_new_match_is_not_registered(self):
         old_match_count = models.Match.objects.count()
-        self.client.post(reverse('matchmaking:new_match'), {
+        self.client.post(reverse('matchmaking:register'), {
             'title': 'new game',
             'board_map': 'test'
         })

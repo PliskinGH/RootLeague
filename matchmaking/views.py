@@ -2,10 +2,10 @@ from django.shortcuts import render
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView
 
 from .models import Match
-from .forms import MatchForm, ParticipantsFormSet
+from .forms import MatchForm, ParticipantsFormSet, ParticipantsFormSetHelper
 
 # Create your views here.
 
@@ -36,24 +36,16 @@ def match_detail(*args, **kwargs):
     return MatchDetailView.as_view()(*args, **kwargs)
 
 @login_required
-def register_match(*args, **kwargs):
-    return CreateView.as_view(model=Match,
-                              fields=('title', 'deck',
-                                      'board_map', 'random_suits',
-                                      )
-                              )(*args, **kwargs)
-
-@login_required
-def new_match(request):
+def register_match(request):
     context = {}
     if request.method == 'POST':
         match_form = MatchForm(request.POST)
-        if match_form.is_valid():
-            match = match_form.save()
+        participants_formset = ParticipantsFormSet(request.POST)
+        if (match_form.is_valid()):
+            match = match_form.save(commit=False)
             if (match_form.cleaned_data['closed']):
                 match.date_closed = match.date_registered
-                match.save()
-            participants_formset = ParticipantsFormSet(request.POST)
+            match.save()
             if (participants_formset.is_valid()):
                 participants=[]
                 for form in participants_formset.forms:
@@ -72,11 +64,9 @@ def new_match(request):
                         coalitioned_player = participants[index_coalitioned-1]
                         if (coalitioned_player is not None):
                             participant.coalition = coalitioned_player
-                            participant.save()
-                match.save()
+                for participant in participants:
+                    participant.save()
             return match_detail(request, match_id=match.id)
-        else:
-            context['match_errors'] = match_form.errors.items()
     else:
         match_form = MatchForm()
         participants_formset = ParticipantsFormSet(initial=[
@@ -84,9 +74,11 @@ def new_match(request):
                                 { 'turn_order': 2},
                                 { 'turn_order': 3},
                                 { 'turn_order': 4},])
-        context['match_form'] = match_form
-        context['participants_formset'] = participants_formset
-    return render(request, 'matchmaking/new_match.html', context)
+    participants_helper = ParticipantsFormSetHelper()
+    context['match_form'] = match_form
+    context['participants_formset'] = participants_formset
+    context['participants_helper'] = participants_helper
+    return render(request, 'matchmaking/match_form.html', context)
 
 def search(request):
     query = request.GET.get('query')
@@ -94,7 +86,9 @@ def search(request):
         matchs = Match.objects.all()
     else:
         matchs = Match.objects.filter(Q(title__icontains=query) |
-                                      Q(participants__player__in_game_name__icontains=query))
+                                      Q(participants__player__in_game_name__icontains=query) |
+                                      Q(participants__player__username__icontains=query) |
+                                      Q(participants__player__discord_name__icontains=query))
     if matchs.exists():
         matchs = matchs.order_by('-date_registered')
     title = "Search results for the request %s"%query
