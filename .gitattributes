@@ -1,0 +1,4 @@
+*.txt                                          diff
+*.py                                           diff
+*.html                                         diff
+*.js                                           diff
