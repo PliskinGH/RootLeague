@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load i18n %}
+
 {% load crispy_forms_tags %}
 
 {% block extra-css %}
@@ -12,8 +14,8 @@
 
 {% block content %}
 <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Register match</span>
-    <span class="section-heading-lower">Form</span>
+    <span class="section-heading-upper">{{_("Register match")}}</span>
+    <span class="section-heading-lower">{{_("Form")}}</span>
 </h2>
 {% crispy form %}
 {% endblock %}

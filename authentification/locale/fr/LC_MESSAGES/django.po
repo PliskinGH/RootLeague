@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-13 16:17+0200\n"
+"POT-Creation-Date: 2024-07-15 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\authentification\forms.py:14
+msgid "Sign up"
+msgstr "S'inscrire"
+
+#: .\authentification\forms.py:27
+#: .\authentification\templates\authentification\login.html:12
+msgid "Log in"
+msgstr "Se connecter"
+
+#: .\authentification\forms.py:34
+msgid "Save"
+msgstr "Enregistrer"
+
 #: .\authentification\models.py:13
 msgid "name"
 msgstr "nom"
@@ -44,3 +58,32 @@ msgstr "ID dans le jeu"
 #: .\authentification\models.py:31
 msgid "roles"
 msgstr ""
+
+#: .\authentification\templates\authentification\login.html:11
+#: .\authentification\templates\authentification\password_change.html:11
+#: .\authentification\templates\authentification\register.html:11
+msgid "Account"
+msgstr "Compte"
+
+#: .\authentification\templates\authentification\password_change.html:12
+msgid "Change Password"
+msgstr "Changer de mot de passe"
+
+#: .\authentification\templates\authentification\register.html:12
+msgid "Register"
+msgstr "S'inscrire"
+
+#: .\authentification\views.py:15
+msgid "Log in successful!"
+msgstr "Connexion réussie !"
+
+#: .\authentification\views.py:22
+msgid ""
+"Your player account was successfully created.                          You "
+"can now log in."
+msgstr "Votre compte de joueur a bien été créé.                          Vous "
+"pouvez vous connecter."
+
+#: .\authentification\views.py:29
+msgid "Password changed successfully!"
+msgstr "Mot de passe modifié avec succès !"

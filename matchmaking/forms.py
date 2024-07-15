@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ChoiceField, BooleanField, inlineformset_factory
+from django.forms import ModelForm, ChoiceField, BooleanField
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from crispy_forms.helper import FormHelper
@@ -34,7 +34,7 @@ class MatchForm(ModelForm):
                         'league_score'],
                 ),
             ),
-            Submit("submit", "Register match", css_class="btn btn-secondary"),
+            Submit("submit", _("Register match"), css_class="btn btn-secondary"),
         )
     
     class Meta:
@@ -94,30 +94,6 @@ class ParticipantForm(ModelForm):
         """
         changed_data = super(ParticipantForm, self).has_changed()
         return bool(self.initial or changed_data)
-        
-ParticipantsFormSet = inlineformset_factory(model = models.Participant,
-                                            parent_model = models.Match,
-                                            form = ParticipantForm,
-                                            extra = models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                            max_num=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                                            absolute_max=models.MAX_NUMBER_OF_PLAYERS_IN_MATCH)
-
-class ParticipantsFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.layout = Layout(
-            'turn_order',
-            'player',
-            'faction',
-            'game_score',
-            'dominance',
-            'coalitioned_player',
-            'league_score'
-        )
-        self.form_tag = False
-        self.disable_csrf = False
-        self.include_media = False
-        self.template = 'bootstrap5/table_inline_formset.html'
 
 class LeagueForm(ModelForm):
     class Meta:

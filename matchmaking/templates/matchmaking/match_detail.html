@@ -2,9 +2,11 @@
 
 {% load static %}
 
+{% load i18n %}
+
 {% block content %}
 <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Match details</span>
+    <span class="section-heading-upper">{{_("Match details")}}</span>
     <span class="section-heading-lower">{{ object.title }}</span>
 </h2>
 <p>

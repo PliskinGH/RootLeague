@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
 {% block content %}
 <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Account</span>
-    <span class="section-heading-lower">Log in</span>
+    <span class="section-heading-upper">{{_("Account")}}</span>
+    <span class="section-heading-lower">{{_("Log in")}}</span>
 </h2>
 
-<form class="form-inline"  method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-secondary" >Log in</button>
-</form>
+{% crispy form %}
+
 {% endblock content %}

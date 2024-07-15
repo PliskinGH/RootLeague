@@ -1,9 +1,9 @@
 <div class="col-lg-12 detail-separator">
   <form class="col-md-6 col-md-offset-3 text-center" action="{% url 'matchmaking:search' %}" method="get" accept-charset="utf-8">
     <div class="form-group">
-      <label for="searchForm">Search</label>
+      <label for="searchForm">{{_("Search")}}</label>
       <input id="searchForm" class="form-control" name="query">
     </div>
-    <span class="help-block" id="helpBlock">Find a match</span>
+    <span class="help-block" id="helpBlock">{{_("Find a match")}}</span>
   </form>
 </div>

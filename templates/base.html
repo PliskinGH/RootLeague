@@ -1,5 +1,7 @@
 {% load static %}
 
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>ROOT Ranked League</title>
+        <title>{{_("ROOT Ranked League")}}</title>
         <link rel="icon" type="image/x-icon" href="{% static 'matchmaking/assets/favicon.ico' %}" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
@@ -21,8 +23,8 @@
     <body>
         <header>
             <h1 class="site-heading text-center text-faded d-none d-lg-block">
-                <span class="site-heading-upper text-primary mb-3">An unofficial matchmaking and ranking system</span>
-                <span class="site-heading-lower">ROOT Ranked League</span>
+                <span class="site-heading-upper text-primary mb-3">{{_("An unofficial matchmaking and ranking system")}}</span>
+                <span class="site-heading-lower">{{_("ROOT Ranked League")}}</span>
             </h1>
         </header>
         <!-- Navigation-->
@@ -31,24 +33,24 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'matchmaking:listing' %}">Match list</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'matchmaking:register' %}">Register match</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'leaderboards:leaderboard' %}">Leaderboard</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">Faction stats</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">About</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'matchmaking:listing' %}">{{_("Match list")}}</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'matchmaking:register' %}">{{_("Register match")}}</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'leaderboards:leaderboard' %}">{{_("Leaderboard")}}</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">{{_("Faction stats")}}</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
                         {%  if user.is_authenticated %}
                         <li class="nav-item px-lg-4">
                             <form method="post" action="{% url 'auth:logout' %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-primary">Log out</button>
+                                <button type="submit" class="btn btn-primary">{{_("Log out")}}</button>
                             </form>
                         </li>
                         {% else %}
                         <li class="nav-item px-lg-4">
-                            <a class="nav-link text-uppercase" href="{% url 'auth:login' %}">Log in</a>
+                            <a class="nav-link text-uppercase" href="{% url 'auth:login' %}">{{_("Log in")}}</a>
                         </li>
                         <li class="nav-item px-lg-4">
-                            <a class="nav-link text-uppercase" href="{% url 'auth:register' %}">Sign up</a>
+                            <a class="nav-link text-uppercase" href="{% url 'auth:register' %}">{{_("Sign up")}}</a>
                         </li>
                         {% endif %}
                     </ul>

@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block content %}
 <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Match listing</span>
+    <span class="section-heading-upper">{{_("Match listing")}}</span>
     <span class="section-heading-lower">{{ title }}</span>
 </h2>
 {% include 'matchmaking/search_form.html' %}
