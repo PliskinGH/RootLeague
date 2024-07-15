@@ -23,7 +23,7 @@ msgstr "Ligue ROOT"
 
 #: .\templates\base.html:26
 msgid "An unofficial matchmaking and ranking system"
-msgstr "Non officielle"
+msgstr "Tournois non officiels"
 
 #: .\templates\base.html:36
 msgid "Match list"
