@@ -65,6 +65,29 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
     def get_success_url(self):
         return reverse_lazy('matchmaking:match_detail', args=(self.object.id,))
 
+    def forms_valid(self, form, inlines):
+        response = super(CreateMatchView, self).forms_valid(form, inlines)
+        if (form.cleaned_data.get('closed', False)):
+            self.object.date_closed = self.object.date_registered
+        if (len(inlines) == 1):
+            participants_formset = inlines[0]
+            index_participant = 0
+            participants = []
+            for participant in self.object.participants.all():
+                participants.append(participant)
+            for form in participants_formset.forms:
+                index_participant += 1
+                index_coalitioned = form.cleaned_data.get('coalitioned_player', '')
+                if (not(index_coalitioned in [None, ''])):
+                    index_coalitioned = int(index_coalitioned)
+                    participant = participants[index_participant-1]
+                    coalitioned_player = participants[index_coalitioned-1]
+                    if (coalitioned_player is not None):
+                        participant.coalition = coalitioned_player
+                        participant.save()
+        self.object.save()
+        return response
+
 def search(request):
     query = request.GET.get('query')
     if not query:
