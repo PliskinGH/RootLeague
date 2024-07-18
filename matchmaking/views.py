@@ -17,15 +17,26 @@ def index(request):
     return listing(request, matchs=matchs,
                    title=_("Last matches"), number_per_page=5)
 
+class ElidedListView(ListView):
+    title = ""
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+      context = super(ElidedListView, self).get_context_data(**kwargs)
+      page = context['page_obj']
+      context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
+      context['title'] = self.title
+      return context
+
 def listing(request, matchs = None, title = _("All games"),
-            number_per_page = 10):
+            number_per_page = 1):
     if (matchs is None):
         matchs = Match.objects.all().order_by('-date_registered')
-    return ListView.as_view(model=Match,
-                            queryset=matchs,
-                            paginate_by=number_per_page,
-                            extra_context={'title' : title}
-                     )(request)
+    return ElidedListView.as_view(model=Match,
+                                  queryset=matchs,
+                                  paginate_by=number_per_page,
+                                  ordering = '-date_registered',
+                                  title=title
+                                  )(request)
 
 class MatchDetailView(DetailView):
     model = Match
