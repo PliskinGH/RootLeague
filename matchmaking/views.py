@@ -28,7 +28,7 @@ class ElidedListView(ListView):
       return context
 
 def listing(request, matchs = None, title = _("All games"),
-            number_per_page = 1):
+            number_per_page = 10):
     if (matchs is None):
         matchs = Match.objects.all().order_by('-date_registered')
     return ElidedListView.as_view(model=Match,

@@ -7,12 +7,40 @@
     <span class="section-heading-upper">{{_("Match listing")}}</span>
     <span class="section-heading-lower">{{ title }}</span>
 </h2>
+
 {% include 'matchmaking/search_form.html' %}
-<ul>
-{% for match in page_obj  %}
-    <li><a href="{% url 'matchmaking:match_detail' match_id=match.id %}">{{ match.title }}</a></li>
-{% endfor %}
-</ul>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{{_("Date")}}</th>
+      <th scope="col">{{_("Match")}}</th>
+      <th scope="col">{{_("Players")}}</th>
+      <th scope="col">{{_("Map")}}</th>
+      <th scope="col">{{_("Deck")}}</th>
+      <th scope="col">{{_("Winner")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for match in page_obj %}
+    <tr>
+      <th scope="row">{{ match.date_registered }}</th>
+      <td><a href="{% url 'matchmaking:match_detail' match_id=match.id %}">{{ match.title }}</a></td>
+      <td>
+      {% for participant in match.participants.all %}
+          {% if participant.player %}
+              {{ participant.player }}
+          {% else %}
+              {{ participant }}
+          {% endif %}
+      {% endfor %}</td>
+      <td>{{ match.get_board_map_display }}</td>
+      <td>{{ match.get_deck_display }}</td>
+      <td></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% include 'pagination.html' %}
 {% endblock %}
