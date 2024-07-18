@@ -34,7 +34,6 @@ def listing(request, matchs = None, title = _("All games"),
     return ElidedListView.as_view(model=Match,
                                   queryset=matchs,
                                   paginate_by=number_per_page,
-                                  ordering = '-date_registered',
                                   title=title
                                   )(request)
 
