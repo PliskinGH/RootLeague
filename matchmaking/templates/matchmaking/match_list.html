@@ -18,7 +18,7 @@
       <th scope="col">{{_("Players")}}</th>
       <th scope="col">{{_("Map")}}</th>
       <th scope="col">{{_("Deck")}}</th>
-      <th scope="col">{{_("Winner")}}</th>
+      <th scope="col">{{_("Winner(s)")}}</th>
     </tr>
   </thead>
   <tbody>
@@ -33,10 +33,21 @@
           {% else %}
               {{ participant }}
           {% endif %}
-      {% endfor %}</td>
+      {% endfor %}
+      </td>
       <td>{{ match.get_board_map_display }}</td>
       <td>{{ match.get_deck_display }}</td>
-      <td></td>
+      <td>
+      {% for participant in match.participants.all %}
+          {% if participant.league_score > 0 %}
+              {% if participant.player %}
+                  {{ participant.player }}
+              {% else %}
+                  {{ participant }}
+              {% endif %}
+          {% endif %}
+      {% endfor %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>

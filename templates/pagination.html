@@ -6,9 +6,7 @@
 
     {% for page_number in paginator_range %}
         {% if page_obj.number == page_number %}
-            <button class="btn btn-outline-primary active">
-                <span>{{ page_number }} <span class="sr-only">(current)</span></span>
-            </button>
+            <span class="btn btn-outline-primary active">{{ page_number }} <span class="sr-only">(current)</span></span>
         {% else %}
             {% if page_number == page_obj.paginator.ELLIPSIS %}
             <span class="btn btn-outline-primary">{{page_number}}</span>

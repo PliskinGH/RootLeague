@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-15 21:59+0200\n"
+"POT-Creation-Date: 2024-07-20 01:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,7 @@ msgid "Register match"
 msgstr "Enregistrer une partie"
 
 #: .\matchmaking\forms.py:56
+#: .\matchmaking\templates\matchmaking\match_detail.html:65
 msgid "Coalition with"
 msgstr "Coalition avec"
 
@@ -180,10 +181,12 @@ msgid "map"
 msgstr "plateau"
 
 #: .\matchmaking\models.py:128
+#: .\matchmaking\templates\matchmaking\match_detail.html:30
 msgid "random suits"
 msgstr "distribution aléatoire"
 
 #: .\matchmaking\models.py:138
+#: .\matchmaking\templates\matchmaking\match_list.html:17
 msgid "Match"
 msgstr "Partie"
 
@@ -224,7 +227,6 @@ msgid " in "
 msgstr " dans "
 
 #: .\matchmaking\models.py:189
-#, fuzzy
 #| msgid "UnknownParticipant"
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
@@ -255,6 +257,57 @@ msgstr "saison active"
 msgid "Match details"
 msgstr "Détails de partie"
 
+#: .\matchmaking\templates\matchmaking\match_detail.html:16
+#| msgid "date registered"
+msgid "Date registered"
+msgstr "Date de création"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:17
+#| msgid "table talk"
+msgid "Table talk"
+msgstr "Déroulement"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:18
+#: .\matchmaking\templates\matchmaking\match_list.html:19
+#| msgid "map"
+msgid "Map"
+msgstr "Plateau"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:19
+#: .\matchmaking\templates\matchmaking\match_list.html:20
+msgid "Deck"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:20
+#| msgid "date closed"
+msgid "Date closed"
+msgstr "Date de fin"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:42
+#| msgid "turn order"
+msgid "Turn order"
+msgstr "Tour de jeu"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:43
+#| msgid "player"
+msgid "Player"
+msgstr "Joueur"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:44
+#| msgid "active season"
+msgid "Faction"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:45
+#| msgid "game score"
+msgid "Game score"
+msgstr "Score de jeu"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:46
+#| msgid "tournament"
+msgid "Tournament score"
+msgstr "Score de tournoi"
+
 #: .\matchmaking\templates\matchmaking\match_form.html:18
 msgid "Form"
 msgstr "Formulaire"
@@ -262,6 +315,19 @@ msgstr "Formulaire"
 #: .\matchmaking\templates\matchmaking\match_list.html:7
 msgid "Match listing"
 msgstr "Liste de parties"
+
+#: .\matchmaking\templates\matchmaking\match_list.html:16
+msgid "Date"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_list.html:18
+#| msgid "player"
+msgid "Players"
+msgstr "Joueurs"
+
+#: .\matchmaking\templates\matchmaking\match_list.html:21
+msgid "Winner(s)"
+msgstr "Vainqueur(s)"
 
 #: .\matchmaking\templates\matchmaking\search_form.html:4
 msgid "Search"
@@ -275,17 +341,16 @@ msgstr "Recherche de partie"
 msgid "Last matches"
 msgstr "Dernières parties"
 
-#: .\matchmaking\views.py:20
+#: .\matchmaking\views.py:30
 msgid "All games"
 msgstr "Toutes les parties"
 
-#: .\matchmaking\views.py:63
-#, fuzzy
+#: .\matchmaking\views.py:73
 #| msgid "date registered"
 msgid "Match successfully registered!"
-msgstr "date de création"
+msgstr "Partie enregistrée avec succès !"
 
-#: .\matchmaking\views.py:79
+#: .\matchmaking\views.py:112
 #, python-format
 msgid "Search results for the request %s"
 msgstr "Résultats de recherche pour la requête %s"

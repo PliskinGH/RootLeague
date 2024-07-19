@@ -9,7 +9,73 @@
     <span class="section-heading-upper">{{_("Match details")}}</span>
     <span class="section-heading-lower">{{ object.title }}</span>
 </h2>
-<p>
-{{ object }}
-</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{{_("Date registered")}}</th>
+      <th scope="col">{{_("Table talk")}}</th>
+      <th scope="col">{{_("Map")}}</th>
+      <th scope="col">{{_("Deck")}}</th>
+      <th scope="col">{{_("Date closed")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">{{ object.date_registered }}</th>
+      <td>{{ object.get_table_talk_display }}</td>
+      <td>
+      {{ object.get_board_map_display }}
+      {% if object.random_suits %}
+      ({{_("random suits")}})
+      {% endif %}
+      </td>
+      <td>{{ object.get_deck_display }}</td>
+      <th scope="row">{{ object.date_closed }}</th>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{{_("Turn order")}}</th>
+      <th scope="col">{{_("Player")}}</th>
+      <th scope="col">{{_("Faction")}}</th>
+      <th scope="col">{{_("Game score")}}</th>
+      <th scope="col">{{_("Tournament score")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for participant in object.participants.all|dictsort:"turn_order" %}
+    <tr>
+      <th scope="row">{{ participant.get_turn_order_display }}</th>
+      <td>
+          {% if participant.player %}
+              {{ participant.player }}
+          {% else %}
+              {{ participant }}
+          {% endif %}
+      </td>
+      <td>{{ participant.get_faction_display }}</td>
+      <td>
+          {% if participant.dominance and participant.dominance != "" %}
+              {{ participant.get_dominance_display }}
+          {% elif participant.coalition %}
+              {{_("Coalition with")}}
+              {% if participant.coalition.player %}
+                  {{ participant.coalition.player }}
+              {% else %}
+                  {{ participant.coalition }}
+              {% endif %}
+          {% else %}
+              {{ participant.game_score }}
+          {% endif %}
+      </td>
+      <td>{{ participant.league_score }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}
