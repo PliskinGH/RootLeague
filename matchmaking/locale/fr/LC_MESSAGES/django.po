@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-20 13:08+0200\n"
+"POT-Creation-Date: 2024-07-21 00:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,273 +28,251 @@ msgid "Register match"
 msgstr "Enregistrer une partie"
 
 #: .\matchmaking\forms.py:56
-#: .\matchmaking\templates\matchmaking\match_detail.html:65
+#: .\matchmaking\templates\matchmaking\match_detail.html:75
 msgid "Coalition with"
 msgstr "Coalition avec"
 
-#: .\matchmaking\models.py:30
+#: .\matchmaking\models.py:31
 msgid "Marquise de Cat"
 msgstr "Marquise de Chat"
 
-#: .\matchmaking\models.py:31
+#: .\matchmaking\models.py:32
 msgid "Eyrie Dynasties"
 msgstr "Dynastie de la Canopée"
 
-#: .\matchmaking\models.py:32
+#: .\matchmaking\models.py:33
 msgid "Woodland Alliance"
 msgstr "Alliance de la forêt"
 
-#: .\matchmaking\models.py:33
+#: .\matchmaking\models.py:34
 msgid "Riverfolk"
 msgstr "Compagnie de la rivière"
 
-#: .\matchmaking\models.py:34
+#: .\matchmaking\models.py:35
 msgid "Lizard Cult"
 msgstr "Culte des lézards"
 
-#: .\matchmaking\models.py:35
+#: .\matchmaking\models.py:36
 msgid "Underground Duchy"
 msgstr "Duché souterrain"
 
-#: .\matchmaking\models.py:36
+#: .\matchmaking\models.py:37
 msgid "Corvid Conspiracy"
 msgstr "Conspiration des corvidés"
 
-#: .\matchmaking\models.py:37
+#: .\matchmaking\models.py:38
 msgid "Lord of the Hundreds"
 msgstr "Seigneur des Cents"
 
-#: .\matchmaking\models.py:38
+#: .\matchmaking\models.py:39
 msgid "Keepers in Iron"
 msgstr "Gardiens de Fer"
 
-#: .\matchmaking\models.py:39
-msgid "Vagabond: Ranger"
-msgstr ""
-
 #: .\matchmaking\models.py:40
+msgid "Vagabond: Ranger"
+msgstr "Vagabond: Rôdeur"
+
+#: .\matchmaking\models.py:41
 msgid "Vagabond: Thief"
 msgstr "Vagabond : Voleur"
 
-#: .\matchmaking\models.py:41
+#: .\matchmaking\models.py:42
 msgid "Vagabond: Tinker"
 msgstr "Vagabond : Bricoleur"
 
-#: .\matchmaking\models.py:42
-msgid "Vagabond: Vagrant"
-msgstr ""
-
 #: .\matchmaking\models.py:43
-msgid "Vagabond: Arbiter"
-msgstr ""
+msgid "Vagabond: Vagrant"
+msgstr "Vagabond : Errant"
 
 #: .\matchmaking\models.py:44
-msgid "Vagabond: Scoundrel"
-msgstr ""
+msgid "Vagabond: Arbiter"
+msgstr "Vagabond : Médiateur"
 
 #: .\matchmaking\models.py:45
+msgid "Vagabond: Scoundrel"
+msgstr "Vagabond : Crapule"
+
+#: .\matchmaking\models.py:46
 msgid "Vagabond: Adventurer"
 msgstr "Vagabond : Aventurier"
 
-#: .\matchmaking\models.py:46
+#: .\matchmaking\models.py:47
 msgid "Vagabond: Ronin"
 msgstr "Vagabond : Ronin"
 
-#: .\matchmaking\models.py:47
+#: .\matchmaking\models.py:48
 msgid "Vagabond: Harrier"
-msgstr ""
+msgstr "Vagabond : Busard"
 
-#: .\matchmaking\models.py:55
+#: .\matchmaking\models.py:56
 msgid "Autumn"
 msgstr "Automne"
 
-#: .\matchmaking\models.py:56
+#: .\matchmaking\models.py:57
 msgid "Winter"
 msgstr "Hiver"
 
-#: .\matchmaking\models.py:57
+#: .\matchmaking\models.py:58
 msgid "Mountain"
 msgstr "Montagne"
 
-#: .\matchmaking\models.py:58
+#: .\matchmaking\models.py:59
 msgid "Lake"
 msgstr "Lac"
 
-#: .\matchmaking\models.py:64
+#: .\matchmaking\models.py:65
 msgid "Standard"
 msgstr ""
 
-#: .\matchmaking\models.py:65
+#: .\matchmaking\models.py:66
 msgid "Exiles and Partisans"
 msgstr "Exilés et Partisans"
 
-#: .\matchmaking\models.py:73
+#: .\matchmaking\models.py:74
 msgid "Bird dominance"
 msgstr "Domination oiseau"
 
-#: .\matchmaking\models.py:74
+#: .\matchmaking\models.py:75
 msgid "Fox dominance"
 msgstr "Domination renard"
 
-#: .\matchmaking\models.py:75
+#: .\matchmaking\models.py:76
 msgid "Mouse dominance"
 msgstr "Domination souris"
 
-#: .\matchmaking\models.py:76
+#: .\matchmaking\models.py:77
 msgid "Rabbit dominance"
 msgstr "Domination lapin"
 
-#: .\matchmaking\models.py:93
+#: .\matchmaking\models.py:94
 msgid "Live"
 msgstr "Direct"
 
-#: .\matchmaking\models.py:94
+#: .\matchmaking\models.py:95
 msgid "Async"
 msgstr "Différé"
 
-#: .\matchmaking\models.py:106
+#: .\matchmaking\models.py:107
 msgid "title"
 msgstr "titre"
 
-#: .\matchmaking\models.py:108
+#: .\matchmaking\models.py:109
 msgid "date registered"
 msgstr "date de création"
 
-#: .\matchmaking\models.py:110
+#: .\matchmaking\models.py:111
 msgid "date closed"
 msgstr "date de fin"
 
-#: .\matchmaking\models.py:114
+#: .\matchmaking\models.py:115
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\matchmaking\models.py:119
+#: .\matchmaking\models.py:120
 msgid "table talk"
 msgstr "déroulement"
 
-#: .\matchmaking\models.py:123
+#: .\matchmaking\models.py:124
 msgid "deck"
 msgstr ""
 
-#: .\matchmaking\models.py:126
+#: .\matchmaking\models.py:127
 msgid "map"
 msgstr "plateau"
 
-#: .\matchmaking\models.py:128
-#: .\matchmaking\templates\matchmaking\match_detail.html:30
+#: .\matchmaking\models.py:129
+#: .\matchmaking\templates\matchmaking\match_detail.html:34
 msgid "random suits"
 msgstr "distribution aléatoire"
 
-#: .\matchmaking\models.py:138
+#: .\matchmaking\models.py:139
 #: .\matchmaking\templates\matchmaking\match_list.html:17
 msgid "Match"
 msgstr "Partie"
 
-#: .\matchmaking\models.py:156
+#: .\matchmaking\models.py:157
 msgid "player"
 msgstr "joueur"
 
-#: .\matchmaking\models.py:159
+#: .\matchmaking\models.py:160
 msgid "match"
 msgstr "partie"
 
-#: .\matchmaking\models.py:163
+#: .\matchmaking\models.py:164
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:166
+#: .\matchmaking\models.py:167
 msgid "game score"
 msgstr "score de jeu"
 
-#: .\matchmaking\models.py:169
+#: .\matchmaking\models.py:170
 msgid "dominance"
 msgstr "domination"
 
-#: .\matchmaking\models.py:172
+#: .\matchmaking\models.py:173
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:176
+#: .\matchmaking\models.py:177
 msgid "league score"
 msgstr "score de ligue"
 
-#: .\matchmaking\models.py:180
+#: .\matchmaking\models.py:181
 msgid "turn order"
 msgstr "tour de jeu"
 
-#: .\matchmaking\models.py:187
+#: .\matchmaking\models.py:188
 msgid " in "
 msgstr " dans "
 
-#: .\matchmaking\models.py:189
+#: .\matchmaking\models.py:190
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
 
-#: .\matchmaking\models.py:199 .\matchmaking\models.py:222
-msgid "name"
-msgstr "nom"
-
-#: .\matchmaking\models.py:203
-#, fuzzy
-#| msgid "league score"
-msgid "league"
-msgstr "ligue"
-
-#: .\matchmaking\models.py:206
-msgid "start date"
-msgstr "date de début"
-
-#: .\matchmaking\models.py:208
-msgid "end date"
-msgstr "date de fin"
-
-#: .\matchmaking\models.py:226
-msgid "active season"
-msgstr "saison active"
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:9
+#: .\matchmaking\templates\matchmaking\match_detail.html:11
 msgid "Match details"
 msgstr "Détails de partie"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:16
+#: .\matchmaking\templates\matchmaking\match_detail.html:18
 msgid "Date registered"
 msgstr "Date de création"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:17
+#: .\matchmaking\templates\matchmaking\match_detail.html:19
 msgid "Table talk"
 msgstr "Déroulement"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:18
+#: .\matchmaking\templates\matchmaking\match_detail.html:20
 #: .\matchmaking\templates\matchmaking\match_list.html:19
 msgid "Map"
 msgstr "Plateau"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:19
+#: .\matchmaking\templates\matchmaking\match_detail.html:21
 #: .\matchmaking\templates\matchmaking\match_list.html:20
 msgid "Deck"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:20
+#: .\matchmaking\templates\matchmaking\match_detail.html:23
 msgid "Date closed"
 msgstr "Date de fin"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:42
+#: .\matchmaking\templates\matchmaking\match_detail.html:48
 msgid "Turn order"
 msgstr "Tour de jeu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:43
+#: .\matchmaking\templates\matchmaking\match_detail.html:49
 msgid "Player"
 msgstr "Joueur"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:44
+#: .\matchmaking\templates\matchmaking\match_detail.html:50
 msgid "Faction"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:45
+#: .\matchmaking\templates\matchmaking\match_detail.html:51
 msgid "Game score"
 msgstr "Score de jeu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:46
+#: .\matchmaking\templates\matchmaking\match_detail.html:52
 msgid "Tournament score"
 msgstr "Score de tournoi"
 
@@ -342,3 +320,20 @@ msgstr "Partie enregistrée avec succès !"
 #, python-format
 msgid "Search results for the request %s"
 msgstr "Résultats de recherche pour la requête %s"
+
+#~ msgid "name"
+#~ msgstr "nom"
+
+#, fuzzy
+#~| msgid "league score"
+#~ msgid "league"
+#~ msgstr "ligue"
+
+#~ msgid "start date"
+#~ msgstr "date de début"
+
+#~ msgid "end date"
+#~ msgstr "date de fin"
+
+#~ msgid "active season"
+#~ msgstr "saison active"
