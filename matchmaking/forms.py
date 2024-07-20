@@ -94,13 +94,3 @@ class ParticipantForm(ModelForm):
         """
         changed_data = super(ParticipantForm, self).has_changed()
         return bool(self.initial or changed_data)
-
-class LeagueForm(ModelForm):
-    class Meta:
-        model = models.League
-        fields = "__all__"
-    
-    def __init__(self, *args, **kwargs):
-        super(LeagueForm, self).__init__(*args, **kwargs)
-        if (self.instance and (self.fields['active_season'].queryset.count() >= 1)):
-            self.fields['active_season'].queryset = models.Tournament.objects.filter(league=self.instance)

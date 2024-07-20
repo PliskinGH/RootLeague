@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from authentification.models import Player
+from league.models import Tournament
 
 # Constants subject to change
 MAX_NUMBER_OF_PLAYERS_IN_MATCH = 4
@@ -108,7 +109,7 @@ class Match(models.Model):
                                            verbose_name=_('date registered'))
     date_closed = models.DateTimeField(blank=True, null=True,
                                        verbose_name=_('date closed'))
-    tournament = models.ForeignKey('Tournament', on_delete=models.SET_NULL,
+    tournament = models.ForeignKey(Tournament, on_delete=models.SET_NULL,
                                    null=True, blank=False,
                                    related_name="matches",
                                    verbose_name=_('tournament'))
@@ -187,46 +188,4 @@ class Participant(models.Model):
                 result = result + _(" in ") + self.match.__str__(mention_participants=False)
         else:
             result = _("UnknownPlayer") + str(self.id)
-        return result
-    
-class Tournament(models.Model):
-    """
-    Model for a tournament, which is a set of matches,
-    but could be part (= season) of a league if applicable,
-    i.e. represent a set of league matches in a given period of time.
-    """
-    name = models.CharField(max_length=200, blank=False, unique=True,
-                            verbose_name=_('name'))
-    league = models.ForeignKey('League', on_delete=models.SET_NULL,
-                               null=True, blank=True,
-                               related_name="seasons",
-                               verbose_name=_('league'))
-    
-    start_date = models.DateTimeField(blank=True, null=True,
-                                      verbose_name=_('start date'))
-    end_date = models.DateTimeField(blank=True, null=True,
-                                     verbose_name=_('end date'))
-
-    def __str__(self):
-        result = super(Tournament, self).__str__()
-        if (self.name not in ['', None]):
-            result = self.name
-        return result
-
-class League(models.Model):
-    """
-    Model for a league, which is a set of matches,
-    that could be divided into seasons.
-    """
-    name = models.CharField(max_length=200, blank=False, unique=True,
-                            verbose_name=_('name'))
-    active_season = models.OneToOneField(Tournament, on_delete=models.SET_NULL,
-                                         null=True, blank=True,
-                                         related_name="active_in_league",
-                                         verbose_name=_('active season'))
-
-    def __str__(self):
-        result = super(League, self).__str__()
-        if (self.name not in ['', None]):
-            result = self.name
         return result
