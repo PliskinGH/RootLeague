@@ -4,6 +4,8 @@
 
 {% load i18n %}
 
+{% load custom_tags %}
+
 {% block content %}
 <h2 class="section-heading mb-4">
     <span class="section-heading-upper">{{_("Match details")}}</span>
@@ -17,7 +19,9 @@
       <th scope="col">{{_("Table talk")}}</th>
       <th scope="col">{{_("Map")}}</th>
       <th scope="col">{{_("Deck")}}</th>
+      {% if object.date_closed %}
       <th scope="col">{{_("Date closed")}}</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -31,7 +35,9 @@
       {% endif %}
       </td>
       <td>{{ object.get_deck_display }}</td>
+      {% if object.date_closed %}
       <th scope="row">{{ object.date_closed }}</th>
+      {% endif %}
     </tr>
   </tbody>
 </table>
@@ -47,9 +53,13 @@
     </tr>
   </thead>
   <tbody>
-    {% for participant in object.participants.all|dictsort:"turn_order" %}
+    {% for participant in object.participants.all|sort_by:"turn_order" %}
     <tr>
-      <th scope="row">{{ participant.get_turn_order_display }}</th>
+      <th scope="row">
+      {% if participant.turn_order != None %}
+          {{ participant.get_turn_order_display }}
+      {% endif %}
+      </th>
       <td>
           {% if participant.player %}
               {{ participant.player }}
@@ -68,11 +78,15 @@
               {% else %}
                   {{ participant.coalition }}
               {% endif %}
-          {% else %}
+          {% elif participant.game_score != None %}
               {{ participant.game_score }}
           {% endif %}
       </td>
-      <td>{{ participant.league_score }}</td>
+      <td>
+      {% if participant.league_score != None %}
+          {{ participant.league_score }}
+      {% endif %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>

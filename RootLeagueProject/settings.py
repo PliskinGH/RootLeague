@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'django_select2',
     'authentification',
     'matchmaking',
-    'leaderboards',
+    'league',
     'misc',
 ]
 

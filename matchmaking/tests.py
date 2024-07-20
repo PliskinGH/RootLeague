@@ -21,13 +21,13 @@ class MatchDetailslPageTestCase(TestCase):
     # test that detail page returns a 200 if the match exists
     def test_details_page_returns_200(self):
         match_id = self.match.id
-        response = self.client.get(reverse('matchmaking:match_detail', args=(match_id,)))
+        response = self.client.get(reverse('match:match_detail', args=(match_id,)))
         self.assertEqual(response.status_code, 200)
 
     # test that detail page returns a 404 if the item match does not exist
     def test_details_page_returns_404(self):
         match_id = self.match.id + 1
-        response = self.client.get(reverse('matchmaking:match_detail', args=(match_id,)))
+        response = self.client.get(reverse('match:match_detail', args=(match_id,)))
         self.assertEqual(response.status_code, 404)
 
 class NewMatchPageTestCase(TestCase):
@@ -39,7 +39,7 @@ class NewMatchPageTestCase(TestCase):
     # test that a new match is made
     def test_new_match_is_registered(self):
         old_match_count = models.Match.objects.count()
-        self.client.post(reverse('matchmaking:register'), {
+        self.client.post(reverse('match:register'), {
             'title': 'new game',
             'board_map': models.MAP_AUTUMN,
             "participants-TOTAL_FORMS": "1",
@@ -51,7 +51,7 @@ class NewMatchPageTestCase(TestCase):
     # test that a new match is not made
     def test_new_match_is_not_registered(self):
         old_match_count = models.Match.objects.count()
-        self.client.post(reverse('matchmaking:register'), {
+        self.client.post(reverse('match:register'), {
             'title': 'new game',
             'board_map': 'test'
         })

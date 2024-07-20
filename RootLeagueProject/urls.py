@@ -22,10 +22,10 @@ from matchmaking import views # import views so we can use them in urls.
 urlpatterns = [
     path("select2/", include("django_select2.urls")),
     path('', views.index, name='index'),
-    path('matchmaking/', include('matchmaking.urls', namespace='matchmaking')),
+    path('match/', include('matchmaking.urls', namespace='match')),
     path('misc/', include('misc.urls', namespace='misc')),
     path('auth/', include('authentification.urls', namespace='auth')),
-    path('leaderboards/', include('leaderboards.urls', namespace='leaderboards')),
+    path('league/', include('league.urls', namespace='league')),
     path('admin/', admin.site.urls),
 ]
 

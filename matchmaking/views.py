@@ -73,7 +73,7 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
     success_message = _("Match successfully registered!")
     
     def get_success_url(self):
-        return reverse_lazy('matchmaking:match_detail', args=(self.object.id,))
+        return reverse_lazy('match:match_detail', args=(self.object.id,))
 
     def forms_valid(self, form, inlines):
         response = super(CreateMatchView, self).forms_valid(form, inlines)

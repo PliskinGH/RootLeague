@@ -25,7 +25,7 @@
     {% for match in page_obj %}
     <tr>
       <th scope="row">{{ match.date_registered }}</th>
-      <td><a href="{% url 'matchmaking:match_detail' match_id=match.id %}">{{ match.title }}</a></td>
+      <td><a href="{% url 'match:match_detail' match_id=match.id %}">{{ match.title }}</a></td>
       <td>
       {% for participant in match.participants.all %}
           {% if participant.player %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-20 01:42+0200\n"
+"POT-Creation-Date: 2024-07-20 13:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,7 +227,6 @@ msgid " in "
 msgstr " dans "
 
 #: .\matchmaking\models.py:189
-#| msgid "UnknownParticipant"
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
 
@@ -258,18 +257,15 @@ msgid "Match details"
 msgstr "Détails de partie"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:16
-#| msgid "date registered"
 msgid "Date registered"
 msgstr "Date de création"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:17
-#| msgid "table talk"
 msgid "Table talk"
 msgstr "Déroulement"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:18
 #: .\matchmaking\templates\matchmaking\match_list.html:19
-#| msgid "map"
 msgid "Map"
 msgstr "Plateau"
 
@@ -279,32 +275,26 @@ msgid "Deck"
 msgstr ""
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:20
-#| msgid "date closed"
 msgid "Date closed"
 msgstr "Date de fin"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:42
-#| msgid "turn order"
 msgid "Turn order"
 msgstr "Tour de jeu"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:43
-#| msgid "player"
 msgid "Player"
 msgstr "Joueur"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:44
-#| msgid "active season"
 msgid "Faction"
 msgstr ""
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:45
-#| msgid "game score"
 msgid "Game score"
 msgstr "Score de jeu"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:46
-#| msgid "tournament"
 msgid "Tournament score"
 msgstr "Score de tournoi"
 
@@ -321,7 +311,6 @@ msgid "Date"
 msgstr ""
 
 #: .\matchmaking\templates\matchmaking\match_list.html:18
-#| msgid "player"
 msgid "Players"
 msgstr "Joueurs"
 
@@ -346,7 +335,6 @@ msgid "All games"
 msgstr "Toutes les parties"
 
 #: .\matchmaking\views.py:73
-#| msgid "date registered"
 msgid "Match successfully registered!"
 msgstr "Partie enregistrée avec succès !"
 

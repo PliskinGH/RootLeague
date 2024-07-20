@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-20 01:42+0200\n"
+"POT-Creation-Date: 2024-07-20 13:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,20 +16,19 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-#: .\leaderboards\templates\leaderboards\leaderboard.html:7
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\league\templates\league\leaderboard.html:7
 msgid "Leaderboard"
-msgstr "Classement"
+msgstr ""
 
-#: .\leaderboards\templates\leaderboards\leaderboard.html:15
+#: .\league\templates\league\leaderboard.html:15
 msgid "Player"
 msgstr ""
 
-#: .\leaderboards\templates\leaderboards\leaderboard.html:16
+#: .\league\templates\league\leaderboard.html:16
 msgid "Score"
 msgstr ""
 
-#: .\leaderboards\views.py:11
+#: .\league\views.py:9
 msgid "All players"
-msgstr "Tous les joueurs"
+msgstr ""
