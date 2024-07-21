@@ -177,7 +177,6 @@ msgid "e.g. Discord thread"
 msgstr "e.g thread Discord"
 
 #: .\matchmaking\models.py:124
-#, fuzzy
 #| msgid "table talk"
 msgid "table talk url"
 msgstr "lien de discussion"
