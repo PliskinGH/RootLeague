@@ -32,6 +32,19 @@ class Tournament(AbstractTournament):
                                null=True, blank=True,
                                related_name="seasons",
                                verbose_name=_('league'))
+    
+    @classmethod
+    def get_default_pk(cls):
+        league, created_league = League.get_default()
+        if (not(created_league) and league.active_season is not None):
+            tournament = league.active_season
+        else:
+            tournament, created = cls.objects.get_or_create(name='Test League Season 1', 
+                                                            defaults=dict(league=league))
+        result = None
+        if (tournament is not None):
+            result = tournament.pk
+        return result
 
 
 class League(AbstractTournament):
@@ -43,3 +56,8 @@ class League(AbstractTournament):
                                          null=True, blank=True,
                                          related_name="active_in_league",
                                          verbose_name=_('active season'))
+    
+    @classmethod
+    def get_default(cls):
+        league, created = cls.objects.get_or_create(name='Test League')
+        return (league, created)

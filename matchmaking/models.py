@@ -111,6 +111,7 @@ class Match(models.Model):
                                        verbose_name=_('date closed'))
     tournament = models.ForeignKey(Tournament, on_delete=models.SET_NULL,
                                    null=True, blank=False,
+                                   default=Tournament.get_default_pk,
                                    related_name="matches",
                                    verbose_name=_('tournament'))
     
@@ -118,6 +119,9 @@ class Match(models.Model):
                                   blank=True, default=TABLETALK_ASYNC,
                                   choices=TABLETALK_TYPES,
                                   verbose_name=_('table talk'))
+    table_talk_url = models.URLField(blank=True, null=True,
+                                     help_text=_("e.g. Discord thread"),
+                                     verbose_name=_('table talk url'))
     
     deck = models.CharField(max_length=200, choices=DECKS,
                             blank=True, default=DECK_EP,

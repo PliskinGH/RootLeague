@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 00:38+0200\n"
+"POT-Creation-Date: 2024-07-21 11:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "date de fn"
 msgid "league"
 msgstr "ligue"
 
-#: .\league\models.py:45
+#: .\league\models.py:58
 msgid "active season"
 msgstr "saison active"
 

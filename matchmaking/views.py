@@ -8,6 +8,7 @@ from extra_views import InlineFormSetFactory, CreateWithInlinesView, SuccessMess
 from django.utils.translation import gettext_lazy as _
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
+from league.models import Tournament
 from .forms import MatchForm, ParticipantForm
 
 # Create your views here.
@@ -71,6 +72,22 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
     inlines = [ParticipantInline]
     form_class = MatchForm
     success_message = _("Match successfully registered!")
+    
+    def get_form(self, form_class=None):
+        form = super(CreateMatchView, self).get_form(form_class)
+        initial_tournament_name = ""
+        if (self.request.method == 'GET'):
+            initial_tournament_name = self.request.GET.get("tournament", "")
+        initial_tournaments = []
+        if (initial_tournament_name not in ["", None]):
+            initial_tournaments = form.fields['tournament'].queryset.filter(name=initial_tournament_name)
+        initial_tournament = None
+        if (len(initial_tournaments) == 1):
+            initial_tournament = initial_tournaments[0]
+        if (initial_tournament is not None):
+            form.fields['tournament'].initial = initial_tournament
+            form.fields['tournament'].disabled = True
+        return form
     
     def get_success_url(self):
         return reverse_lazy('match:match_detail', args=(self.object.id,))

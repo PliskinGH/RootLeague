@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from . import models
 from authentification.models import Player
+from league.models import Tournament
 
 # Create your tests here.
 
@@ -34,6 +35,7 @@ class NewMatchPageTestCase(TestCase):
     
     def setUp(self):
         self.user = Player.objects.create_user('TestUser', 'test@test.com', 'test')
+        self.tournament = Tournament.objects.create(name='Test Tournament')
         self.client.login(username='TestUser', password='test')
 
     # test that a new match is made
@@ -42,6 +44,7 @@ class NewMatchPageTestCase(TestCase):
         self.client.post(reverse('match:register'), {
             'title': 'new game',
             'board_map': models.MAP_AUTUMN,
+            'tournament': self.tournament.pk,
             "participants-TOTAL_FORMS": "1",
             "participants-INITIAL_FORMS": "0",}
         )

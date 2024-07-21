@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 00:38+0200\n"
+"POT-Creation-Date: 2024-07-21 14:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\matchmaking\forms.py:15
+#: .\matchmaking\forms.py:17
 msgid "Closed"
 msgstr ""
 
-#: .\matchmaking\forms.py:37
+#: .\matchmaking\forms.py:43
 #: .\matchmaking\templates\matchmaking\match_form.html:17
 msgid "Register match"
 msgstr ""
 
-#: .\matchmaking\forms.py:56
+#: .\matchmaking\forms.py:64
 #: .\matchmaking\templates\matchmaking\match_detail.html:75
 msgid "Coalition with"
 msgstr ""
@@ -164,69 +164,77 @@ msgstr ""
 msgid "date closed"
 msgstr ""
 
-#: .\matchmaking\models.py:115
+#: .\matchmaking\models.py:116
 msgid "tournament"
 msgstr ""
 
-#: .\matchmaking\models.py:120
+#: .\matchmaking\models.py:121
 msgid "table talk"
 msgstr ""
 
+#: .\matchmaking\models.py:123
+msgid "e.g. Discord thread"
+msgstr ""
+
 #: .\matchmaking\models.py:124
+msgid "table talk url"
+msgstr ""
+
+#: .\matchmaking\models.py:128
 msgid "deck"
 msgstr ""
 
-#: .\matchmaking\models.py:127
+#: .\matchmaking\models.py:131
 msgid "map"
 msgstr ""
 
-#: .\matchmaking\models.py:129
+#: .\matchmaking\models.py:133
 #: .\matchmaking\templates\matchmaking\match_detail.html:34
 msgid "random suits"
 msgstr ""
 
-#: .\matchmaking\models.py:139
+#: .\matchmaking\models.py:143
 #: .\matchmaking\templates\matchmaking\match_list.html:17
 msgid "Match"
 msgstr ""
 
-#: .\matchmaking\models.py:157
+#: .\matchmaking\models.py:161
 msgid "player"
 msgstr ""
 
-#: .\matchmaking\models.py:160
+#: .\matchmaking\models.py:164
 msgid "match"
 msgstr ""
 
-#: .\matchmaking\models.py:164
+#: .\matchmaking\models.py:168
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:167
+#: .\matchmaking\models.py:171
 msgid "game score"
 msgstr ""
 
-#: .\matchmaking\models.py:170
+#: .\matchmaking\models.py:174
 msgid "dominance"
 msgstr ""
 
-#: .\matchmaking\models.py:173
+#: .\matchmaking\models.py:177
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:177
+#: .\matchmaking\models.py:181
 msgid "league score"
 msgstr ""
 
-#: .\matchmaking\models.py:181
+#: .\matchmaking\models.py:185
 msgid "turn order"
 msgstr ""
 
-#: .\matchmaking\models.py:188
+#: .\matchmaking\models.py:192
 msgid " in "
 msgstr ""
 
-#: .\matchmaking\models.py:190
+#: .\matchmaking\models.py:194
 msgid "UnknownPlayer"
 msgstr ""
 
@@ -304,19 +312,19 @@ msgstr ""
 msgid "Find a match"
 msgstr ""
 
-#: .\matchmaking\views.py:18
+#: .\matchmaking\views.py:19
 msgid "Last matches"
 msgstr ""
 
-#: .\matchmaking\views.py:30
+#: .\matchmaking\views.py:31
 msgid "All games"
 msgstr ""
 
-#: .\matchmaking\views.py:73
+#: .\matchmaking\views.py:74
 msgid "Match successfully registered!"
 msgstr ""
 
-#: .\matchmaking\views.py:112
+#: .\matchmaking\views.py:129
 #, python-format
 msgid "Search results for the request %s"
 msgstr ""

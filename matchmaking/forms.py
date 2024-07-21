@@ -1,4 +1,5 @@
 from django.forms import ModelForm, ChoiceField, BooleanField
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from crispy_forms.helper import FormHelper
@@ -6,9 +7,10 @@ from crispy_forms.layout import Column, Fieldset, Layout, Row, Submit
 from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
-from . import models
+from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH
+from league.models import Tournament
 
-PLAYERS_SEATS = [(i,i) for i in range(1, models.MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
+PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 
 class MatchForm(ModelForm):
@@ -16,10 +18,14 @@ class MatchForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if (self.instance and (self.fields['tournament'].queryset.count() >= 1)):
+            self.fields['tournament'].queryset = Tournament.objects.exclude(Q(active_in_league = None) & ~Q(league = None))
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Row(Column("title", css_class='col-10'), Column("closed", css_class='col-2')),
-            Row(Column("table_talk"), Column("deck"), Column("board_map"), Column("random_suits")),
+            Row(Column("title")),
+            Row(Column("tournament", css_class='col-10'), Column("closed", css_class='col-2')),
+            Row(Column("table_talk", css_class='col-3'), Column("table_talk_url")),
+            Row(Column("deck"), Column("board_map"), Column("random_suits")),
             Fieldset(
                 "Participants",
                 ModalEditFormsetLayout(
@@ -38,10 +44,12 @@ class MatchForm(ModelForm):
         )
     
     class Meta:
-        model = models.Match
+        model = Match
         fields = [
                    'title',
+                   'tournament',
                    'table_talk',
+                   'table_talk_url',
                    'deck',
                    'board_map',
                    'random_suits',
@@ -56,7 +64,7 @@ class ParticipantForm(ModelForm):
                                      label=_('Coalition with'))
     
     class Meta:
-        model = models.Participant
+        model = Participant
         fields = [
             'turn_order',
             'player',
