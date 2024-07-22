@@ -94,6 +94,13 @@ TABLETALK_TYPES = [
     (TABLETALK_LIVE, _("Live")),
     (TABLETALK_ASYNC, _("Async")),
     ]
+
+SETUP_ADSET = "adset"
+SETUP_STANDARD = "standard"
+SETUP_TYPES = [
+    (SETUP_ADSET, _("Advanced")),
+    (SETUP_STANDARD, _("Standard")),
+    ]
     
 # Create your models here.
 
@@ -120,8 +127,17 @@ class Match(models.Model):
                                   choices=TABLETALK_TYPES,
                                   verbose_name=_('table talk'))
     table_talk_url = models.URLField(blank=True, null=True,
-                                     help_text=_("e.g. Discord thread"),
-                                     verbose_name=_('table talk url'))
+                                     help_text=_("E.g. Discord thread."),
+                                     verbose_name=_('table talk URL'))
+    
+    game_setup = models.CharField(max_length=20,
+                                  blank=True, default=SETUP_ADSET,
+                                  choices=SETUP_TYPES,
+                                  verbose_name=_('setup'))
+    undrafted_faction = models.CharField(max_length=100, choices=FACTIONS,
+                                         blank=True,
+                                         help_text=_("Only in advanced setup."),
+                                         verbose_name=_('undrafted faction'))
     
     deck = models.CharField(max_length=200, choices=DECKS,
                             blank=True, default=DECK_EP,

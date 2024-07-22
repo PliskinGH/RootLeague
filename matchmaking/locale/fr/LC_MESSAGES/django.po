@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 14:19+0200\n"
+"POT-Creation-Date: 2024-07-22 19:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,8 @@ msgstr "Terminé"
 msgid "Register match"
 msgstr "Enregistrer une partie"
 
-#: .\matchmaking\forms.py:64
-#: .\matchmaking\templates\matchmaking\match_detail.html:75
+#: .\matchmaking\forms.py:66
+#: .\matchmaking\templates\matchmaking\match_detail.html:97
 msgid "Coalition with"
 msgstr "Coalition avec"
 
@@ -120,7 +120,7 @@ msgstr "Montagne"
 msgid "Lake"
 msgstr "Lac"
 
-#: .\matchmaking\models.py:65
+#: .\matchmaking\models.py:65 .\matchmaking\models.py:102
 msgid "Standard"
 msgstr ""
 
@@ -152,90 +152,106 @@ msgstr "Direct"
 msgid "Async"
 msgstr "Différé"
 
-#: .\matchmaking\models.py:107
+#: .\matchmaking\models.py:101
+msgid "Advanced"
+msgstr "Avancée"
+
+#: .\matchmaking\models.py:114
 msgid "title"
 msgstr "titre"
 
-#: .\matchmaking\models.py:109
+#: .\matchmaking\models.py:116
 msgid "date registered"
 msgstr "date de création"
 
-#: .\matchmaking\models.py:111
+#: .\matchmaking\models.py:118
 msgid "date closed"
 msgstr "date de fin"
 
-#: .\matchmaking\models.py:116
+#: .\matchmaking\models.py:123
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\matchmaking\models.py:121
+#: .\matchmaking\models.py:128
 msgid "table talk"
 msgstr "déroulement"
 
-#: .\matchmaking\models.py:123
-msgid "e.g. Discord thread"
-msgstr "e.g thread Discord"
+#: .\matchmaking\models.py:130
+#| msgid "e.g. Discord thread"
+msgid "E.g. Discord thread."
+msgstr "E.g fil de discussion Discord."
 
-#: .\matchmaking\models.py:124
+#: .\matchmaking\models.py:131
 #| msgid "table talk"
-msgid "table talk url"
+msgid "table talk URL"
 msgstr "lien de discussion"
 
-#: .\matchmaking\models.py:128
+#: .\matchmaking\models.py:136
+msgid "setup"
+msgstr "mise en place"
+
+#: .\matchmaking\models.py:139
+msgid "Only in advanced setup."
+msgstr "Mise en place avancée uniquement."
+
+#: .\matchmaking\models.py:140
+msgid "undrafted faction"
+msgstr "faction non sélectionnée"
+
+#: .\matchmaking\models.py:144
 msgid "deck"
 msgstr ""
 
-#: .\matchmaking\models.py:131
+#: .\matchmaking\models.py:147
 msgid "map"
 msgstr "plateau"
 
-#: .\matchmaking\models.py:133
-#: .\matchmaking\templates\matchmaking\match_detail.html:34
+#: .\matchmaking\models.py:149
+#: .\matchmaking\templates\matchmaking\match_detail.html:56
 msgid "random suits"
 msgstr "distribution aléatoire"
 
-#: .\matchmaking\models.py:143
-#: .\matchmaking\templates\matchmaking\match_list.html:17
+#: .\matchmaking\models.py:159
 msgid "Match"
 msgstr "Partie"
 
-#: .\matchmaking\models.py:161
+#: .\matchmaking\models.py:177
 msgid "player"
 msgstr "joueur"
 
-#: .\matchmaking\models.py:164
+#: .\matchmaking\models.py:180
 msgid "match"
 msgstr "partie"
 
-#: .\matchmaking\models.py:168
+#: .\matchmaking\models.py:184
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:171
+#: .\matchmaking\models.py:187
 msgid "game score"
 msgstr "score de jeu"
 
-#: .\matchmaking\models.py:174
+#: .\matchmaking\models.py:190
 msgid "dominance"
 msgstr "domination"
 
-#: .\matchmaking\models.py:177
+#: .\matchmaking\models.py:193
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:181
+#: .\matchmaking\models.py:197
 msgid "league score"
 msgstr "score de ligue"
 
-#: .\matchmaking\models.py:185
+#: .\matchmaking\models.py:201
 msgid "turn order"
 msgstr "tour de jeu"
 
-#: .\matchmaking\models.py:192
+#: .\matchmaking\models.py:208
 msgid " in "
 msgstr " dans "
 
-#: .\matchmaking\models.py:194
+#: .\matchmaking\models.py:210
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
 
@@ -247,41 +263,60 @@ msgstr "Détails de partie"
 msgid "Date registered"
 msgstr "Date de création"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:19
-msgid "Table talk"
-msgstr "Déroulement"
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:20
-#: .\matchmaking\templates\matchmaking\match_list.html:19
-msgid "Map"
-msgstr "Plateau"
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:21
-#: .\matchmaking\templates\matchmaking\match_list.html:20
-msgid "Deck"
-msgstr ""
-
 #: .\matchmaking\templates\matchmaking\match_detail.html:23
 msgid "Date closed"
 msgstr "Date de fin"
 
+#: .\matchmaking\templates\matchmaking\match_detail.html:29
+#: .\matchmaking\templates\matchmaking\match_list.html:17
+#| msgid "tournament"
+msgid "Tournament"
+msgstr "Tournoi"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:34
+msgid "Setup"
+msgstr "Mise en place"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:38
+msgid "Table talk"
+msgstr "Déroulement"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:43
+#| msgid "Table talk"
+msgid "Table talk URL"
+msgstr "Lien de discussion"
+
 #: .\matchmaking\templates\matchmaking\match_detail.html:48
+#: .\matchmaking\templates\matchmaking\match_list.html:20
+msgid "Deck"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:52
+#: .\matchmaking\templates\matchmaking\match_list.html:19
+msgid "Map"
+msgstr "Plateau"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:61
+msgid "Undrafted faction"
+msgstr "Faction non sélectionnée"
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:70
 msgid "Turn order"
 msgstr "Tour de jeu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:49
+#: .\matchmaking\templates\matchmaking\match_detail.html:71
 msgid "Player"
 msgstr "Joueur"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:50
+#: .\matchmaking\templates\matchmaking\match_detail.html:72
 msgid "Faction"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:51
+#: .\matchmaking\templates\matchmaking\match_detail.html:73
 msgid "Game score"
 msgstr "Score de jeu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:52
+#: .\matchmaking\templates\matchmaking\match_detail.html:74
 msgid "Tournament score"
 msgstr "Score de tournoi"
 
@@ -329,6 +364,10 @@ msgstr "Partie enregistrée avec succès !"
 #, python-format
 msgid "Search results for the request %s"
 msgstr "Résultats de recherche pour la requête %s"
+
+#~| msgid "table talk"
+#~ msgid "table talk url"
+#~ msgstr "lien de discussion"
 
 #~ msgid "name"
 #~ msgstr "nom"

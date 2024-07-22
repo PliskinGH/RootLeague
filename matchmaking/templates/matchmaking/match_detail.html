@@ -13,31 +13,53 @@
 </h2>
 
 <table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">{{_("Date registered")}}</th>
-      <th scope="col">{{_("Table talk")}}</th>
-      <th scope="col">{{_("Map")}}</th>
-      <th scope="col">{{_("Deck")}}</th>
-      {% if object.date_closed %}
-      <th scope="col">{{_("Date closed")}}</th>
-      {% endif %}
-    </tr>
-  </thead>
   <tbody>
     <tr>
-      <th scope="row">{{ object.date_registered }}</th>
+      <th scope="row">{{_("Date registered")}}</th>
+      <td>{{ object.date_registered }}</td>
+    </tr>
+    {% if object.date_closed %}
+    <tr>
+      <th scope="row">{{_("Date closed")}}</th>
+      <td>{{ object.date_closed }}</td>
+    </tr>
+    {% endif %}
+    {% if object.tournament %}
+    <tr>
+      <th scope="row">{{_("Tournament")}}</th>
+      <td>{{ object.tournament }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <th scope="row">{{_("Setup")}}</th>
+      <td>{{ object.get_game_setup_display }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{{_("Table talk")}}</th>
       <td>{{ object.get_table_talk_display }}</td>
+    </tr>
+    {% if object.table_talk_url %}
+    <tr>
+      <th scope="row">{{_("Table talk URL")}}</th>
+      <td><a href="{{ object.table_talk_url }}">{{ object.table_talk_url }}</a></td>
+    </tr>
+    {% endif %}
+    <tr>
+      <th scope="row">{{_("Deck")}}</th>
+      <td>{{ object.get_deck_display }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{{_("Map")}}</th>
       <td>
       {{ object.get_board_map_display }}
       {% if object.random_suits %}
       ({{_("random suits")}})
       {% endif %}
       </td>
-      <td>{{ object.get_deck_display }}</td>
-      {% if object.date_closed %}
-      <th scope="row">{{ object.date_closed }}</th>
-      {% endif %}
+    </tr>
+    <tr>
+      <th scope="row">{{_("Undrafted faction")}}</th>
+      <td>{{ object.undrafted_faction_display }}</td>
     </tr>
   </tbody>
 </table>

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'crispy_formset_modal',
     'django_select2',
+    'import_export',
     'authentification',
     'matchmaking',
     'league',

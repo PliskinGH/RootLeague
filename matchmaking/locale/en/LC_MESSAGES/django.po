@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 14:19+0200\n"
+"POT-Creation-Date: 2024-07-22 19:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,8 @@ msgstr ""
 msgid "Register match"
 msgstr ""
 
-#: .\matchmaking\forms.py:64
-#: .\matchmaking\templates\matchmaking\match_detail.html:75
+#: .\matchmaking\forms.py:66
+#: .\matchmaking\templates\matchmaking\match_detail.html:97
 msgid "Coalition with"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Lake"
 msgstr ""
 
-#: .\matchmaking\models.py:65
+#: .\matchmaking\models.py:65 .\matchmaking\models.py:102
 msgid "Standard"
 msgstr ""
 
@@ -152,89 +152,104 @@ msgstr ""
 msgid "Async"
 msgstr ""
 
-#: .\matchmaking\models.py:107
+#: .\matchmaking\models.py:101
+msgid "Advanced"
+msgstr ""
+
+#: .\matchmaking\models.py:114
 msgid "title"
 msgstr ""
 
-#: .\matchmaking\models.py:109
+#: .\matchmaking\models.py:116
 msgid "date registered"
 msgstr ""
 
-#: .\matchmaking\models.py:111
+#: .\matchmaking\models.py:118
 msgid "date closed"
 msgstr ""
 
-#: .\matchmaking\models.py:116
+#: .\matchmaking\models.py:123
 msgid "tournament"
 msgstr ""
 
-#: .\matchmaking\models.py:121
+#: .\matchmaking\models.py:128
 msgid "table talk"
 msgstr ""
 
-#: .\matchmaking\models.py:123
-msgid "e.g. Discord thread"
-msgstr ""
-
-#: .\matchmaking\models.py:124
-msgid "table talk url"
-msgstr ""
-
-#: .\matchmaking\models.py:128
-msgid "deck"
+#: .\matchmaking\models.py:130
+msgid "E.g. Discord thread."
 msgstr ""
 
 #: .\matchmaking\models.py:131
+msgid "table talk URL"
+msgstr ""
+
+#: .\matchmaking\models.py:136
+msgid "setup"
+msgstr ""
+
+#: .\matchmaking\models.py:139
+msgid "Only in advanced setup."
+msgstr ""
+
+#: .\matchmaking\models.py:140
+msgid "undrafted faction"
+msgstr ""
+
+#: .\matchmaking\models.py:144
+msgid "deck"
+msgstr ""
+
+#: .\matchmaking\models.py:147
 msgid "map"
 msgstr ""
 
-#: .\matchmaking\models.py:133
-#: .\matchmaking\templates\matchmaking\match_detail.html:34
+#: .\matchmaking\models.py:149
+#: .\matchmaking\templates\matchmaking\match_detail.html:56
 msgid "random suits"
 msgstr ""
 
-#: .\matchmaking\models.py:143
-#: .\matchmaking\templates\matchmaking\match_list.html:17
+#: .\matchmaking\models.py:159
 msgid "Match"
 msgstr ""
 
-#: .\matchmaking\models.py:161
+#: .\matchmaking\models.py:177
 msgid "player"
 msgstr ""
 
-#: .\matchmaking\models.py:164
+#: .\matchmaking\models.py:180
 msgid "match"
 msgstr ""
 
-#: .\matchmaking\models.py:168
+#: .\matchmaking\models.py:184
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:171
+#: .\matchmaking\models.py:187
 msgid "game score"
 msgstr ""
 
-#: .\matchmaking\models.py:174
+#: .\matchmaking\models.py:190
 msgid "dominance"
 msgstr ""
 
-#: .\matchmaking\models.py:177
+#: .\matchmaking\models.py:193
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:181
+#: .\matchmaking\models.py:197
 msgid "league score"
 msgstr ""
 
-#: .\matchmaking\models.py:185
+#: .\matchmaking\models.py:201
 msgid "turn order"
 msgstr ""
 
-#: .\matchmaking\models.py:192
+#: .\matchmaking\models.py:208
 msgid " in "
 msgstr ""
 
-#: .\matchmaking\models.py:194
+#: .\matchmaking\models.py:210
 msgid "UnknownPlayer"
 msgstr ""
 
@@ -246,41 +261,58 @@ msgstr ""
 msgid "Date registered"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:19
-msgid "Table talk"
-msgstr ""
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:20
-#: .\matchmaking\templates\matchmaking\match_list.html:19
-msgid "Map"
-msgstr ""
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:21
-#: .\matchmaking\templates\matchmaking\match_list.html:20
-msgid "Deck"
-msgstr ""
-
 #: .\matchmaking\templates\matchmaking\match_detail.html:23
 msgid "Date closed"
 msgstr ""
 
+#: .\matchmaking\templates\matchmaking\match_detail.html:29
+#: .\matchmaking\templates\matchmaking\match_list.html:17
+msgid "Tournament"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:34
+msgid "Setup"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:38
+msgid "Table talk"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:43
+msgid "Table talk URL"
+msgstr ""
+
 #: .\matchmaking\templates\matchmaking\match_detail.html:48
-msgid "Turn order"
-msgstr ""
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:49
-msgid "Player"
-msgstr ""
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:50
-msgid "Faction"
-msgstr ""
-
-#: .\matchmaking\templates\matchmaking\match_detail.html:51
-msgid "Game score"
+#: .\matchmaking\templates\matchmaking\match_list.html:20
+msgid "Deck"
 msgstr ""
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:52
+#: .\matchmaking\templates\matchmaking\match_list.html:19
+msgid "Map"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:61
+msgid "Undrafted faction"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:70
+msgid "Turn order"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:71
+msgid "Player"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:72
+msgid "Faction"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:73
+msgid "Game score"
+msgstr ""
+
+#: .\matchmaking\templates\matchmaking\match_detail.html:74
 msgid "Tournament score"
 msgstr ""
 

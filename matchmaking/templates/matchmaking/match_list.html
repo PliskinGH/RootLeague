@@ -14,7 +14,7 @@
   <thead>
     <tr>
       <th scope="col">{{_("Date")}}</th>
-      <th scope="col">{{_("Match")}}</th>
+      <th scope="col">{{_("Tournament")}}</th>
       <th scope="col">{{_("Players")}}</th>
       <th scope="col">{{_("Map")}}</th>
       <th scope="col">{{_("Deck")}}</th>
@@ -24,8 +24,12 @@
   <tbody>
     {% for match in page_obj %}
     <tr>
-      <th scope="row">{{ match.date_registered }}</th>
-      <td><a href="{% url 'match:match_detail' match_id=match.id %}">{{ match.title }}</a></td>
+      <th scope="row"><a href="{% url 'match:match_detail' match_id=match.id %}">{{ match.date_registered }}</a></th>
+      <td>
+        {% if match.tournament != None %}
+        {{ match.tournament }}
+        {% endif %}
+      </td>
       <td>
       {% for participant in match.participants.all %}
           {% if participant.player %}

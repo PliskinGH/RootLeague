@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
+from import_export import resources
+from import_export.admin import ImportExportMixin, ExportActionMixin
 
 from .models import Match, Participant
 
@@ -47,8 +49,12 @@ class ParticipationInline(ParticipantInline):
         url = self.get_admin_url(participant.match)
         return mark_safe("<a href='{}'>{}</a>".format(url, participant.match.__str__()))
 
+class MatchResource(resources.ModelResource):
+    class Meta:
+        model = Match
+
 @admin.register(Match)
-class MatchAdmin(admin.ModelAdmin):
+class MatchAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     inlines = [ParticipantInline,] # list of participants in the match
     search_fields = ['title', 'participants__player__username',
                      'participants__player__in_game_name',
@@ -58,3 +64,4 @@ class MatchAdmin(admin.ModelAdmin):
                    'tournament',
                    'board_map', 'deck', 'random_suits']
     readonly_fields = ["date_registered"]
+    resource_classes = [MatchResource]

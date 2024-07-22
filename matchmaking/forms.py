@@ -23,9 +23,9 @@ class MatchForm(ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(Column("title")),
-            Row(Column("tournament", css_class='col-10'), Column("closed", css_class='col-2')),
+            Row(Column("tournament", css_class='col-6'), Column("game_setup", css_class='col-4'), Column("closed", css_class='col-2')),
             Row(Column("table_talk", css_class='col-3'), Column("table_talk_url")),
-            Row(Column("deck"), Column("board_map"), Column("random_suits")),
+            Row(Column("deck"), Column("board_map"), Column("random_suits"), Column("undrafted_faction")),
             Fieldset(
                 "Participants",
                 ModalEditFormsetLayout(
@@ -50,6 +50,8 @@ class MatchForm(ModelForm):
                    'tournament',
                    'table_talk',
                    'table_talk_url',
+                   'game_setup',
+                   'undrafted_faction',
                    'deck',
                    'board_map',
                    'random_suits',
@@ -83,7 +85,6 @@ class ParticipantForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields["turn_order"].disabled = True
         self.helper = ModalEditFormHelper()
         self.helper.layout = ModalEditLayout(
             'turn_order',
