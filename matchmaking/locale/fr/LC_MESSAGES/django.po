@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-22 19:53+0200\n"
+"POT-Creation-Date: 2024-07-23 19:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\matchmaking\apps.py:6
+msgid "matchmaking"
+msgstr ""
 
 #: .\matchmaking\forms.py:17
 msgid "Closed"
@@ -70,7 +74,7 @@ msgstr "Gardiens de Fer"
 
 #: .\matchmaking\models.py:40
 msgid "Vagabond: Ranger"
-msgstr "Vagabond: Rôdeur"
+msgstr "Vagabond : Rôdeur"
 
 #: .\matchmaking\models.py:41
 msgid "Vagabond: Thief"
@@ -177,12 +181,10 @@ msgid "table talk"
 msgstr "déroulement"
 
 #: .\matchmaking\models.py:130
-#| msgid "e.g. Discord thread"
 msgid "E.g. Discord thread."
-msgstr "E.g fil de discussion Discord."
+msgstr "E.g. fil de discussion Discord."
 
 #: .\matchmaking\models.py:131
-#| msgid "table talk"
 msgid "table talk URL"
 msgstr "lien de discussion"
 
@@ -211,47 +213,51 @@ msgstr "plateau"
 msgid "random suits"
 msgstr "distribution aléatoire"
 
-#: .\matchmaking\models.py:159
-msgid "Match"
-msgstr "Partie"
-
-#: .\matchmaking\models.py:177
-msgid "player"
-msgstr "joueur"
-
-#: .\matchmaking\models.py:180
+#: .\matchmaking\models.py:152 .\matchmaking\models.py:181
 msgid "match"
 msgstr "partie"
 
-#: .\matchmaking\models.py:184
+#: .\matchmaking\models.py:160
+msgid "Match"
+msgstr "Partie"
+
+#: .\matchmaking\models.py:178
+msgid "player"
+msgstr "joueur"
+
+#: .\matchmaking\models.py:185
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:187
+#: .\matchmaking\models.py:188
 msgid "game score"
 msgstr "score de jeu"
 
-#: .\matchmaking\models.py:190
+#: .\matchmaking\models.py:191
 msgid "dominance"
 msgstr "domination"
 
-#: .\matchmaking\models.py:193
+#: .\matchmaking\models.py:194
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:197
+#: .\matchmaking\models.py:198
 msgid "league score"
 msgstr "score de ligue"
 
-#: .\matchmaking\models.py:201
+#: .\matchmaking\models.py:202
 msgid "turn order"
 msgstr "tour de jeu"
 
-#: .\matchmaking\models.py:208
+#: .\matchmaking\models.py:205
+msgid "participant"
+msgstr ""
+
+#: .\matchmaking\models.py:212
 msgid " in "
 msgstr " dans "
 
-#: .\matchmaking\models.py:210
+#: .\matchmaking\models.py:214
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
 
@@ -269,7 +275,6 @@ msgstr "Date de fin"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:29
 #: .\matchmaking\templates\matchmaking\match_list.html:17
-#| msgid "tournament"
 msgid "Tournament"
 msgstr "Tournoi"
 
@@ -282,7 +287,6 @@ msgid "Table talk"
 msgstr "Déroulement"
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:43
-#| msgid "Table talk"
 msgid "Table talk URL"
 msgstr "Lien de discussion"
 

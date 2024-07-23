@@ -147,8 +147,9 @@ class Match(models.Model):
                                  verbose_name=_('map'))
     random_suits = models.BooleanField(default=True, blank=True, null=True,
                                        verbose_name=_('random suits'))
-    
+
     class Meta:
+        verbose_name = _("match")
         ordering = ['-date_registered']
     
     def __str__(self, mention_participants=True):
@@ -199,6 +200,9 @@ class Participant(models.Model):
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
                                                   blank=True, null=True,
                                                   verbose_name=_('turn order'))
+
+    class Meta:
+        verbose_name = _("participant")
     
     def __str__(self, mention_match=True):
         result = ""

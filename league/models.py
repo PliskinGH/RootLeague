@@ -32,6 +32,9 @@ class Tournament(AbstractTournament):
                                null=True, blank=True,
                                related_name="seasons",
                                verbose_name=_('league'))
+
+    class Meta:
+        verbose_name = _("tournament")
     
     @classmethod
     def get_default_pk(cls):
@@ -56,6 +59,9 @@ class League(AbstractTournament):
                                          null=True, blank=True,
                                          related_name="active_in_league",
                                          verbose_name=_('active season'))
+
+    class Meta:
+        verbose_name = _("league")
     
     @classmethod
     def get_default(cls):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-21 11:57+0200\n"
+"POT-Creation-Date: 2024-07-23 19:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\league\apps.py:7 .\league\models.py:34 .\league\models.py:64
+msgid "league"
+msgstr "ligue"
 
 #: .\league\models.py:11
 msgid "name"
@@ -30,11 +34,11 @@ msgstr "date de début"
 msgid "end date"
 msgstr "date de fn"
 
-#: .\league\models.py:34
-msgid "league"
-msgstr "ligue"
+#: .\league\models.py:37
+msgid "tournament"
+msgstr "tournoi"
 
-#: .\league\models.py:58
+#: .\league\models.py:61
 msgid "active season"
 msgstr "saison active"
 

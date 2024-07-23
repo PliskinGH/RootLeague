@@ -19,6 +19,8 @@ class Player(AbstractUser):
     """
     Model for players registered in the league database.
     """
+    first_name = None
+    last_name = None
     email = models.EmailField(_('email address'), unique=True)
     discord_name = models.CharField(max_length=200, blank=True,
                                     verbose_name=_("discord username"))
@@ -29,6 +31,10 @@ class Player(AbstractUser):
     roles = models.ManyToManyField(Role, related_name='players',
                                    blank=True,
                                    verbose_name=_('roles'))
+
+    class Meta:
+        verbose_name = _("player")
+        verbose_name_plural = _("players")
     
     def __str__(self):
         result = ""

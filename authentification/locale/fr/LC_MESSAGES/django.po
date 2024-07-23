@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-15 21:59+0200\n"
+"POT-Creation-Date: 2024-07-23 19:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: .\authentification\apps.py:6
+msgid "authentication"
+msgstr "authentification"
+
 #: .\authentification\forms.py:14
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: .\authentification\forms.py:27
+#: .\authentification\forms.py:26
 #: .\authentification\templates\authentification\login.html:12
 msgid "Log in"
 msgstr "Se connecter"
 
-#: .\authentification\forms.py:34
+#: .\authentification\forms.py:33
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -39,25 +43,33 @@ msgstr "nom"
 msgid "icon"
 msgstr "icone"
 
-#: .\authentification\models.py:22
+#: .\authentification\models.py:24
 msgid "email address"
 msgstr "adresse e-mail"
 
-#: .\authentification\models.py:24
+#: .\authentification\models.py:26
 msgid "discord username"
 msgstr "nom discord"
 
-#: .\authentification\models.py:26
+#: .\authentification\models.py:28
 msgid "in-game Username"
 msgstr "nom dans le jeu"
 
-#: .\authentification\models.py:28
+#: .\authentification\models.py:30
 msgid "in-game ID"
 msgstr "ID dans le jeu"
 
-#: .\authentification\models.py:31
+#: .\authentification\models.py:33
 msgid "roles"
 msgstr ""
+
+#: .\authentification\models.py:36
+msgid "player"
+msgstr "joueur"
+
+#: .\authentification\models.py:37
+msgid "players"
+msgstr "joueurs"
 
 #: .\authentification\templates\authentification\login.html:11
 #: .\authentification\templates\authentification\password_change.html:11
@@ -81,8 +93,9 @@ msgstr "Connexion réussie !"
 msgid ""
 "Your player account was successfully created.                          You "
 "can now log in."
-msgstr "Votre compte de joueur a bien été créé.                          Vous "
-"pouvez vous connecter."
+msgstr ""
+"Votre compte de joueur a bien été créé.                          Vous pouvez "
+"vous connecter."
 
 #: .\authentification\views.py:29
 msgid "Password changed successfully!"

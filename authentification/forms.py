@@ -16,8 +16,7 @@ class PlayerRegisterForm(UserCreationForm):
   class Meta:
       model = get_user_model()
       fields = ('username', 'email', 'discord_name',
-                'in_game_name', 'in_game_id',
-                'first_name', 'last_name')
+                'in_game_name', 'in_game_id')
 
 class PlayerLoginForm(AuthenticationForm):
 
