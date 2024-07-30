@@ -13,13 +13,34 @@ class AbstractTournament(models.Model):
     start_date = models.DateTimeField(blank=True, null=True,
                                       verbose_name=_('start date'))
     end_date = models.DateTimeField(blank=True, null=True,
-                                     verbose_name=_('end date'))
+                                    verbose_name=_('end date'))
+    
+    max_players_per_game = models.IntegerField(blank=True, null=True,
+                                               default=6,
+                                               verbose_name=_("maximum number of players per game")
+                                               )
+    min_players_per_game = models.IntegerField(blank=True, null=True,
+                                               default=2,
+                                               verbose_name=_("minimum number of players per game")
+                                               )
+    coalition_allowed = models.BooleanField(blank=True, null=True,
+                                            default=True,
+                                            verbose_name=_('coalition allowed'))
+    three_coalition_allowed = models.BooleanField(blank=True, null=True,
+                                                  default=True,
+                                                  verbose_name=_('three way coalition allowed'))
     
     class Meta:
         abstract = True
+    
+    def save(self, *args, **kwargs):
+        if (self.three_coalition_allowed is None and
+            self.coalition_allowed is not None):
+            self.three_coalition_allowed = self.coalition_allowed
+        super(AbstractTournament, self).save()
 
     def __str__(self):
-        result = super(AbstractTournament, self).__str__()
+        result = super().__str__()
         if (self.name not in ['', None]):
             result = self.name
         return result
@@ -35,6 +56,26 @@ class Tournament(AbstractTournament):
 
     class Meta:
         verbose_name = _("tournament")
+    
+    def save(self, *args, **kwargs):
+        if (self.league is not None):
+            if (self.league.max_players_per_game is not None and
+                (self.max_players_per_game is None or
+                 (self.max_players_per_game > self.league.max_players_per_game))):
+                self.max_players_per_game = self.league.max_players_per_game
+            if (self.league.min_players_per_game is not None and
+                (self.min_players_per_game is None or
+                 (self.min_players_per_game < self.league.min_players_per_game))):
+                self.min_players_per_game = self.league.min_players_per_game
+            if (self.league.coalition_allowed is not None and
+                (self.coalition_allowed is None or
+                 (self.coalition_allowed and not(self.league.coalition_allowed)))):
+                self.coalition_allowed = self.league.coalition_allowed
+            if (self.league.three_coalition_allowed is not None and
+                (self.three_coalition_allowed is None or
+                 (self.three_coalition_allowed and not(self.league.three_coalition_allowed)))):
+                self.three_coalition_allowed = self.league.three_coalition_allowed
+        super().save()
     
     @classmethod
     def get_default_pk(cls):

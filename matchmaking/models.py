@@ -1,11 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from authentification.models import Player
 from league.models import Tournament
 
 # Constants subject to change
-MAX_NUMBER_OF_PLAYERS_IN_MATCH = 4
+MAX_NUMBER_OF_PLAYERS_IN_MATCH = 6
 DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH = 4
 
 FACTION_CATS = "cats"
@@ -151,6 +152,16 @@ class Match(models.Model):
     class Meta:
         verbose_name = _("match")
         ordering = ['-date_registered']
+
+    def clean(self):
+        super().clean()
+        # if (self.tournament is not None and 
+        #     self.tournament.max_players_per_game is not None):
+        #     nb_participants = self.participants.count()
+        #     max_nb_participants = self.tournament.max_players_per_game
+        #     if (nb_participants > max_nb_participants):
+        #         raise ValidationError(
+        #             _("This tournament does not accept more than %d players per game.")%max_nb_participants)
     
     def __str__(self, mention_participants=True):
         result = ""

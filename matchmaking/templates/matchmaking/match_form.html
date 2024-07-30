@@ -17,6 +17,9 @@
     <span class="section-heading-upper">{{_("Register match")}}</span>
     <span class="section-heading-lower">{{_("Form")}}</span>
 </h2>
+{% for formset in inlines %}
+  {{ formset|as_crispy_errors }}
+{% endfor %}
 {% crispy form %}
 {% endblock %}
 

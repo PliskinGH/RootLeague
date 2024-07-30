@@ -1,5 +1,6 @@
-from django.forms import ModelForm, ChoiceField, BooleanField
+from django.forms import ModelForm, ChoiceField, BooleanField, BaseInlineFormSet
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from crispy_forms.helper import FormHelper
@@ -103,3 +104,25 @@ class ParticipantForm(ModelForm):
         """
         changed_data = super(ParticipantForm, self).has_changed()
         return bool(self.initial or changed_data)
+
+class ParticipantFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        try:
+            forms = [f for f in self.forms
+                       if  f.cleaned_data
+                       # This next line filters out inline objects that did exist
+                       # but will be deleted if we let this form validate --
+                       # obviously we don't want to count those if our goal is to
+                       # enforce a min or max number of related objects.
+                       and not f.cleaned_data.get('DELETE', False)]
+            if (self.instance.tournament is not None and 
+                self.instance.tournament.max_players_per_game is not None):
+                nb_participants = len(forms)
+                max_nb_participants = self.instance.tournament.max_players_per_game
+                if (nb_participants > max_nb_participants):
+                    raise ValidationError(
+                        _("This tournament does not accept more than %d players per game.")%max_nb_participants)
+        except AttributeError:
+            pass
+        

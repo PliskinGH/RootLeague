@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
-from .forms import MatchForm, ParticipantForm
+from .forms import MatchForm, ParticipantForm, ParticipantFormSet
 
 # Create your views here.
 
@@ -52,6 +52,7 @@ def match_detail(*args, **kwargs):
 class ParticipantInline(InlineFormSetFactory):
     model = Participant
     form_class = ParticipantForm
+    formset_class = ParticipantFormSet
     fields = [
         'turn_order',
         'player',
@@ -65,7 +66,9 @@ class ParticipantInline(InlineFormSetFactory):
     initial = [{ 'turn_order': 1},
                { 'turn_order': 2},
                { 'turn_order': 3},
-               { 'turn_order': 4},]
+               { 'turn_order': 4},
+               { 'turn_order': 5},
+               { 'turn_order': 6},]
 
 class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
     model = Match
