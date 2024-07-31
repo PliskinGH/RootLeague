@@ -59,7 +59,7 @@ class ParticipantInline(InlineFormSetFactory):
         'faction',
         'game_score',
         'dominance',
-        'league_score']
+        'tournament_score']
     factory_kwargs = {"extra" : DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH, 
                       "max_num" : MAX_NUMBER_OF_PLAYERS_IN_MATCH,
                       "absolute_max" : MAX_NUMBER_OF_PLAYERS_IN_MATCH}

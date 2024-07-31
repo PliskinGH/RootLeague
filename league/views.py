@@ -9,7 +9,7 @@ from matchmaking.views import ElidedListView
 def leaderboard(request, players = None, title = _("All players"),
             number_per_page = 10):
     if (players is None):
-        players = Player.objects.annotate(score=Sum('participations__league_score')).exclude(score=None)
+        players = Player.objects.annotate(score=Sum('participations__tournament_score')).exclude(score=None)
     return ElidedListView.as_view(model=Player,
                                   queryset=players,
                                   template_name='league/leaderboard.html',

@@ -153,15 +153,6 @@ class Match(models.Model):
         verbose_name = _("match")
         ordering = ['-date_registered']
 
-    def clean(self):
-        super().clean()
-        # if (self.tournament is not None and 
-        #     self.tournament.max_players_per_game is not None):
-        #     nb_participants = self.participants.count()
-        #     max_nb_participants = self.tournament.max_players_per_game
-        #     if (nb_participants > max_nb_participants):
-        #         raise ValidationError(
-        #             _("This tournament does not accept more than %d players per game.")%max_nb_participants)
     
     def __str__(self, mention_participants=True):
         result = ""
@@ -203,10 +194,10 @@ class Participant(models.Model):
     coalition = models.OneToOneField('Participant', on_delete=models.SET_NULL,
                                      null=True, blank=True,
                                      verbose_name=_('coalition'))
-    league_score = models.DecimalField(max_digits=2, decimal_places=1,
-                                       choices = SCORES,
-                                       blank=True, null=True,
-                                       verbose_name=_('league score'))
+    tournament_score = models.DecimalField(max_digits=2, decimal_places=1,
+                                           choices = SCORES,
+                                           blank=True, null=True,
+                                           verbose_name=_('tournament score'))
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
                                                   blank=True, null=True,

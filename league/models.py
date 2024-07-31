@@ -16,18 +16,14 @@ class AbstractTournament(models.Model):
                                     verbose_name=_('end date'))
     
     max_players_per_game = models.IntegerField(blank=True, null=True,
-                                               default=6,
                                                verbose_name=_("maximum number of players per game")
                                                )
     min_players_per_game = models.IntegerField(blank=True, null=True,
-                                               default=2,
                                                verbose_name=_("minimum number of players per game")
                                                )
     coalition_allowed = models.BooleanField(blank=True, null=True,
-                                            default=True,
                                             verbose_name=_('coalition allowed'))
     three_coalition_allowed = models.BooleanField(blank=True, null=True,
-                                                  default=True,
                                                   verbose_name=_('three way coalition allowed'))
     
     class Meta:

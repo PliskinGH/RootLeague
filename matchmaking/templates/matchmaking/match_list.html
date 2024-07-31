@@ -43,7 +43,7 @@
       <td>{{ match.get_deck_display }}</td>
       <td>
       {% for participant in match.participants.all %}
-          {% if participant.league_score > 0 %}
+          {% if participant.tournament_score > 0 %}
               {% if participant.player %}
                   {{ participant.player }}
               {% else %}

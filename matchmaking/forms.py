@@ -38,7 +38,7 @@ class MatchForm(ModelForm):
                         'game_score',
                         'dominance',
                         'coalitioned_player',
-                        'league_score'],
+                        'tournament_score'],
                 ),
             ),
             Submit("submit", _("Register match"), css_class="btn btn-secondary"),
@@ -74,7 +74,7 @@ class ParticipantForm(ModelForm):
             'faction',
             'game_score',
             'dominance',
-            'league_score'
+            'tournament_score'
             ]
         exclude = [
             'match',
@@ -94,7 +94,7 @@ class ParticipantForm(ModelForm):
             'game_score',
             'dominance',
             'coalitioned_player',
-            'league_score'
+            'tournament_score'
         )
 
     def has_changed(self):
@@ -116,13 +116,44 @@ class ParticipantFormSet(BaseInlineFormSet):
                        # obviously we don't want to count those if our goal is to
                        # enforce a min or max number of related objects.
                        and not f.cleaned_data.get('DELETE', False)]
-            if (self.instance.tournament is not None and 
-                self.instance.tournament.max_players_per_game is not None):
-                nb_participants = len(forms)
+            errors = []
+            nb_participants = len(forms)
+            if (self.instance.tournament is not None):
                 max_nb_participants = self.instance.tournament.max_players_per_game
-                if (nb_participants > max_nb_participants):
-                    raise ValidationError(
-                        _("This tournament does not accept more than %d players per game.")%max_nb_participants)
+                if (max_nb_participants is not None):
+                    if (nb_participants > max_nb_participants):
+                        errors.append(
+                            ValidationError(
+                            _("This tournament does not accept more than %(max_nb)d players per game."),
+                            code="error_max_nb",
+                            params={'max_nb' : max_nb_participants}))
+                min_nb_participants = self.instance.tournament.min_players_per_game
+                if (min_nb_participants is not None):
+                    if (nb_participants < min_nb_participants):
+                        errors.append(
+                            ValidationError(
+                            _("This tournament does not accept fewer than %(min_nb)d players per game."),
+                            code="error_min_nb",
+                            params={'min_nb' : min_nb_participants})) 
+                coalition_allowed = self.instance.tournament.coalition_allowed
+                three_coal_allowed = self.instance.tournament.three_coalition_allowed
+                coals = 0
+                if (coalition_allowed is False or three_coal_allowed is False):
+                    for f in forms:
+                        if (f.cleaned_data.get('coalitioned_player', None) not in [None, '']):
+                            coals += 1
+                    if (coals >= 1 and coalition_allowed is False):
+                        errors.append(
+                            ValidationError(
+                            _("This tournament does not accept coalitions."),
+                            code="error_coal")) 
+                    if (coals >= 2 and three_coal_allowed is False):
+                        errors.append(
+                            ValidationError(
+                            _("This tournament does not accept three-way coalitions."),
+                            code="error_three_coal")) 
+            if (len(errors)):
+                raise ValidationError(errors)
         except AttributeError:
             pass
         

@@ -26,7 +26,7 @@ class ParticipantResource(resources.ModelResource):
     faction = Field(attribute='faction', column_name="Faction")
     turn_order = Field(attribute='turn_order', column_name="Turn Order")
     game_score = Field(attribute='game_score', column_name="Game Score")
-    league_score = Field(attribute='league_score', column_name="Tournament Score")
+    tournament_score = Field(attribute='tournament_score', column_name="Tournament Score")
     board_map = Field(attribute='board_map', column_name="Map")
     clearing_distribution = Field(attribute='clearing_distribution', column_name="Clearing Distribution")
     deck = Field(attribute='deck', column_name="Deck")
@@ -36,7 +36,7 @@ class ParticipantResource(resources.ModelResource):
 
     def get_export_order(self):
         return ('game_id', 'timestamp', 'player', 'faction', 'turn_order',
-                'game_score', 'league_score', 'board_map',
+                'game_score', 'tournament_score', 'board_map',
                 'clearing_distribution', 'deck', 'undrafted_faction',
                 'dom_coal', 'season')
 
@@ -125,7 +125,7 @@ class ParticipantInline(admin.TabularInline, AdminURLMixin):
     extra = 0
     readonly_fields = ['player_link']
     fields = ['player', 'player_link', 'faction', 'turn_order',
-              'game_score','dominance', 'coalition','league_score']
+              'game_score','dominance', 'coalition','tournament_score']
     autocomplete_fields = ['player']
     def player_link(self, participant):
         if (participant.player is None):
@@ -139,7 +139,7 @@ class ParticipantInline(admin.TabularInline, AdminURLMixin):
 class ParticipationInline(ParticipantInline):
     readonly_fields = ['match_link']
     fields = ['match', 'match_link', 'faction', 'turn_order',
-              'game_score', 'dominance', 'coalition','league_score']
+              'game_score', 'dominance', 'coalition','tournament_score']
     verbose_name = "Participation"
     verbose_name_plural = "Participations"
     def match_link(self, participant):
