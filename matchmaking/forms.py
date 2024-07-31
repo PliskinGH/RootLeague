@@ -124,7 +124,7 @@ class ParticipantFormSet(BaseInlineFormSet):
                     if (nb_participants > max_nb_participants):
                         errors.append(
                             ValidationError(
-                            _("This tournament does not accept more than %(max_nb)d players per game."),
+                            _("This tournament does not allow more than %(max_nb)d players per game."),
                             code="error_max_nb",
                             params={'max_nb' : max_nb_participants}))
                 min_nb_participants = self.instance.tournament.min_players_per_game
@@ -132,7 +132,7 @@ class ParticipantFormSet(BaseInlineFormSet):
                     if (nb_participants < min_nb_participants):
                         errors.append(
                             ValidationError(
-                            _("This tournament does not accept fewer than %(min_nb)d players per game."),
+                            _("This tournament does not allow fewer than %(min_nb)d players per game."),
                             code="error_min_nb",
                             params={'min_nb' : min_nb_participants})) 
                 coalition_allowed = self.instance.tournament.coalition_allowed
@@ -145,12 +145,12 @@ class ParticipantFormSet(BaseInlineFormSet):
                     if (coals >= 1 and coalition_allowed is False):
                         errors.append(
                             ValidationError(
-                            _("This tournament does not accept coalitions."),
+                            _("This tournament does not allow coalitions."),
                             code="error_coal")) 
                     if (coals >= 2 and three_coal_allowed is False):
                         errors.append(
                             ValidationError(
-                            _("This tournament does not accept three-way coalitions."),
+                            _("This tournament does not allow three-way coalitions."),
                             code="error_three_coal")) 
             if (len(errors)):
                 raise ValidationError(errors)

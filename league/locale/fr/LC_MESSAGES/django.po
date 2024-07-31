@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 19:13+0200\n"
+"POT-Creation-Date: 2024-07-31 22:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:34 .\league\models.py:64
+#: .\league\apps.py:7 .\league\models.py:51 .\league\models.py:101
 msgid "league"
 msgstr "ligue"
 
@@ -34,11 +34,27 @@ msgstr "date de début"
 msgid "end date"
 msgstr "date de fn"
 
-#: .\league\models.py:37
+#: .\league\models.py:19
+msgid "maximum number of players per game"
+msgstr "nombre maximum de joueurs par partie"
+
+#: .\league\models.py:22
+msgid "minimum number of players per game"
+msgstr "nombre minimum de joueurs par partie"
+
+#: .\league\models.py:25
+msgid "coalition allowed"
+msgstr "coalition autorisée"
+
+#: .\league\models.py:27
+msgid "three way coalition allowed"
+msgstr "coalition à trois autorisée"
+
+#: .\league\models.py:54
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\league\models.py:61
+#: .\league\models.py:98
 msgid "active season"
 msgstr "saison active"
 
