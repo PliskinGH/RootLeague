@@ -8,6 +8,7 @@ from league.models import Tournament
 # Constants subject to change
 MAX_NUMBER_OF_PLAYERS_IN_MATCH = 6
 DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH = 4
+WIN_GAME_SCORE = 30
 
 FACTION_CATS = "cats"
 FACTION_BIRDS = "birds"
@@ -19,15 +20,16 @@ FACTION_MOLES = "moles"
 FACTION_CROWS = "crows"
 FACTION_RATS = "rats"
 FACTION_BADGERS = "badgers"
-VAGABOND_RANGER = "vb_ranger"
-VAGABOND_THIEF = "vb_thief"
-VAGABOND_TINKER = "vb_tinker"
-VAGABOND_VAGRANT = "vb_vagrant"
-VAGABOND_ARBITER = "vb_arbiter"
-VAGABOND_SCOUNDREL = "vb_scoundrel"
-VAGABOND_ADVENTURER = "vb_adventurer"
-VAGABOND_RONIN = "vb_ronin"
-VAGABOND_HARRIER = "vb_harrier"
+VAGABOND = "vb_"
+VAGABOND_RANGER = VAGABOND + "ranger"
+VAGABOND_THIEF = VAGABOND + "thief"
+VAGABOND_TINKER = VAGABOND + "tinker"
+VAGABOND_VAGRANT = VAGABOND + "vagrant"
+VAGABOND_ARBITER = VAGABOND + "arbiter"
+VAGABOND_SCOUNDREL = VAGABOND + "scoundrel"
+VAGABOND_ADVENTURER = VAGABOND + "adventurer"
+VAGABOND_RONIN = VAGABOND + "ronin"
+VAGABOND_HARRIER = VAGABOND + "harrier"
 FACTIONS = [
     (FACTION_CATS, _("Marquise de Cat")),
     (FACTION_BIRDS, _("Eyrie Dynasties")),
@@ -38,15 +40,15 @@ FACTIONS = [
     (FACTION_CROWS, _("Corvid Conspiracy")),
     (FACTION_RATS, _("Lord of the Hundreds")),
     (FACTION_BADGERS, _("Keepers in Iron")),
-    (VAGABOND_RANGER, _("Vagabond: Ranger")),
-    (VAGABOND_THIEF, _("Vagabond: Thief")),
-    (VAGABOND_TINKER, _("Vagabond: Tinker")),
-    (VAGABOND_VAGRANT, _("Vagabond: Vagrant")),
-    (VAGABOND_ARBITER, _("Vagabond: Arbiter")),
-    (VAGABOND_SCOUNDREL, _("Vagabond: Scoundrel")),
-    (VAGABOND_ADVENTURER, _("Vagabond: Adventurer")),
-    (VAGABOND_RONIN, _("Vagabond: Ronin")),
-    (VAGABOND_HARRIER, _("Vagabond: Harrier")),
+    (VAGABOND_RANGER, _("Vagabond (Ranger)")),
+    (VAGABOND_THIEF, _("Vagabond (Thief)")),
+    (VAGABOND_TINKER, _("Vagabond (Tinker)")),
+    (VAGABOND_VAGRANT, _("Vagabond (Vagrant)")),
+    (VAGABOND_ARBITER, _("Vagabond (Arbiter)")),
+    (VAGABOND_SCOUNDREL, _("Vagabond (Scoundrel)")),
+    (VAGABOND_ADVENTURER, _("Vagabond (Adventurer)")),
+    (VAGABOND_RONIN, _("Vagabond (Ronin)")),
+    (VAGABOND_HARRIER, _("Vagabond (Harrier)")),
     ]
 
 MAP_AUTUMN = "autumn"
@@ -141,10 +143,10 @@ class Match(models.Model):
                                          verbose_name=_('undrafted faction'))
     
     deck = models.CharField(max_length=200, choices=DECKS,
-                            blank=True, default=DECK_EP,
+                            default=DECK_EP,
                             verbose_name=_('deck'))
     board_map = models.CharField(max_length=20, choices=MAPS,
-                                 blank=True, default=MAP_AUTUMN,
+                                 default=MAP_AUTUMN,
                                  verbose_name=_('map'))
     random_suits = models.BooleanField(default=True, blank=True, null=True,
                                        verbose_name=_('random suits'))
@@ -183,7 +185,6 @@ class Participant(models.Model):
                               verbose_name=_('match'))
     
     faction = models.CharField(max_length=100, choices=FACTIONS,
-                               blank=True,
                                verbose_name=_('faction'))
     
     game_score = models.IntegerField(blank=True, null=True,
@@ -194,13 +195,12 @@ class Participant(models.Model):
     coalition = models.OneToOneField('Participant', on_delete=models.SET_NULL,
                                      null=True, blank=True,
                                      verbose_name=_('coalition'))
-    tournament_score = models.DecimalField(max_digits=2, decimal_places=1,
-                                           choices = SCORES,
-                                           blank=True, null=True,
+    tournament_score = models.DecimalField(max_digits=3, decimal_places=2,
+                                           null=True,
                                            verbose_name=_('tournament score'))
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
-                                                  blank=True, null=True,
+                                                  null=True,
                                                   verbose_name=_('turn order'))
 
     class Meta:

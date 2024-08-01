@@ -26,6 +26,16 @@ class AbstractTournament(models.Model):
     three_coalition_allowed = models.BooleanField(blank=True, null=True,
                                                   verbose_name=_('three way coalition allowed'))
     
+    win_score =  models.DecimalField(max_digits=3, decimal_places=2,
+                                     blank=True, null=True,
+                                     verbose_name=_('win score'))
+    coalition_score_multiplier = models.DecimalField(max_digits=2, decimal_places=1,
+                                                     blank=True, null=True,
+                                                     verbose_name=_('coalition score multiplier'))
+    total_score_per_game = models.DecimalField(max_digits=3, decimal_places=2,
+                                               blank=True, null=True,
+                                               verbose_name=_('total score per game'))
+    
     class Meta:
         abstract = True
     
