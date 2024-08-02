@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 from extra_views import InlineFormSetFactory, CreateWithInlinesView, SuccessMessageMixin
 from django.utils.translation import gettext_lazy as _
+from django.forms.formsets import all_valid
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
@@ -77,7 +78,7 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
     success_message = _("Match successfully registered!")
     
     def get_form(self, form_class=None):
-        form = super(CreateMatchView, self).get_form(form_class)
+        form = super().get_form(form_class)
         initial_tournament_name = ""
         if (self.request.method == 'GET'):
             initial_tournament_name = self.request.GET.get("tournament", "")
@@ -94,17 +95,41 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
     
     def get_success_url(self):
         return reverse_lazy('match:match_detail', args=(self.object.id,))
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form and formset instances with the
+        passed POST variables and then checked for validity.
+        Rewrite of ProcessFormWithInlinesView.post due to formsets being validated
+        despite parent form being invalid.
+        """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        initial_object = self.object
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            form_validated = True
+        else:
+            form_validated = False
+
+        inlines = self.construct_inlines()
+
+        if form_validated and all_valid(inlines): # change order of conditions
+            return self.forms_valid(form, inlines)
+        self.object = initial_object
+        return self.forms_invalid(form, inlines)
 
     def forms_valid(self, form, inlines):
-        response = super(CreateMatchView, self).forms_valid(form, inlines)
+        response = super().forms_valid(form, inlines)
         if (form.cleaned_data.get('closed', False)):
             self.object.date_closed = self.object.date_registered
         if (len(inlines) == 1):
             participants_formset = inlines[0]
             index_participant = 0
-            participants = []
-            for participant in self.object.participants.all():
-                participants.append(participant)
+            participants = [participant
+                            for participant in self.object.participants.all()]
             for form in participants_formset.forms:
                 index_participant += 1
                 index_coalitioned = form.cleaned_data.get('coalitioned_player', '')

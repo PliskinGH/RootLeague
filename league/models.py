@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .constants import SETUP_TYPES, DECKS, MAPS
+
 # Create your models here.
 
 class AbstractTournament(models.Model):
@@ -35,6 +37,19 @@ class AbstractTournament(models.Model):
     total_score_per_game = models.DecimalField(max_digits=3, decimal_places=2,
                                                blank=True, null=True,
                                                verbose_name=_('total score per game'))
+    
+    game_setup = models.CharField(max_length=20,
+                                  blank=True,
+                                  choices=SETUP_TYPES,
+                                  verbose_name=_('setup'))
+    deck = models.CharField(max_length=200, choices=DECKS,
+                            blank=True,
+                            verbose_name=_('deck'))
+    board_map = models.CharField(max_length=20, choices=MAPS,
+                                 blank=True,
+                                 verbose_name=_('map'))
+    random_suits = models.BooleanField(blank=True, null=True,
+                                       verbose_name=_('random suits'))
     
     class Meta:
         abstract = True

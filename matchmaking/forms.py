@@ -1,6 +1,7 @@
 from django.forms import ModelForm, ChoiceField, BooleanField, BaseInlineFormSet
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+from django.core.validators import EMPTY_VALUES
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from crispy_forms.helper import FormHelper
@@ -43,6 +44,49 @@ class MatchForm(ModelForm):
             ),
             Submit("submit", _("Register match"), css_class="btn btn-secondary"),
         )
+
+    def clean(self):
+        super().clean()
+        tournament = self.cleaned_data.get('tournament', None)
+        is_closed = self.cleaned_data.get('closed', False)
+        game_setup = self.cleaned_data.get('game_setup', '')
+        board_map = self.cleaned_data.get('board_map', '')
+        deck = self.cleaned_data.get('deck', '')
+        if (is_closed):
+            # Required fields for closed games
+            if (board_map in EMPTY_VALUES):
+                self.add_error('board_map',
+                               ValidationError(
+                                _("A map is required for closed games.")))
+            if (deck in EMPTY_VALUES):
+                self.add_error('deck',
+                               ValidationError(
+                                _("A deck is required for closed games.")))
+        if (tournament is not None):
+            tournament_setup = getattr(tournament, 'game_setup', '')
+            tournament_map = getattr(tournament, 'board_map', '')
+            tournament_deck = getattr(tournament, 'deck', '')
+            if (tournament_setup not in EMPTY_VALUES and
+                game_setup != tournament_setup):
+                self.add_error('game_setup',
+                               ValidationError(
+                                _("The setup chosen is different from \
+                                  the one of the tournament (%(setup)s)."),
+                                  params={'setup' : tournament.get_game_setup_display()}))
+            if (tournament_map not in EMPTY_VALUES and
+                board_map != tournament_map):
+                self.add_error('board_map',
+                               ValidationError(
+                                _("The chosen map is different from \
+                                  the one of the tournament (%(map)s)."),
+                                  params={'map' : tournament.get_board_map_display()}))
+            if (tournament_deck not in EMPTY_VALUES and
+                deck != tournament_deck):
+                self.add_error('deck',
+                               ValidationError(
+                                _("The chosen deck is different from \
+                                  the one of the tournament (%(deck)s)."),
+                                  params={'deck' : tournament.get_deck_display()}))
     
     class Meta:
         model = Match
@@ -97,17 +141,6 @@ class ParticipantForm(ModelForm):
             'tournament_score'
         )
 
-    def clean(self):
-        super().clean()
-        try:
-            errors = []
-            
-            if (len(errors)):
-                raise ValidationError(errors)
-        except AttributeError:
-            pass
-        
-
     def has_changed(self):
         """
         Overriding this, as the initial data passed to the form does not get noticed, 
@@ -143,7 +176,8 @@ class ParticipantFormSet(BaseInlineFormSet):
                             _("This tournament does not allow fewer than %(min_nb)d players per game."),
                             code="error_min_nb",
                             params={'min_nb' : min_nb_participants})) 
-                        
+
+                is_closed = getattr(self.instance, 'closed', False)        
                 coalition_allowed = self.instance.tournament.coalition_allowed
                 three_coal_allowed = self.instance.tournament.three_coalition_allowed
                 total_score_allowed = self.instance.tournament.total_score_per_game
@@ -151,9 +185,10 @@ class ParticipantFormSet(BaseInlineFormSet):
                 coal_mult = self.instance.tournament.coalition_score_multiplier
 
                 coals = []
-                for f in forms:   
+                for f in forms:
+                    match = f.cleaned_data.get('match', None)
                     coal = f.cleaned_data.get('coalitioned_player', None)
-                    if (coal not in [None, '']):
+                    if (coal not in EMPTY_VALUES):
                         coals.append(coal)
 
                 index_f = 0
@@ -164,43 +199,51 @@ class ParticipantFormSet(BaseInlineFormSet):
                     total_score += score
                     game_score = f.cleaned_data.get('game_score', None)
                     coal = f.cleaned_data.get('coalitioned_player', None)
-                    in_coal = index_f in coals or coal not in [None, '']
+                    in_coal = index_f in coals or coal not in EMPTY_VALUES
                     dominance = f.cleaned_data.get('dominance', None)
                     faction = f.cleaned_data.get('faction', None)
-                    is_vagabond = faction is not None and VAGABOND in faction
-                    if (game_score is not None):
-                        if (coal not in [None, '']):
+                    is_vagabond = faction not in EMPTY_VALUES and VAGABOND in faction
+                    if (faction in EMPTY_VALUES and is_closed):
+                        # Required field if game closed
+                        errors.append(
+                            ValidationError(
+                            _("A faction must be defined for %(player)i if the game is closed."),
+                            params={'player' : index_f}))
+                    if (game_score not in EMPTY_VALUES):
+                        if (coal not in EMPTY_VALUES):
                             errors.append(
                                 ValidationError(
                                 _("Player %(player)i cannot both have a game score and be in a coalition."),
                                 code="error_score_coal",
                                 params={'player' : index_f})) 
-                        if (dominance not in [None, '']):
+                        if (dominance not in EMPTY_VALUES):
                             errors.append(
                                 ValidationError(
                                 _("Player %(player)i cannot both play a dominance and have a game score."),
                                 code="error_score_dom",
                                 params={'player' : index_f})) 
-                    if (coal not in [None, ''] and not(is_vagabond)):
+                    if (coal not in EMPTY_VALUES and not(is_vagabond)):
                         errors.append(
                             ValidationError(
                             _("Player %(player)i is not a vagabond and cannot play a coalition."),
                             code="error_vb_coal",
                             params={'player' : index_f})) 
-                    if (dominance not in [None, ''] and is_vagabond):
+                    if (dominance not in EMPTY_VALUES and is_vagabond):
                         errors.append(
                             ValidationError(
                             _("Player %(player)i is a vagabond and cannot play a dominance."),
                             code="error_vb_dom",
                             params={'player' : index_f})) 
                     actual_win_score = None
-                    if (win_score is not None):
+                    if (win_score not in EMPTY_VALUES):
                         actual_win_score = win_score
-                        if (coal_mult is not None and index_f in coals):
+                        if (coal_mult is not None and
+                            (index_f in coals or coal not in EMPTY_VALUES)):
                             actual_win_score *= coal_mult
-                    if (win_score is not None and
-                        game_score not in [None, ''] and
-                        game_score >= WIN_GAME_SCORE and score != actual_win_score):
+                    if (win_score not in EMPTY_VALUES and
+                        ((game_score not in EMPTY_VALUES and
+                        game_score >= WIN_GAME_SCORE and score != actual_win_score) or
+                        (coal not in EMPTY_VALUES and score != actual_win_score and score != 0))):
                         if (coal_mult is not None):
                             coal_win = win_score*coal_mult
                             errors.append(
@@ -217,7 +260,8 @@ class ParticipantFormSet(BaseInlineFormSet):
                                 code="error_score",
                                 params={'player' : index_f, 'win_score' : win_score})) 
 
-                if (total_score_allowed is not None and total_score != total_score_allowed):
+                if (total_score_allowed not in EMPTY_VALUES and
+                    total_score != total_score_allowed):
                     errors.append(
                         ValidationError(
                         _("The total score should be %(total)0.2f."),
