@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-31 22:11+0200\n"
+"POT-Creation-Date: 2024-08-03 17:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,261 +22,224 @@ msgstr ""
 msgid "matchmaking"
 msgstr ""
 
-#: .\matchmaking\forms.py:18
+#: .\matchmaking\forms.py:19
 msgid "Closed"
 msgstr "Terminé"
 
-#: .\matchmaking\forms.py:44
+#: .\matchmaking\forms.py:45
 #: .\matchmaking\templates\matchmaking\match_form.html:17
 msgid "Register match"
 msgstr "Enregistrer une partie"
 
-#: .\matchmaking\forms.py:67
+#: .\matchmaking\forms.py:60
+msgid "A map is required for closed games."
+msgstr "Un plateau est requirs pour les parties terminées."
+
+#: .\matchmaking\forms.py:64
+msgid "A deck is required for closed games."
+msgstr "Un deck est requis pour les parties terminées."
+
+#: .\matchmaking\forms.py:73
+#, python-format
+msgid ""
+"The setup chosen is different from                                   the one "
+"of the tournament (%(setup)s)."
+msgstr ""
+"La mise en place choisie est différente de celle du tournoi (%(setup)s)."
+
+#: .\matchmaking\forms.py:80
+#, python-format
+msgid ""
+"The chosen map is different from                                   the one "
+"of the tournament (%(map)s)."
+msgstr "Le plateau choisi est différent de celui du tournoi (%(map)s)."
+
+#: .\matchmaking\forms.py:87
+#, python-format
+msgid ""
+"The chosen deck is different from                                   the one "
+"of the tournament (%(deck)s)."
+msgstr "Le deck choisi est différent de celui du tournoi (%(deck)s)."
+
+#: .\matchmaking\forms.py:111
 #: .\matchmaking\templates\matchmaking\match_detail.html:97
 msgid "Coalition with"
 msgstr "Coalition avec"
 
-#: .\matchmaking\forms.py:127
+#: .\matchmaking\forms.py:168
 #, python-format
 msgid "This tournament does not allow more than %(max_nb)d players per game."
 msgstr "Ce tournoi n'autorise pas plus de %(max_nb)d joueurs par partie."
 
-#: .\matchmaking\forms.py:135
+#: .\matchmaking\forms.py:176
 #, python-format
-#| msgid ""
 msgid "This tournament does not allow fewer than %(min_nb)d players per game."
 msgstr "Ce tournoi n'autorise pas moins de %(min_nb)d joueurs par partie."
 
-#: .\matchmaking\forms.py:148
+#: .\matchmaking\forms.py:210
+#, python-format
+#| msgid "A faction must be defined for %(player)i if the game is closed."
+msgid "A faction must be defined for player %(player)i if the game is closed."
+msgstr ""
+"Une faction doit être définie pour le joueur %(player)i si la partie est "
+"terminée."
+
+#: .\matchmaking\forms.py:216
+#, python-format
+msgid "Player %(player)i cannot both have a game score and be in a coalition."
+msgstr ""
+"Le joueur %(player)i ne peut pas à la fois avoir un score de jeu et jouer "
+"une coalition."
+
+#: .\matchmaking\forms.py:222
+#, python-format
+msgid "Player %(player)i cannot both play a dominance and have a game score."
+msgstr ""
+"Le joueur %(player)i ne peut pas à la fois avoir un score de jeu et jouer "
+"une domination."
+
+#: .\matchmaking\forms.py:228
+#, python-format
+msgid "Player %(player)i is not a vagabond and cannot play a coalition."
+msgstr ""
+"Le joueur %(player)i n'est pas un vagabond et ne peut donc pas jouer de "
+"coalition."
+
+#: .\matchmaking\forms.py:234
+#, python-format
+msgid "Player %(player)i is a vagabond and cannot play a dominance."
+msgstr ""
+"Le joueur %(player)i est un vagabond et ne peut donc pas jouer de domination."
+
+#: .\matchmaking\forms.py:251
+#, python-format
+msgid ""
+"Player %(player)i does not have a correct tournament "
+"score.                                Possible scores: 0 (for a loss), "
+"%(win_score)0.2f (for a win) and %(win_score)0.2f (for a win in coalition)."
+msgstr "Le joueur %(player)i a un score de tournoi incorrect. Scores possibles : "
+"0 (defaite), %(win_score)0.2f (victoire) et %(win_score)0.2f (victoire en coalition)."
+
+#: .\matchmaking\forms.py:258
+#, python-format
+msgid ""
+"Player %(player)i does not have a correct tournament "
+"score.                                Possible scores: 0 (for a loss) and "
+"%(win_score)0.2f (for a win)."
+msgstr "Le joueur %(player)i a un score de tournoi incorrect. Scores possibles: 0 (défaite) et "
+"%(win_score)0.2f (victoire)."
+
+#: .\matchmaking\forms.py:267
+#, python-format
+msgid "The total score should be %(total)0.2f."
+msgstr "Le score total devrait être %(total)0.2f."
+
+#: .\matchmaking\forms.py:274
 msgid "This tournament does not allow coalitions."
 msgstr "Ce tournoi n'autorise pas les coalitions."
 
-#: .\matchmaking\forms.py:153
+#: .\matchmaking\forms.py:279
 msgid "This tournament does not allow three-way coalitions."
 msgstr "Ce tournoi n'autorise pas les coalitions à trois."
 
-#: .\matchmaking\models.py:32
-msgid "Marquise de Cat"
-msgstr "Marquise de Chat"
-
-#: .\matchmaking\models.py:33
-msgid "Eyrie Dynasties"
-msgstr "Dynastie de la Canopée"
-
-#: .\matchmaking\models.py:34
-msgid "Woodland Alliance"
-msgstr "Alliance de la forêt"
-
-#: .\matchmaking\models.py:35
-msgid "Riverfolk"
-msgstr "Compagnie de la rivière"
-
-#: .\matchmaking\models.py:36
-msgid "Lizard Cult"
-msgstr "Culte des lézards"
-
-#: .\matchmaking\models.py:37
-msgid "Underground Duchy"
-msgstr "Duché souterrain"
-
-#: .\matchmaking\models.py:38
-msgid "Corvid Conspiracy"
-msgstr "Conspiration des corvidés"
-
-#: .\matchmaking\models.py:39
-msgid "Lord of the Hundreds"
-msgstr "Seigneur des Cents"
-
-#: .\matchmaking\models.py:40
-msgid "Keepers in Iron"
-msgstr "Gardiens de Fer"
-
-#: .\matchmaking\models.py:41
-msgid "Vagabond: Ranger"
-msgstr "Vagabond : Rôdeur"
-
-#: .\matchmaking\models.py:42
-msgid "Vagabond: Thief"
-msgstr "Vagabond : Voleur"
-
-#: .\matchmaking\models.py:43
-msgid "Vagabond: Tinker"
-msgstr "Vagabond : Bricoleur"
-
-#: .\matchmaking\models.py:44
-msgid "Vagabond: Vagrant"
-msgstr "Vagabond : Errant"
-
-#: .\matchmaking\models.py:45
-msgid "Vagabond: Arbiter"
-msgstr "Vagabond : Médiateur"
-
-#: .\matchmaking\models.py:46
-msgid "Vagabond: Scoundrel"
-msgstr "Vagabond : Crapule"
-
-#: .\matchmaking\models.py:47
-msgid "Vagabond: Adventurer"
-msgstr "Vagabond : Aventurier"
-
-#: .\matchmaking\models.py:48
-msgid "Vagabond: Ronin"
-msgstr "Vagabond : Ronin"
-
-#: .\matchmaking\models.py:49
-msgid "Vagabond: Harrier"
-msgstr "Vagabond : Busard"
-
-#: .\matchmaking\models.py:57
-msgid "Autumn"
-msgstr "Automne"
-
-#: .\matchmaking\models.py:58
-msgid "Winter"
-msgstr "Hiver"
-
-#: .\matchmaking\models.py:59
-msgid "Mountain"
-msgstr "Montagne"
-
-#: .\matchmaking\models.py:60
-msgid "Lake"
-msgstr "Lac"
-
-#: .\matchmaking\models.py:66 .\matchmaking\models.py:103
-msgid "Standard"
-msgstr ""
-
-#: .\matchmaking\models.py:67
-msgid "Exiles and Partisans"
-msgstr "Exilés et Partisans"
-
-#: .\matchmaking\models.py:75
-msgid "Bird dominance"
-msgstr "Domination oiseau"
-
-#: .\matchmaking\models.py:76
-msgid "Fox dominance"
-msgstr "Domination renard"
-
-#: .\matchmaking\models.py:77
-msgid "Mouse dominance"
-msgstr "Domination souris"
-
-#: .\matchmaking\models.py:78
-msgid "Rabbit dominance"
-msgstr "Domination lapin"
-
-#: .\matchmaking\models.py:95
-msgid "Live"
-msgstr "Direct"
-
-#: .\matchmaking\models.py:96
-msgid "Async"
-msgstr "Différé"
-
-#: .\matchmaking\models.py:102
-msgid "Advanced"
-msgstr "Avancée"
-
-#: .\matchmaking\models.py:115
+#: .\matchmaking\models.py:18
 msgid "title"
 msgstr "titre"
 
-#: .\matchmaking\models.py:117
+#: .\matchmaking\models.py:20
 msgid "date registered"
 msgstr "date de création"
 
-#: .\matchmaking\models.py:119
+#: .\matchmaking\models.py:22
 msgid "date closed"
 msgstr "date de fin"
 
-#: .\matchmaking\models.py:124
+#: .\matchmaking\models.py:27
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\matchmaking\models.py:129
+#: .\matchmaking\models.py:32
 msgid "table talk"
 msgstr "déroulement"
 
-#: .\matchmaking\models.py:131
+#: .\matchmaking\models.py:34
 msgid "E.g. Discord thread."
 msgstr "E.g. fil de discussion Discord."
 
-#: .\matchmaking\models.py:132
+#: .\matchmaking\models.py:35
 msgid "table talk URL"
 msgstr "lien de discussion"
 
-#: .\matchmaking\models.py:137
+#: .\matchmaking\models.py:40
 msgid "setup"
 msgstr "mise en place"
 
-#: .\matchmaking\models.py:140
+#: .\matchmaking\models.py:43
 msgid "Only in advanced setup."
 msgstr "Mise en place avancée uniquement."
 
-#: .\matchmaking\models.py:141
+#: .\matchmaking\models.py:44
 msgid "undrafted faction"
 msgstr "faction non sélectionnée"
 
-#: .\matchmaking\models.py:145
+#: .\matchmaking\models.py:48
 msgid "deck"
 msgstr ""
 
-#: .\matchmaking\models.py:148
+#: .\matchmaking\models.py:51
 msgid "map"
 msgstr "plateau"
 
-#: .\matchmaking\models.py:150
+#: .\matchmaking\models.py:53
 #: .\matchmaking\templates\matchmaking\match_detail.html:56
 msgid "random suits"
 msgstr "distribution aléatoire"
 
-#: .\matchmaking\models.py:153 .\matchmaking\models.py:183
+#: .\matchmaking\models.py:56 .\matchmaking\models.py:86
 msgid "match"
 msgstr "partie"
 
-#: .\matchmaking\models.py:162
+#: .\matchmaking\models.py:65
 msgid "Match"
 msgstr "Partie"
 
-#: .\matchmaking\models.py:180
+#: .\matchmaking\models.py:83
 msgid "player"
 msgstr "joueur"
 
-#: .\matchmaking\models.py:187
+#: .\matchmaking\models.py:90
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:190
+#: .\matchmaking\models.py:93
 msgid "game score"
 msgstr "score de jeu"
 
-#: .\matchmaking\models.py:193
+#: .\matchmaking\models.py:96
 msgid "dominance"
 msgstr "domination"
 
-#: .\matchmaking\models.py:196
+#: .\matchmaking\models.py:99
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:200
+#: .\matchmaking\models.py:102
 msgid "tournament score"
 msgstr "score de tournoi"
 
-#: .\matchmaking\models.py:204
+#: .\matchmaking\models.py:106
 msgid "turn order"
 msgstr "tour de jeu"
 
-#: .\matchmaking\models.py:207
+#: .\matchmaking\models.py:109
 msgid "participant"
 msgstr ""
 
-#: .\matchmaking\models.py:214
+#: .\matchmaking\models.py:116
 msgid " in "
 msgstr " dans "
 
-#: .\matchmaking\models.py:216
+#: .\matchmaking\models.py:118
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
 
@@ -371,22 +334,112 @@ msgstr "Recherche"
 msgid "Find a match"
 msgstr "Recherche de partie"
 
-#: .\matchmaking\views.py:19
+#: .\matchmaking\views.py:20
 msgid "Last matches"
 msgstr "Dernières parties"
 
-#: .\matchmaking\views.py:31
+#: .\matchmaking\views.py:32
 msgid "All games"
 msgstr "Toutes les parties"
 
-#: .\matchmaking\views.py:77
+#: .\matchmaking\views.py:78
 msgid "Match successfully registered!"
 msgstr "Partie enregistrée avec succès !"
 
-#: .\matchmaking\views.py:132
+#: .\matchmaking\views.py:157
 #, python-format
 msgid "Search results for the request %s"
 msgstr "Résultats de recherche pour la requête %s"
+
+#~ msgid "Marquise de Cat"
+#~ msgstr "Marquise de Chat"
+
+#~ msgid "Eyrie Dynasties"
+#~ msgstr "Dynastie de la Canopée"
+
+#~ msgid "Woodland Alliance"
+#~ msgstr "Alliance de la forêt"
+
+#~ msgid "Riverfolk"
+#~ msgstr "Compagnie de la rivière"
+
+#~ msgid "Lizard Cult"
+#~ msgstr "Culte des lézards"
+
+#~ msgid "Underground Duchy"
+#~ msgstr "Duché souterrain"
+
+#~ msgid "Corvid Conspiracy"
+#~ msgstr "Conspiration des corvidés"
+
+#~ msgid "Lord of the Hundreds"
+#~ msgstr "Seigneur des Cents"
+
+#~ msgid "Keepers in Iron"
+#~ msgstr "Gardiens de Fer"
+
+#~ msgid "Vagabond: Ranger"
+#~ msgstr "Vagabond : Rôdeur"
+
+#~ msgid "Vagabond: Thief"
+#~ msgstr "Vagabond : Voleur"
+
+#~ msgid "Vagabond: Tinker"
+#~ msgstr "Vagabond : Bricoleur"
+
+#~ msgid "Vagabond: Vagrant"
+#~ msgstr "Vagabond : Errant"
+
+#~ msgid "Vagabond: Arbiter"
+#~ msgstr "Vagabond : Médiateur"
+
+#~ msgid "Vagabond: Scoundrel"
+#~ msgstr "Vagabond : Crapule"
+
+#~ msgid "Vagabond: Adventurer"
+#~ msgstr "Vagabond : Aventurier"
+
+#~ msgid "Vagabond: Ronin"
+#~ msgstr "Vagabond : Ronin"
+
+#~ msgid "Vagabond: Harrier"
+#~ msgstr "Vagabond : Busard"
+
+#~ msgid "Autumn"
+#~ msgstr "Automne"
+
+#~ msgid "Winter"
+#~ msgstr "Hiver"
+
+#~ msgid "Mountain"
+#~ msgstr "Montagne"
+
+#~ msgid "Lake"
+#~ msgstr "Lac"
+
+#~ msgid "Exiles and Partisans"
+#~ msgstr "Exilés et Partisans"
+
+#~ msgid "Bird dominance"
+#~ msgstr "Domination oiseau"
+
+#~ msgid "Fox dominance"
+#~ msgstr "Domination renard"
+
+#~ msgid "Mouse dominance"
+#~ msgstr "Domination souris"
+
+#~ msgid "Rabbit dominance"
+#~ msgstr "Domination lapin"
+
+#~ msgid "Live"
+#~ msgstr "Direct"
+
+#~ msgid "Async"
+#~ msgstr "Différé"
+
+#~ msgid "Advanced"
+#~ msgstr "Avancée"
 
 #~ msgid "league score"
 #~ msgstr "score de ligue"

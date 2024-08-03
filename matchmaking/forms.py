@@ -207,7 +207,7 @@ class ParticipantFormSet(BaseInlineFormSet):
                         # Required field if game closed
                         errors.append(
                             ValidationError(
-                            _("A faction must be defined for %(player)i if the game is closed."),
+                            _("A faction must be defined for player %(player)i if the game is closed."),
                             params={'player' : index_f}))
                     if (game_score not in EMPTY_VALUES):
                         if (coal not in EMPTY_VALUES):

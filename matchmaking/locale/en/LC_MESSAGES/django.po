@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-31 22:11+0200\n"
+"POT-Creation-Date: 2024-08-03 17:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,260 +22,211 @@ msgstr ""
 msgid "matchmaking"
 msgstr ""
 
-#: .\matchmaking\forms.py:18
+#: .\matchmaking\forms.py:19
 msgid "Closed"
 msgstr ""
 
-#: .\matchmaking\forms.py:44
+#: .\matchmaking\forms.py:45
 #: .\matchmaking\templates\matchmaking\match_form.html:17
 msgid "Register match"
 msgstr ""
 
-#: .\matchmaking\forms.py:67
+#: .\matchmaking\forms.py:60
+msgid "A map is required for closed games."
+msgstr ""
+
+#: .\matchmaking\forms.py:64
+msgid "A deck is required for closed games."
+msgstr ""
+
+#: .\matchmaking\forms.py:73
+#, python-format
+msgid ""
+"The setup chosen is different from                                   the one "
+"of the tournament (%(setup)s)."
+msgstr ""
+
+#: .\matchmaking\forms.py:80
+#, python-format
+msgid ""
+"The chosen map is different from                                   the one "
+"of the tournament (%(map)s)."
+msgstr ""
+
+#: .\matchmaking\forms.py:87
+#, python-format
+msgid ""
+"The chosen deck is different from                                   the one "
+"of the tournament (%(deck)s)."
+msgstr ""
+
+#: .\matchmaking\forms.py:111
 #: .\matchmaking\templates\matchmaking\match_detail.html:97
 msgid "Coalition with"
 msgstr ""
 
-#: .\matchmaking\forms.py:127
+#: .\matchmaking\forms.py:168
 #, python-format
 msgid "This tournament does not allow more than %(max_nb)d players per game."
 msgstr ""
 
-#: .\matchmaking\forms.py:135
+#: .\matchmaking\forms.py:176
 #, python-format
 msgid "This tournament does not allow fewer than %(min_nb)d players per game."
 msgstr ""
 
-#: .\matchmaking\forms.py:148
+#: .\matchmaking\forms.py:210
+#, python-format
+msgid "A faction must be defined for player %(player)i if the game is closed."
+msgstr ""
+
+#: .\matchmaking\forms.py:216
+#, python-format
+msgid "Player %(player)i cannot both have a game score and be in a coalition."
+msgstr ""
+
+#: .\matchmaking\forms.py:222
+#, python-format
+msgid "Player %(player)i cannot both play a dominance and have a game score."
+msgstr ""
+
+#: .\matchmaking\forms.py:228
+#, python-format
+msgid "Player %(player)i is not a vagabond and cannot play a coalition."
+msgstr ""
+
+#: .\matchmaking\forms.py:234
+#, python-format
+msgid "Player %(player)i is a vagabond and cannot play a dominance."
+msgstr ""
+
+#: .\matchmaking\forms.py:251
+#, python-format
+msgid ""
+"Player %(player)i does not have a correct tournament "
+"score.                                Possible scores: 0 (for a loss), "
+"%(win_score)0.2f (for a win) and %(coal_win)0.2f (for a win in coalition)."
+msgstr ""
+
+#: .\matchmaking\forms.py:258
+#, python-format
+msgid ""
+"Player %(player)i does not have a correct tournament "
+"score.                                Possible scores: 0 (for a loss) and "
+"%(win_score)0.2f (for a win)."
+msgstr ""
+
+#: .\matchmaking\forms.py:267
+#, python-format
+msgid "The total score should be %(total)0.2f."
+msgstr ""
+
+#: .\matchmaking\forms.py:274
 msgid "This tournament does not allow coalitions."
 msgstr ""
 
-#: .\matchmaking\forms.py:153
+#: .\matchmaking\forms.py:279
 msgid "This tournament does not allow three-way coalitions."
 msgstr ""
 
-#: .\matchmaking\models.py:32
-msgid "Marquise de Cat"
-msgstr ""
-
-#: .\matchmaking\models.py:33
-msgid "Eyrie Dynasties"
-msgstr ""
-
-#: .\matchmaking\models.py:34
-msgid "Woodland Alliance"
-msgstr ""
-
-#: .\matchmaking\models.py:35
-msgid "Riverfolk"
-msgstr ""
-
-#: .\matchmaking\models.py:36
-msgid "Lizard Cult"
-msgstr ""
-
-#: .\matchmaking\models.py:37
-msgid "Underground Duchy"
-msgstr ""
-
-#: .\matchmaking\models.py:38
-msgid "Corvid Conspiracy"
-msgstr ""
-
-#: .\matchmaking\models.py:39
-msgid "Lord of the Hundreds"
-msgstr ""
-
-#: .\matchmaking\models.py:40
-msgid "Keepers in Iron"
-msgstr ""
-
-#: .\matchmaking\models.py:41
-msgid "Vagabond: Ranger"
-msgstr ""
-
-#: .\matchmaking\models.py:42
-msgid "Vagabond: Thief"
-msgstr ""
-
-#: .\matchmaking\models.py:43
-msgid "Vagabond: Tinker"
-msgstr ""
-
-#: .\matchmaking\models.py:44
-msgid "Vagabond: Vagrant"
-msgstr ""
-
-#: .\matchmaking\models.py:45
-msgid "Vagabond: Arbiter"
-msgstr ""
-
-#: .\matchmaking\models.py:46
-msgid "Vagabond: Scoundrel"
-msgstr ""
-
-#: .\matchmaking\models.py:47
-msgid "Vagabond: Adventurer"
-msgstr ""
-
-#: .\matchmaking\models.py:48
-msgid "Vagabond: Ronin"
-msgstr ""
-
-#: .\matchmaking\models.py:49
-msgid "Vagabond: Harrier"
-msgstr ""
-
-#: .\matchmaking\models.py:57
-msgid "Autumn"
-msgstr ""
-
-#: .\matchmaking\models.py:58
-msgid "Winter"
-msgstr ""
-
-#: .\matchmaking\models.py:59
-msgid "Mountain"
-msgstr ""
-
-#: .\matchmaking\models.py:60
-msgid "Lake"
-msgstr ""
-
-#: .\matchmaking\models.py:66 .\matchmaking\models.py:103
-msgid "Standard"
-msgstr ""
-
-#: .\matchmaking\models.py:67
-msgid "Exiles and Partisans"
-msgstr ""
-
-#: .\matchmaking\models.py:75
-msgid "Bird dominance"
-msgstr ""
-
-#: .\matchmaking\models.py:76
-msgid "Fox dominance"
-msgstr ""
-
-#: .\matchmaking\models.py:77
-msgid "Mouse dominance"
-msgstr ""
-
-#: .\matchmaking\models.py:78
-msgid "Rabbit dominance"
-msgstr ""
-
-#: .\matchmaking\models.py:95
-msgid "Live"
-msgstr ""
-
-#: .\matchmaking\models.py:96
-msgid "Async"
-msgstr ""
-
-#: .\matchmaking\models.py:102
-msgid "Advanced"
-msgstr ""
-
-#: .\matchmaking\models.py:115
+#: .\matchmaking\models.py:18
 msgid "title"
 msgstr ""
 
-#: .\matchmaking\models.py:117
+#: .\matchmaking\models.py:20
 msgid "date registered"
 msgstr ""
 
-#: .\matchmaking\models.py:119
+#: .\matchmaking\models.py:22
 msgid "date closed"
 msgstr ""
 
-#: .\matchmaking\models.py:124
+#: .\matchmaking\models.py:27
 msgid "tournament"
 msgstr ""
 
-#: .\matchmaking\models.py:129
+#: .\matchmaking\models.py:32
 msgid "table talk"
 msgstr ""
 
-#: .\matchmaking\models.py:131
+#: .\matchmaking\models.py:34
 msgid "E.g. Discord thread."
 msgstr ""
 
-#: .\matchmaking\models.py:132
+#: .\matchmaking\models.py:35
 msgid "table talk URL"
 msgstr ""
 
-#: .\matchmaking\models.py:137
+#: .\matchmaking\models.py:40
 msgid "setup"
 msgstr ""
 
-#: .\matchmaking\models.py:140
+#: .\matchmaking\models.py:43
 msgid "Only in advanced setup."
 msgstr ""
 
-#: .\matchmaking\models.py:141
+#: .\matchmaking\models.py:44
 msgid "undrafted faction"
 msgstr ""
 
-#: .\matchmaking\models.py:145
+#: .\matchmaking\models.py:48
 msgid "deck"
 msgstr ""
 
-#: .\matchmaking\models.py:148
+#: .\matchmaking\models.py:51
 msgid "map"
 msgstr ""
 
-#: .\matchmaking\models.py:150
+#: .\matchmaking\models.py:53
 #: .\matchmaking\templates\matchmaking\match_detail.html:56
 msgid "random suits"
 msgstr ""
 
-#: .\matchmaking\models.py:153 .\matchmaking\models.py:183
+#: .\matchmaking\models.py:56 .\matchmaking\models.py:86
 msgid "match"
 msgstr ""
 
-#: .\matchmaking\models.py:162
+#: .\matchmaking\models.py:65
 msgid "Match"
 msgstr ""
 
-#: .\matchmaking\models.py:180
+#: .\matchmaking\models.py:83
 msgid "player"
 msgstr ""
 
-#: .\matchmaking\models.py:187
+#: .\matchmaking\models.py:90
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:190
+#: .\matchmaking\models.py:93
 msgid "game score"
 msgstr ""
 
-#: .\matchmaking\models.py:193
+#: .\matchmaking\models.py:96
 msgid "dominance"
 msgstr ""
 
-#: .\matchmaking\models.py:196
+#: .\matchmaking\models.py:99
 msgid "coalition"
 msgstr ""
 
-#: .\matchmaking\models.py:200
+#: .\matchmaking\models.py:102
 msgid "tournament score"
 msgstr ""
 
-#: .\matchmaking\models.py:204
+#: .\matchmaking\models.py:106
 msgid "turn order"
 msgstr ""
 
-#: .\matchmaking\models.py:207
+#: .\matchmaking\models.py:109
 msgid "participant"
 msgstr ""
 
-#: .\matchmaking\models.py:214
+#: .\matchmaking\models.py:116
 msgid " in "
 msgstr ""
 
-#: .\matchmaking\models.py:216
+#: .\matchmaking\models.py:118
 msgid "UnknownPlayer"
 msgstr ""
 
@@ -370,19 +321,19 @@ msgstr ""
 msgid "Find a match"
 msgstr ""
 
-#: .\matchmaking\views.py:19
+#: .\matchmaking\views.py:20
 msgid "Last matches"
 msgstr ""
 
-#: .\matchmaking\views.py:31
+#: .\matchmaking\views.py:32
 msgid "All games"
 msgstr ""
 
-#: .\matchmaking\views.py:77
+#: .\matchmaking\views.py:78
 msgid "Match successfully registered!"
 msgstr ""
 
-#: .\matchmaking\views.py:132
+#: .\matchmaking\views.py:157
 #, python-format
 msgid "Search results for the request %s"
 msgstr ""

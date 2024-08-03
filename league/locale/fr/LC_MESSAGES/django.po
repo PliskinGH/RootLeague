@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-31 22:04+0200\n"
+"POT-Creation-Date: 2024-08-03 17:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,195 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:51 .\league\models.py:101
+#: .\league\apps.py:7 .\league\models.py:76 .\league\models.py:106
 msgid "league"
 msgstr "ligue"
 
-#: .\league\models.py:11
+#: .\league\constants.py:30
+msgid "Marquise de Cat"
+msgstr "Marquise de Chat"
+
+#: .\league\constants.py:31
+msgid "Eyrie Dynasties"
+msgstr "Dynastie de la Canopée"
+
+#: .\league\constants.py:32
+msgid "Woodland Alliance"
+msgstr "Alliance de la forêt"
+
+#: .\league\constants.py:33
+msgid "Riverfolk"
+msgstr "Compagnie de la rivière"
+
+#: .\league\constants.py:34
+msgid "Lizard Cult"
+msgstr "Culte des lézards"
+
+#: .\league\constants.py:35
+msgid "Underground Duchy"
+msgstr "Duché souterrain"
+
+#: .\league\constants.py:36
+msgid "Corvid Conspiracy"
+msgstr "Conspiration des corvidés"
+
+#: .\league\constants.py:37
+msgid "Lord of the Hundreds"
+msgstr "Seigneur des Cents"
+
+#: .\league\constants.py:38
+msgid "Keepers in Iron"
+msgstr "Gardiens de Fer"
+
+#: .\league\constants.py:39
+msgid "Vagabond (Ranger)"
+msgstr "Vagabond (Rôdeur)"
+
+#: .\league\constants.py:40
+msgid "Vagabond (Thief)"
+msgstr "Vagabond (Voleur)"
+
+#: .\league\constants.py:41
+msgid "Vagabond (Tinker)"
+msgstr "Vagabond (Voleur)"
+
+#: .\league\constants.py:42
+msgid "Vagabond (Vagrant)"
+msgstr "Vagabond (Errant)"
+
+#: .\league\constants.py:43
+msgid "Vagabond (Arbiter)"
+msgstr "Vagabond (Médiateur)"
+
+#: .\league\constants.py:44
+msgid "Vagabond (Scoundrel)"
+msgstr "Vagabond (Crapule)"
+
+#: .\league\constants.py:45
+msgid "Vagabond (Adventurer)"
+msgstr "Vagabond (Aventurier)"
+
+#: .\league\constants.py:46
+msgid "Vagabond (Ronin)"
+msgstr "Vagabond (Ronin)"
+
+#: .\league\constants.py:47
+msgid "Vagabond (Harrier)"
+msgstr "Vagabond (Busard)"
+
+#: .\league\constants.py:55
+msgid "Autumn"
+msgstr "Automne"
+
+#: .\league\constants.py:56
+msgid "Winter"
+msgstr "Hiver"
+
+#: .\league\constants.py:57
+msgid "Mountain"
+msgstr "Montagne"
+
+#: .\league\constants.py:58
+msgid "Lake"
+msgstr "Lac"
+
+#: .\league\constants.py:64 .\league\constants.py:101
+msgid "Standard"
+msgstr ""
+
+#: .\league\constants.py:65
+msgid "Exiles and Partisans"
+msgstr "Exilés et Partisans"
+
+#: .\league\constants.py:73
+msgid "Bird dominance"
+msgstr "Domination oiseau"
+
+#: .\league\constants.py:74
+msgid "Fox dominance"
+msgstr "Domination renard"
+
+#: .\league\constants.py:75
+msgid "Mouse dominance"
+msgstr "Domination souris"
+
+#: .\league\constants.py:76
+msgid "Rabbit dominance"
+msgstr "Domination lapin"
+
+#: .\league\constants.py:93
+msgid "Live"
+msgstr "Direct"
+
+#: .\league\constants.py:94
+msgid "Async"
+msgstr "Différé"
+
+#: .\league\constants.py:100
+msgid "Advanced"
+msgstr "Avancée"
+
+#: .\league\models.py:13
 msgid "name"
 msgstr "nom"
 
-#: .\league\models.py:14
+#: .\league\models.py:16
 msgid "start date"
 msgstr "date de début"
 
-#: .\league\models.py:16
+#: .\league\models.py:18
 msgid "end date"
 msgstr "date de fn"
 
-#: .\league\models.py:19
+#: .\league\models.py:21
 msgid "maximum number of players per game"
 msgstr "nombre maximum de joueurs par partie"
 
-#: .\league\models.py:22
+#: .\league\models.py:24
 msgid "minimum number of players per game"
 msgstr "nombre minimum de joueurs par partie"
 
-#: .\league\models.py:25
+#: .\league\models.py:27
 msgid "coalition allowed"
 msgstr "coalition autorisée"
 
-#: .\league\models.py:27
+#: .\league\models.py:29
 msgid "three way coalition allowed"
 msgstr "coalition à trois autorisée"
 
-#: .\league\models.py:54
+#: .\league\models.py:33
+msgid "win score"
+msgstr "score de victoire"
+
+#: .\league\models.py:36
+msgid "coalition score multiplier"
+msgstr "multiplicateur de score de coalition"
+
+#: .\league\models.py:39
+msgid "total score per game"
+msgstr "score total par partie"
+
+#: .\league\models.py:44
+msgid "setup"
+msgstr "mise en place"
+
+#: .\league\models.py:47
+msgid "deck"
+msgstr ""
+
+#: .\league\models.py:50
+msgid "map"
+msgstr "plateau"
+
+#: .\league\models.py:52
+msgid "random suits"
+msgstr "distribution aléatoire"
+
+#: .\league\models.py:79
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\league\models.py:98
+#: .\league\models.py:103
 msgid "active season"
 msgstr "saison active"
 
@@ -68,6 +220,26 @@ msgstr "Joueur"
 
 #: .\league\templates\league\leaderboard.html:16
 msgid "Score"
+msgstr ""
+
+#: .\league\templates\league\related_widget_wrapper.html:11
+#, python-format
+msgid "Change selected %(model)s"
+msgstr ""
+
+#: .\league\templates\league\related_widget_wrapper.html:19
+#, python-format
+msgid "Add another %(model)s"
+msgstr ""
+
+#: .\league\templates\league\related_widget_wrapper.html:27
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr ""
+
+#: .\league\templates\league\related_widget_wrapper.html:34
+#, python-format
+msgid "View selected %(model)s"
 msgstr ""
 
 #: .\league\views.py:9

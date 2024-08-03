@@ -78,26 +78,6 @@ class Tournament(AbstractTournament):
     class Meta:
         verbose_name = _("tournament")
     
-    def save(self, *args, **kwargs):
-        if (self.league is not None):
-            if (self.league.max_players_per_game is not None and
-                (self.max_players_per_game is None or
-                 (self.max_players_per_game > self.league.max_players_per_game))):
-                self.max_players_per_game = self.league.max_players_per_game
-            if (self.league.min_players_per_game is not None and
-                (self.min_players_per_game is None or
-                 (self.min_players_per_game < self.league.min_players_per_game))):
-                self.min_players_per_game = self.league.min_players_per_game
-            if (self.league.coalition_allowed is not None and
-                (self.coalition_allowed is None or
-                 (self.coalition_allowed and not(self.league.coalition_allowed)))):
-                self.coalition_allowed = self.league.coalition_allowed
-            if (self.league.three_coalition_allowed is not None and
-                (self.three_coalition_allowed is None or
-                 (self.three_coalition_allowed and not(self.league.three_coalition_allowed)))):
-                self.three_coalition_allowed = self.league.three_coalition_allowed
-        super().save()
-    
     @classmethod
     def get_default_pk(cls):
         league, created_league = League.get_default()
