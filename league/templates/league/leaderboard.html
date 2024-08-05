@@ -13,7 +13,9 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">{{_("Player")}}</th>
-      <th scope="col">{{_("Score")}}</th>
+      <th scope="col">{{_("Total Games")}}</th>
+      <th scope="col">{{_("Total Score")}}</th>
+      <th scope="col">{{_("Relative Score")}}</th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +23,9 @@
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
       <td>{{ player }}</td>
-      <td>{{ player.score }}</td>
+      <td>{{ player.total }}</td>
+      <td>{{ player.score|floatformat:"-1" }}</td>
+      <td>{{ player.relative_score|floatformat:"-2" }} %</td>
     </tr>
     {% endfor %}
   </tbody>
