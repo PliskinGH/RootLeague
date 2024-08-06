@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 17:38+0200\n"
+"POT-Creation-Date: 2024-08-06 21:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -321,19 +321,19 @@ msgstr ""
 msgid "Find a match"
 msgstr ""
 
-#: .\matchmaking\views.py:20
+#: .\matchmaking\views.py:21
 msgid "Last matches"
 msgstr ""
 
-#: .\matchmaking\views.py:32
+#: .\matchmaking\views.py:23
 msgid "All games"
 msgstr ""
 
-#: .\matchmaking\views.py:78
+#: .\matchmaking\views.py:69
 msgid "Match successfully registered!"
 msgstr ""
 
-#: .\matchmaking\views.py:157
+#: .\matchmaking\views.py:148
 #, python-format
 msgid "Search results for the request %s"
 msgstr ""

@@ -11,6 +11,7 @@ from django.forms.formsets import all_valid
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
 from .forms import MatchForm, ParticipantForm, ParticipantFormSet
+from misc.views import ElidedListView
 
 # Create your views here.
 
@@ -18,16 +19,6 @@ def index(request):
     matchs = Match.objects.all().order_by('-date_registered')[:5]
     return listing(request, matchs=matchs,
                    title=_("Last matches"), number_per_page=5)
-
-class ElidedListView(ListView):
-    title = ""
-    
-    def get_context_data(self, *, object_list=None, **kwargs):
-      context = super(ElidedListView, self).get_context_data(**kwargs)
-      page = context['page_obj']
-      context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
-      context['title'] = self.title
-      return context
 
 def listing(request, matchs = None, title = _("All games"),
             number_per_page = 10):

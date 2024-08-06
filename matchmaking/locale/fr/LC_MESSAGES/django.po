@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 17:38+0200\n"
+"POT-Creation-Date: 2024-08-06 21:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,6 @@ msgstr "Ce tournoi n'autorise pas moins de %(min_nb)d joueurs par partie."
 
 #: .\matchmaking\forms.py:210
 #, python-format
-#| msgid "A faction must be defined for %(player)i if the game is closed."
 msgid "A faction must be defined for player %(player)i if the game is closed."
 msgstr ""
 "Une faction doit être définie pour le joueur %(player)i si la partie est "
@@ -112,13 +111,20 @@ msgstr ""
 "Le joueur %(player)i est un vagabond et ne peut donc pas jouer de domination."
 
 #: .\matchmaking\forms.py:251
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "Player %(player)i does not have a correct tournament "
+#| "score.                                Possible scores: 0 (for a loss), "
+#| "%(win_score)0.2f (for a win) and %(win_score)0.2f (for a win in "
+#| "coalition)."
 msgid ""
 "Player %(player)i does not have a correct tournament "
 "score.                                Possible scores: 0 (for a loss), "
-"%(win_score)0.2f (for a win) and %(win_score)0.2f (for a win in coalition)."
-msgstr "Le joueur %(player)i a un score de tournoi incorrect. Scores possibles : "
-"0 (defaite), %(win_score)0.2f (victoire) et %(win_score)0.2f (victoire en coalition)."
+"%(win_score)0.2f (for a win) and %(coal_win)0.2f (for a win in coalition)."
+msgstr ""
+"Le joueur %(player)i a un score de tournoi incorrect. Scores possibles : 0 "
+"(defaite), %(win_score)0.2f (victoire) et %(coal_win)0.2f (victoire en "
+"coalition)."
 
 #: .\matchmaking\forms.py:258
 #, python-format
@@ -126,8 +132,9 @@ msgid ""
 "Player %(player)i does not have a correct tournament "
 "score.                                Possible scores: 0 (for a loss) and "
 "%(win_score)0.2f (for a win)."
-msgstr "Le joueur %(player)i a un score de tournoi incorrect. Scores possibles: 0 (défaite) et "
-"%(win_score)0.2f (victoire)."
+msgstr ""
+"Le joueur %(player)i a un score de tournoi incorrect. Scores possibles: 0 "
+"(défaite) et %(win_score)0.2f (victoire)."
 
 #: .\matchmaking\forms.py:267
 #, python-format
@@ -334,19 +341,19 @@ msgstr "Recherche"
 msgid "Find a match"
 msgstr "Recherche de partie"
 
-#: .\matchmaking\views.py:20
+#: .\matchmaking\views.py:21
 msgid "Last matches"
 msgstr "Dernières parties"
 
-#: .\matchmaking\views.py:32
+#: .\matchmaking\views.py:23
 msgid "All games"
 msgstr "Toutes les parties"
 
-#: .\matchmaking\views.py:78
+#: .\matchmaking\views.py:69
 msgid "Match successfully registered!"
 msgstr "Partie enregistrée avec succès !"
 
-#: .\matchmaking\views.py:157
+#: .\matchmaking\views.py:148
 #, python-format
 msgid "Search results for the request %s"
 msgstr "Résultats de recherche pour la requête %s"

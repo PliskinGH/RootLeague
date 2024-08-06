@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q, UniqueConstraint, Deferrable
+from django.core.validators import EMPTY_VALUES
 
 from .constants import SETUP_TYPES, DECKS, MAPS
 
@@ -81,11 +83,18 @@ class Tournament(AbstractTournament):
     @classmethod
     def get_default_pk(cls):
         league, created_league = League.get_default()
-        if (not(created_league) and league.active_season is not None):
+        if (not(created_league) and league is not None
+            and league.active_season is not None):
             tournament = league.active_season
         else:
-            tournament, created = cls.objects.get_or_create(name='Test League Season 1', 
+            tournament_name = "Test Tournament"
+            if (league is not None and league.name not in EMPTY_VALUES):
+                tournament_name = league.name + " Season 1"
+            tournament, created = cls.objects.get_or_create(name=tournament_name, 
                                                             defaults=dict(league=league))
+            if (league is not None and tournament is not None):
+                league.active_season = tournament
+                league.save()
         result = None
         if (tournament is not None):
             result = tournament.pk
@@ -101,11 +110,30 @@ class League(AbstractTournament):
                                          null=True, blank=True,
                                          related_name="active_in_league",
                                          verbose_name=_('active season'))
+    is_default = models.BooleanField(null=False, blank=False, default=False,
+                                     verbose_name='is default')
 
     class Meta:
         verbose_name = _("league")
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            previous_defaults = League.objects.filter(is_default=True)
+            for previous_default in previous_defaults:
+                if (self != previous_default):
+                    previous_default.is_default = False
+                    previous_default.save()
+        super().save(*args, **kwargs)
     
     @classmethod
     def get_default(cls):
-        league, created = cls.objects.get_or_create(name='Test League')
-        return (league, created)
+        created = False
+        default_league = None
+        default_leagues = cls.objects.filter(is_default=True)
+        if (default_leagues not in EMPTY_VALUES and len(default_leagues) == 1):
+            default_league = default_leagues.first()
+        if (default_league in EMPTY_VALUES):
+            default_league, created = cls.objects.get_or_create(name='Test League')
+            default_league.is_default = True
+            default_league.save()
+        return (default_league, created)

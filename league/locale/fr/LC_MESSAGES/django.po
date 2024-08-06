@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-03 17:38+0200\n"
+"POT-Creation-Date: 2024-08-06 21:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:76 .\league\models.py:106
+#: .\league\apps.py:7 .\league\models.py:78 .\league\models.py:117
 msgid "league"
 msgstr "ligue"
 
@@ -146,67 +146,67 @@ msgstr "Différé"
 msgid "Advanced"
 msgstr "Avancée"
 
-#: .\league\models.py:13
+#: .\league\models.py:15
 msgid "name"
 msgstr "nom"
 
-#: .\league\models.py:16
+#: .\league\models.py:18
 msgid "start date"
 msgstr "date de début"
 
-#: .\league\models.py:18
+#: .\league\models.py:20
 msgid "end date"
 msgstr "date de fn"
 
-#: .\league\models.py:21
+#: .\league\models.py:23
 msgid "maximum number of players per game"
 msgstr "nombre maximum de joueurs par partie"
 
-#: .\league\models.py:24
+#: .\league\models.py:26
 msgid "minimum number of players per game"
 msgstr "nombre minimum de joueurs par partie"
 
-#: .\league\models.py:27
+#: .\league\models.py:29
 msgid "coalition allowed"
 msgstr "coalition autorisée"
 
-#: .\league\models.py:29
+#: .\league\models.py:31
 msgid "three way coalition allowed"
 msgstr "coalition à trois autorisée"
 
-#: .\league\models.py:33
+#: .\league\models.py:35
 msgid "win score"
 msgstr "score de victoire"
 
-#: .\league\models.py:36
+#: .\league\models.py:38
 msgid "coalition score multiplier"
 msgstr "multiplicateur de score de coalition"
 
-#: .\league\models.py:39
+#: .\league\models.py:41
 msgid "total score per game"
 msgstr "score total par partie"
 
-#: .\league\models.py:44
+#: .\league\models.py:46
 msgid "setup"
 msgstr "mise en place"
 
-#: .\league\models.py:47
+#: .\league\models.py:49
 msgid "deck"
 msgstr ""
 
-#: .\league\models.py:50
+#: .\league\models.py:52
 msgid "map"
 msgstr "plateau"
 
-#: .\league\models.py:52
+#: .\league\models.py:54
 msgid "random suits"
 msgstr "distribution aléatoire"
 
-#: .\league\models.py:79
+#: .\league\models.py:81
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\league\models.py:103
+#: .\league\models.py:112
 msgid "active season"
 msgstr "saison active"
 
@@ -219,8 +219,16 @@ msgid "Player"
 msgstr "Joueur"
 
 #: .\league\templates\league\leaderboard.html:16
-msgid "Score"
-msgstr ""
+msgid "Total Games"
+msgstr "Nombre de parties"
+
+#: .\league\templates\league\leaderboard.html:17
+msgid "Total Score"
+msgstr "Score total"
+
+#: .\league\templates\league\leaderboard.html:18
+msgid "Relative Score"
+msgstr "Score relatif"
 
 #: .\league\templates\league\related_widget_wrapper.html:11
 #, python-format
@@ -242,6 +250,6 @@ msgstr ""
 msgid "View selected %(model)s"
 msgstr ""
 
-#: .\league\views.py:9
+#: .\league\views.py:43
 msgid "All players"
 msgstr "Tous les joueurs"

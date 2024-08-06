@@ -26,7 +26,10 @@ class LeagueForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if (self.instance):
-            self.fields['active_season'].queryset = self.instance.seasons.all()
+            if (self.instance.pk is not None):
+                self.fields['active_season'].queryset = self.instance.seasons.all()
+            else:
+                self.fields['active_season'].queryset = Tournament.objects.none()
             widget = self.fields['active_season'].widget
             self.fields['active_season'].widget = (
             TournamentFieldWidgetWrapper( 
