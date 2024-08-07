@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-06 21:53+0200\n"
+"POT-Creation-Date: 2024-08-07 22:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:78 .\league\models.py:117
+#: .\league\apps.py:7 .\league\models.py:78 .\league\models.py:123
 msgid "league"
 msgstr "ligue"
 
@@ -206,7 +206,7 @@ msgstr "distribution aléatoire"
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\league\models.py:112
+#: .\league\models.py:118
 msgid "active season"
 msgstr "saison active"
 
@@ -214,19 +214,23 @@ msgstr "saison active"
 msgid "Leaderboard"
 msgstr "Classement"
 
-#: .\league\templates\league\leaderboard.html:15
+#: .\league\templates\league\leaderboard.html:11
+msgid "All Seasons"
+msgstr "Toutes les saisons"
+
+#: .\league\templates\league\leaderboard.html:17
 msgid "Player"
 msgstr "Joueur"
 
-#: .\league\templates\league\leaderboard.html:16
+#: .\league\templates\league\leaderboard.html:18
 msgid "Total Games"
 msgstr "Nombre de parties"
 
-#: .\league\templates\league\leaderboard.html:17
+#: .\league\templates\league\leaderboard.html:19
 msgid "Total Score"
 msgstr "Score total"
 
-#: .\league\templates\league\leaderboard.html:18
+#: .\league\templates\league\leaderboard.html:20
 msgid "Relative Score"
 msgstr "Score relatif"
 
@@ -250,6 +254,6 @@ msgstr ""
 msgid "View selected %(model)s"
 msgstr ""
 
-#: .\league\views.py:43
+#: .\league\views.py:44
 msgid "All players"
 msgstr "Tous les joueurs"

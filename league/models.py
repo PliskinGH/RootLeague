@@ -79,23 +79,29 @@ class Tournament(AbstractTournament):
 
     class Meta:
         verbose_name = _("tournament")
-    
+
     @classmethod
-    def get_default_pk(cls):
-        league, created_league = League.get_default()
-        if (not(created_league) and league is not None
-            and league.active_season is not None):
-            tournament = league.active_season
+    def get_default(cls):
+        default_league, created_league = League.get_default()
+        created = False
+        if (not(created_league) and default_league is not None
+            and default_league.active_season is not None):
+            default_tournament = default_league.active_season
         else:
             tournament_name = "Test Tournament"
-            if (league is not None and league.name not in EMPTY_VALUES):
-                tournament_name = league.name + " Season 1"
-            tournament, created = cls.objects.get_or_create(name=tournament_name, 
-                                                            defaults=dict(league=league))
-            if (league is not None and tournament is not None):
-                league.active_season = tournament
-                league.save()
+            if (default_league is not None and default_league.name not in EMPTY_VALUES):
+                tournament_name = default_league.name + " Season 1"
+            default_tournament, created = cls.objects.get_or_create(name=tournament_name, 
+                                                            defaults=dict(league=default_league))
+            if (default_league is not None and default_tournament is not None):
+                default_league.active_season = default_tournament
+                default_league.save()
+        return (default_tournament, created)
+
+    @classmethod
+    def get_default_pk(cls):
         result = None
+        tournament, _ = Tournament.get_default()
         if (tournament is not None):
             result = tournament.pk
         return result

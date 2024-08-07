@@ -1,0 +1,33 @@
+{% if paginator_range %}
+{% load custom_tags %}
+<div class="btn-group" role="group" aria-label="menu">
+    {% if page_obj %}
+        <a href="{% url parent_url parent_obj.id %}" class="btn btn-outline-primary">
+            {{ parent_title }}
+        </a>
+    {% else %}
+        <span class="btn btn-outline-primary active">{{ parent_title }}</span>
+    {% endif %}
+    {% for page_number in paginator_range %}
+        {% if page_obj and page_obj.number == page_number %}
+            {% with index_obj=page_number|add:'-1' %}
+            {% with obj=objects|index:index_obj %}
+                <span class="btn btn-outline-primary active">{{ obj.name }}</span>
+            {% endwith %}
+            {% endwith %}
+        {% else %}
+            {% if page_number == paginator.ELLIPSIS %}
+                <span class="btn btn-outline-primary">{{page_number}}</span>
+            {% else %}
+                {% with index_obj=page_number|add:'-1' %}
+                {% with obj=objects|index:index_obj %}
+                    <a href="{% url obj_url obj.id %}" class="btn btn-outline-primary">
+                        {{ obj.name }}
+                    </a>
+                {% endwith %}
+                {% endwith %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}

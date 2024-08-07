@@ -8,6 +8,8 @@
     <span class="section-heading-lower">{{ title }}</span>
 </h2>
 
+{% include 'menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url='league:league_leaderboard' paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url='league:tournament_leaderboard' only %}
+
 <table class="table table-striped">
   <thead>
     <tr>
