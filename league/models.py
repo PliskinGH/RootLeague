@@ -30,6 +30,10 @@ class AbstractTournament(models.Model):
     three_coalition_allowed = models.BooleanField(blank=True, null=True,
                                                   verbose_name=_('three way coalition allowed'))
     
+    min_games = models.IntegerField(blank=True, null=True,
+                                    verbose_name=_("minimum number of games"),
+                                    help_text=_('Threshold for leaderboards.'))
+    
     win_score =  models.DecimalField(max_digits=3, decimal_places=2,
                                      blank=True, null=True,
                                      verbose_name=_('win score'))

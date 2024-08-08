@@ -11,7 +11,7 @@ class PlayerRegisterForm(UserCreationForm):
   def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
       self.helper = FormHelper()
-      self.helper.add_input(Submit("submit", _("Sign up"), css_class="btn btn-secondary"))
+      self.helper.add_input(Submit("submit", _("Sign up"), css_class="btn btn-outline-secondary"))
 
   class Meta:
       model = get_user_model()
@@ -23,12 +23,12 @@ class PlayerLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", _("Log in"), css_class="btn btn-secondary"))
+        self.helper.add_input(Submit("submit", _("Log in"), css_class="btn btn-outline-secondary"))
 
 class PlayerPasswordChangeForm(PasswordChangeForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", _("Save"), css_class="btn btn-secondary"))
+        self.helper.add_input(Submit("submit", _("Save"), css_class="btn btn-outline-secondary"))
     

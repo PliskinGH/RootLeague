@@ -42,7 +42,7 @@ class MatchForm(ModelForm):
                         'tournament_score'],
                 ),
             ),
-            Submit("submit", _("Register match"), css_class="btn btn-secondary"),
+            Submit("submit", _("Register match"), css_class="btn btn-outline-secondary"),
         )
 
     def clean(self):

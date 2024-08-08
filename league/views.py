@@ -15,15 +15,20 @@ def leaderboard(request,
                 players = None,
                 title = None,
                 ordering = '-relative_score', number_per_page = 15):
+    min_games = 1
     if (players is None):
         players = Player.objects.all()
     if (tournament not in EMPTY_VALUES):
         players = players.annotate(total=Count('participations', filter=Q(participations__match__tournament=tournament)))
+        if (tournament.min_games not in EMPTY_VALUES):
+            min_games = max(tournament.min_games, min_games)
     elif (league not in EMPTY_VALUES):
         players = players.annotate(total=Count('participations', filter=Q(participations__match__tournament__league=league)))
+        if (league.min_games not in EMPTY_VALUES):
+            min_games = max(league.min_games, min_games)
     else:
         players = players.annotate(total=Count('participations'))
-    players = players.exclude(Q(total=None) | Q(total__lt=1))
+    players = players.exclude(Q(total=None) | Q(total__lt=min_games))
 
     if (tournament not in EMPTY_VALUES):
         players = players.annotate(score=Sum('participations__tournament_score', filter=Q(participations__match__tournament=tournament)))
@@ -73,7 +78,8 @@ def leaderboard(request,
                                   paginate_by=number_per_page,
                                   title=title,
                                   ordering=ordering,
-                                  extra_context=dict(league=league,
+                                  extra_context=dict(min_games=min_games,
+                                                     league=league,
                                                      seasons=seasons,
                                                      season_page=season_page,
                                                      season_range=season_range,
