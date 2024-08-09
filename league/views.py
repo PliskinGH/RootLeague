@@ -95,7 +95,8 @@ def faction_stats(request,
                                  score=None,
                                  relative_score=None)
         else:
-            faction_stats = participations.aggregate(score=Sum('tournament_score'))
+            faction_stats = participations.exclude(tournament_score=None) \
+                                          .aggregate(score=Sum('tournament_score', default=0))
             faction_stats['total'] = total
             faction_stats['relative_score'] = faction_stats['score'] / total * 100
         faction_stats['name'] = faction_name
