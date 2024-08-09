@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 22:59+0200\n"
+"POT-Creation-Date: 2024-08-09 23:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:78 .\league\models.py:123
+#: .\league\apps.py:7 .\league\models.py:82 .\league\models.py:127
 msgid "league"
 msgstr ""
 
@@ -174,64 +174,92 @@ msgstr ""
 msgid "three way coalition allowed"
 msgstr ""
 
+#: .\league\models.py:34
+msgid "minimum number of games"
+msgstr ""
+
 #: .\league\models.py:35
+msgid "Threshold for leaderboards."
+msgstr ""
+
+#: .\league\models.py:39
 msgid "win score"
 msgstr ""
 
-#: .\league\models.py:38
+#: .\league\models.py:42
 msgid "coalition score multiplier"
 msgstr ""
 
-#: .\league\models.py:41
+#: .\league\models.py:45
 msgid "total score per game"
 msgstr ""
 
-#: .\league\models.py:46
+#: .\league\models.py:50
 msgid "setup"
 msgstr ""
 
-#: .\league\models.py:49
+#: .\league\models.py:53
 msgid "deck"
 msgstr ""
 
-#: .\league\models.py:52
+#: .\league\models.py:56
 msgid "map"
 msgstr ""
 
-#: .\league\models.py:54
+#: .\league\models.py:58
 msgid "random suits"
 msgstr ""
 
-#: .\league\models.py:81
+#: .\league\models.py:85
 msgid "tournament"
 msgstr ""
 
-#: .\league\models.py:118
+#: .\league\models.py:122
 msgid "active season"
+msgstr ""
+
+#: .\league\templates\league\faction_stats.html:7
+msgid "Faction stats"
+msgstr ""
+
+#: .\league\templates\league\faction_stats.html:11
+#: .\league\templates\league\leaderboard.html:11
+msgid "All Seasons"
+msgstr ""
+
+#: .\league\templates\league\faction_stats.html:17
+msgid "Faction"
+msgstr ""
+
+#: .\league\templates\league\faction_stats.html:18
+#: .\league\templates\league\leaderboard.html:19
+msgid "Total Games"
+msgstr ""
+
+#: .\league\templates\league\faction_stats.html:19
+#: .\league\templates\league\leaderboard.html:20
+msgid "Total Score"
+msgstr ""
+
+#: .\league\templates\league\faction_stats.html:20
+#: .\league\templates\league\leaderboard.html:21
+msgid "Relative Score"
 msgstr ""
 
 #: .\league\templates\league\leaderboard.html:7
 msgid "Leaderboard"
 msgstr ""
 
-#: .\league\templates\league\leaderboard.html:11
-msgid "All Seasons"
-msgstr ""
-
-#: .\league\templates\league\leaderboard.html:17
+#: .\league\templates\league\leaderboard.html:18
 msgid "Player"
 msgstr ""
 
-#: .\league\templates\league\leaderboard.html:18
-msgid "Total Games"
+#: .\league\templates\league\leaderboard.html:41
+msgid "Minimum threshold"
 msgstr ""
 
-#: .\league\templates\league\leaderboard.html:19
-msgid "Total Score"
-msgstr ""
-
-#: .\league\templates\league\leaderboard.html:20
-msgid "Relative Score"
+#: .\league\templates\league\leaderboard.html:42
+msgid "game(s)"
 msgstr ""
 
 #: .\league\templates\league\related_widget_wrapper.html:11
@@ -254,6 +282,6 @@ msgstr ""
 msgid "View selected %(model)s"
 msgstr ""
 
-#: .\league\views.py:44
-msgid "All players"
+#: .\league\views.py:151
+msgid "All games"
 msgstr ""

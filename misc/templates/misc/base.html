@@ -36,7 +36,7 @@
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'match:listing' %}">{{_("Match list")}}</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'match:register' %}">{{_("Register match")}}</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase">{{_("Faction stats")}}</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
                         {%  if user.is_authenticated %}
                         <li class="nav-item px-lg-4">

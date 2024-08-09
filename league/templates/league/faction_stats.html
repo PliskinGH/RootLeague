@@ -1,0 +1,43 @@
+{% extends 'misc/base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<h2 class="section-heading mb-4">
+    <span class="section-heading-upper">{{_("Faction stats")}}</span>
+    <span class="section-heading-lower">{{ title }}</span>
+</h2>
+
+{% include 'misc/menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url='league:league_faction_stats' paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url='league:tournament_faction_stats' only %}
+
+<div class="table-responsive">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{{_("Faction")}}</th>
+      <th scope="col">{{_("Total Games")}}</th>
+      <th scope="col">{{_("Total Score")}}</th>
+      <th scope="col">{{_("Relative Score")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for faction in stats  %}
+    <tr>
+      <th scope="row">{{ faction.name }}</th>
+      <td>{{ faction.total }}</td>
+      <td>
+        {% if faction.score != None %}
+        {{ faction.score|floatformat:"-1" }}
+        {% endif %}
+      </td>
+      <td>
+        {% if faction.relative_score != None %}
+        {{ faction.relative_score|floatformat:"-2" }} %
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
