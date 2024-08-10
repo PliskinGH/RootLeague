@@ -3,14 +3,15 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import gettext_lazy as _
-from django_select2 import forms as s2forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Column, Fieldset, Layout, Row, Submit
+from crispy_forms.layout import Column, Fieldset, Layout, Row
 from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE
 from league.models import Tournament
+from authentification.forms import PlayerWidget
+from misc.forms import NonPrimarySubmit
 
 PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
@@ -42,7 +43,7 @@ class MatchForm(ModelForm):
                         'tournament_score'],
                 ),
             ),
-            Submit("submit", _("Register match"), css_class="btn btn-outline-secondary"),
+            NonPrimarySubmit("submit", _("Register match"), css_class="btn-outline-secondary"),
         )
 
     def clean(self):
@@ -101,10 +102,6 @@ class MatchForm(ModelForm):
                    'board_map',
                    'random_suits',
                   ]
-
-class PlayerWidget(s2forms.ModelSelect2Widget):
-    search_fields = ['username__icontains', 'in_game_name__icontains',
-                     'discord_name__icontains', 'email__icontains']
 
 class ParticipantForm(ModelForm):
     coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,

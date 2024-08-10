@@ -2,12 +2,20 @@
 
 {% load i18n %}
 
+{% load crispy_forms_tags %}
+
+{% block extra-css %}
+  {{player_form.media.css}}
+{% endblock %}
+
 {% block upper_title %}{{ stats_title }}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
 {% block content %}
 
-{% include 'misc/menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url=parent_url paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url=obj_url only %}
+{% include 'misc/menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url=league_url paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url=tournament_url url_get_param=player_get_param only %}
+
+{% crispy player_form %}
 
 <div class="table-responsive">
 <table class="table table-striped">
@@ -39,4 +47,8 @@
   </tbody>
 </table>
 </div>
+{% endblock %}
+
+{% block extra-js %}
+  {{player_form.media.js}}
 {% endblock %}

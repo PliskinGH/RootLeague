@@ -6,6 +6,7 @@ from import_export import resources
 from import_export.admin import ImportExportMixin, ExportActionMixin
 from import_export.fields import Field
 from datetime import datetime 
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from .models import Match, Participant
 
@@ -120,31 +121,21 @@ class ParticipantAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
     autocomplete_fields = ['player']
     resource_classes = [ParticipantResource]
 
-class ParticipantInline(admin.TabularInline, AdminURLMixin):
+class ParticipantInline(TabularInlinePaginated, AdminURLMixin):
     model = Participant
     extra = 0
-    readonly_fields = ['player_link']
-    fields = ['player', 'player_link', 'faction', 'turn_order',
+    readonly_fields = ['participant_link']
+    fields = ['participant_link', 'faction', 'turn_order',
               'game_score','dominance', 'coalition','tournament_score']
-    autocomplete_fields = ['player']
-    def player_link(self, participant):
-        if (participant.player is None):
-            url = self.get_admin_url(participant)
-            title_link = participant.__str__()
-        else:
-            url = self.get_admin_url(participant.player, "authentification")
-            title_link = participant.player.__str__()
+    def participant_link(self, participant):
+        url = self.get_admin_url(participant)
+        title_link = participant.__str__()
         return mark_safe("<a href='{}'>{}</a>".format(url, title_link))
 
 class ParticipationInline(ParticipantInline):
-    readonly_fields = ['match_link']
-    fields = ['match', 'match_link', 'faction', 'turn_order',
-              'game_score', 'dominance', 'coalition','tournament_score']
+    per_page = 3
     verbose_name = "Participation"
     verbose_name_plural = "Participations"
-    def match_link(self, participant):
-        url = self.get_admin_url(participant.match)
-        return mark_safe("<a href='{}'>{}</a>".format(url, participant.match.__str__()))
 
 class MatchResource(resources.ModelResource):
     class Meta:

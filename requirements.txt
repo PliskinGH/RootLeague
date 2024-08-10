@@ -3,12 +3,14 @@ crispy-bootstrap5==2024.2
 diff-match-patch==20230430
 dj-database-url==2.2.0
 Django==5.0.6
+django-admin-inline-paginator==0.4.0
 django-appconf==1.0.6
 django-crispy-forms==2.2
 django-crispy-formset-modal==0.12
 django-debug-toolbar==4.4.2
 django-extra-views==0.14.0
 django-import-export==4.1.1
+django-multiselectfield==0.1.13
 django-select2==8.2.0
 gunicorn==22.0.0
 packaging==24.1

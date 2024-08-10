@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-10 13:22+0200\n"
+"POT-Creation-Date: 2024-08-10 20:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,6 +146,18 @@ msgstr "Différé"
 msgid "Advanced"
 msgstr "Avancée"
 
+#: .\league\forms.py:55
+msgid "Subset of players"
+msgstr "Filtre de joueurs"
+
+#: .\league\forms.py:56
+msgid "All players"
+msgstr "Toutes les joueurs"
+
+#: .\league\forms.py:69
+msgid "Filter"
+msgstr "Filtrer"
+
 #: .\league\models.py:15
 msgid "name"
 msgstr "nom"
@@ -218,39 +230,39 @@ msgstr "tournoi"
 msgid "active season"
 msgstr "saison active"
 
-#: .\league\templates\league\leaderboard.html:7
+#: .\league\templates\league\leaderboard.html:5
 msgid "Leaderboard"
 msgstr "Classement"
 
-#: .\league\templates\league\leaderboard.html:11
-#: .\league\templates\league\stats.html:11
+#: .\league\templates\league\leaderboard.html:10
+#: .\league\templates\league\stats.html:16
 msgid "All Seasons"
 msgstr "Toutes les saisons"
 
-#: .\league\templates\league\leaderboard.html:18
+#: .\league\templates\league\leaderboard.html:17
 msgid "Player"
 msgstr "Joueur"
 
-#: .\league\templates\league\leaderboard.html:19
-#: .\league\templates\league\stats.html:18
+#: .\league\templates\league\leaderboard.html:18
+#: .\league\templates\league\stats.html:25
 msgid "Total Games"
 msgstr "Nombre de parties"
 
-#: .\league\templates\league\leaderboard.html:20
-#: .\league\templates\league\stats.html:19
+#: .\league\templates\league\leaderboard.html:19
+#: .\league\templates\league\stats.html:26
 msgid "Total Score"
 msgstr "Score total"
 
-#: .\league\templates\league\leaderboard.html:21
-#: .\league\templates\league\stats.html:20
+#: .\league\templates\league\leaderboard.html:20
+#: .\league\templates\league\stats.html:27
 msgid "Relative Score"
 msgstr "Score relatif"
 
-#: .\league\templates\league\leaderboard.html:41
+#: .\league\templates\league\leaderboard.html:40
 msgid "Minimum threshold"
 msgstr "Seuil minimal"
 
-#: .\league\templates\league\leaderboard.html:42
+#: .\league\templates\league\leaderboard.html:41
 msgid "game(s)"
 msgstr "partie(s)"
 
@@ -274,22 +286,22 @@ msgstr ""
 msgid "View selected %(model)s"
 msgstr ""
 
-#: .\league\views.py:133
+#: .\league\views.py:160
 msgid "Stats"
 msgstr "Statistiques"
 
-#: .\league\views.py:136
+#: .\league\views.py:163
 msgid "stats"
 msgstr "statistiques"
 
-#: .\league\views.py:155
+#: .\league\views.py:182
 msgid "Faction"
 msgstr ""
 
-#: .\league\views.py:177
+#: .\league\views.py:204
 msgid "Turn order"
 msgstr "Tour de jeu"
 
-#: .\league\views.py:213
+#: .\league\views.py:240
 msgid "All games"
 msgstr "Toutes les parties"

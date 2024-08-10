@@ -2,13 +2,13 @@ from django.contrib import admin
 from django.core.validators import EMPTY_VALUES
 
 from .models import League, Tournament
-from .forms import LeagueForm
+from .forms import LeagueAdminForm
 
 # Register your models here.
 
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
-    form = LeagueForm
+    form = LeagueAdminForm
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):

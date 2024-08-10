@@ -2,7 +2,7 @@
 {% load custom_tags %}
 <div class="btn-group" role="group" aria-label="menu">
     {% if page_obj %}
-        <a href="{% url parent_url parent_obj.id %}" class="btn btn-outline-primary">
+        <a href="{% url parent_url parent_obj.id %}{{ url_get_param }}" class="btn btn-outline-primary">
             {{ parent_title }}
         </a>
     {% else %}
@@ -21,7 +21,7 @@
             {% else %}
                 {% with index_obj=page_number|add:'-1' %}
                 {% with obj=objects|index:index_obj %}
-                    <a href="{% url obj_url obj.id %}" class="btn btn-outline-primary">
+                    <a href="{% url obj_url obj.id %}{{ url_get_param }}" class="btn btn-outline-primary">
                         {{ obj.name }}
                     </a>
                 {% endwith %}
@@ -30,4 +30,7 @@
         {% endif %}
     {% endfor %}
 </div>
+
+<br />
+<br />
 {% endif %}

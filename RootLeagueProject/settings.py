@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'crispy_formset_modal',
     'django_select2',
     'import_export',
+    'django_admin_inline_paginator',
     'authentification',
     'matchmaking',
     'league',

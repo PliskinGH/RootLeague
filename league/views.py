@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.core.exceptions import FieldDoesNotExist
 
 from .models import League, Tournament
+from .forms import PlayerInStatsForm
 from authentification.models import Player
 from matchmaking.models import Participant
 from misc.views import ElidedListView
@@ -82,13 +83,20 @@ def tournament_leaderboard(request,
 def get_stats(rows = None,
               field = None,
               tournament = None,
-              league = None):
+              league = None,
+              player = None):
     stats = []
     if (field in EMPTY_VALUES or rows in EMPTY_VALUES):
         return stats
+    
+    participations_manager = None
+    if (player is not None):
+        participations_manager = player.participations
+    if (participations_manager is None):
+        participations_manager = Participant.objects
     try:
         for (row, row_name) in rows:
-            participations = Participant.objects.filter(**{field : row})
+            participations = participations_manager.filter(**{field : row})
             if (tournament not in EMPTY_VALUES):
                 participations = participations.filter(match__tournament=tournament)
             elif (league not in EMPTY_VALUES):
@@ -116,10 +124,21 @@ def stats(request,
           rows = None,
           field = None,
           stats_name = None):
+    player_id = request.GET.get('player', None)
+    players = None
+    if (player_id not in EMPTY_VALUES):
+        players = Player.objects.filter(id=int(player_id))
+    player = None
+    if (players not in EMPTY_VALUES and len(players) == 1):
+        player = players[0]
+    
+    player_form = PlayerInStatsForm(dict(player=player))
+
     stats = get_stats(rows=rows,
                       field=field,
                       tournament=tournament,
-                      league=league)
+                      league=league,
+                      player=player)
 
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
@@ -127,6 +146,14 @@ def stats(request,
     
     extra_context = get_menu_by_pagination(tournament=tournament,
                                            league=league)
+    
+    extra_context['player'] = None
+    extra_context['player_get_param'] = ""
+    extra_context['player_form'] = player_form
+    if (player not in EMPTY_VALUES):
+        extra_context['player'] = player
+        extra_context['player_get_param'] = "?player=" + str(player.id)
+    
     extra_context['stats'] = stats
     extra_context['title'] = title
     if (stats_name in EMPTY_VALUES):
@@ -135,8 +162,8 @@ def stats(request,
     else:
         extra_context['stats_title'] = stats_name + " " + _("stats")
         extra_context['stats_name'] = stats_name
-    extra_context['parent_url'] = 'league:league_' + field + '_stats'
-    extra_context['obj_url'] = 'league:tournament_' + field + '_stats'
+    extra_context['league_url'] = 'league:league_' + field + '_stats'
+    extra_context['tournament_url'] = 'league:tournament_' + field + '_stats'
 
     return TemplateView.as_view(template_name='league/stats.html',
                                 extra_context=extra_context
@@ -227,7 +254,7 @@ def get_menu_by_pagination(league = None,
     
     seasons = Tournament.objects.none()
     if (league not in EMPTY_VALUES):
-        seasons = league.seasons.all()
+        seasons = league.seasons.all().order_by('start_date')
     season_paginator = Paginator(seasons, 1)
     season_page = None
     season_range = None

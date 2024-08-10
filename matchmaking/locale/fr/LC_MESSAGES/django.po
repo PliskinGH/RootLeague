@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-09 23:17+0200\n"
+"POT-Creation-Date: 2024-08-10 20:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,24 +22,24 @@ msgstr ""
 msgid "matchmaking"
 msgstr ""
 
-#: .\matchmaking\forms.py:19
+#: .\matchmaking\forms.py:20
 msgid "Closed"
 msgstr "Terminé"
 
-#: .\matchmaking\forms.py:45
-#: .\matchmaking\templates\matchmaking\match_form.html:17
+#: .\matchmaking\forms.py:46
+#: .\matchmaking\templates\matchmaking\match_form.html:15
 msgid "Register match"
 msgstr "Enregistrer une partie"
 
-#: .\matchmaking\forms.py:60
+#: .\matchmaking\forms.py:61
 msgid "A map is required for closed games."
 msgstr "Un plateau est requirs pour les parties terminées."
 
-#: .\matchmaking\forms.py:64
+#: .\matchmaking\forms.py:65
 msgid "A deck is required for closed games."
 msgstr "Un deck est requis pour les parties terminées."
 
-#: .\matchmaking\forms.py:73
+#: .\matchmaking\forms.py:74
 #, python-format
 msgid ""
 "The setup chosen is different from                                   the one "
@@ -47,70 +47,70 @@ msgid ""
 msgstr ""
 "La mise en place choisie est différente de celle du tournoi (%(setup)s)."
 
-#: .\matchmaking\forms.py:80
+#: .\matchmaking\forms.py:81
 #, python-format
 msgid ""
 "The chosen map is different from                                   the one "
 "of the tournament (%(map)s)."
 msgstr "Le plateau choisi est différent de celui du tournoi (%(map)s)."
 
-#: .\matchmaking\forms.py:87
+#: .\matchmaking\forms.py:88
 #, python-format
 msgid ""
 "The chosen deck is different from                                   the one "
 "of the tournament (%(deck)s)."
 msgstr "Le deck choisi est différent de celui du tournoi (%(deck)s)."
 
-#: .\matchmaking\forms.py:111
-#: .\matchmaking\templates\matchmaking\match_detail.html:97
+#: .\matchmaking\forms.py:108
+#: .\matchmaking\templates\matchmaking\match_detail.html:95
 msgid "Coalition with"
 msgstr "Coalition avec"
 
-#: .\matchmaking\forms.py:168
+#: .\matchmaking\forms.py:165
 #, python-format
 msgid "This tournament does not allow more than %(max_nb)d players per game."
 msgstr "Ce tournoi n'autorise pas plus de %(max_nb)d joueurs par partie."
 
-#: .\matchmaking\forms.py:176
+#: .\matchmaking\forms.py:173
 #, python-format
 msgid "This tournament does not allow fewer than %(min_nb)d players per game."
 msgstr "Ce tournoi n'autorise pas moins de %(min_nb)d joueurs par partie."
 
-#: .\matchmaking\forms.py:210
+#: .\matchmaking\forms.py:207
 #, python-format
 msgid "A faction must be defined for player %(player)i if the game is closed."
 msgstr ""
 "Une faction doit être définie pour le joueur %(player)i si la partie est "
 "terminée."
 
-#: .\matchmaking\forms.py:216
+#: .\matchmaking\forms.py:213
 #, python-format
 msgid "Player %(player)i cannot both have a game score and be in a coalition."
 msgstr ""
 "Le joueur %(player)i ne peut pas à la fois avoir un score de jeu et jouer "
 "une coalition."
 
-#: .\matchmaking\forms.py:222
+#: .\matchmaking\forms.py:219
 #, python-format
 msgid "Player %(player)i cannot both play a dominance and have a game score."
 msgstr ""
 "Le joueur %(player)i ne peut pas à la fois avoir un score de jeu et jouer "
 "une domination."
 
-#: .\matchmaking\forms.py:228
+#: .\matchmaking\forms.py:225
 #, python-format
 msgid "Player %(player)i is not a vagabond and cannot play a coalition."
 msgstr ""
 "Le joueur %(player)i n'est pas un vagabond et ne peut donc pas jouer de "
 "coalition."
 
-#: .\matchmaking\forms.py:234
+#: .\matchmaking\forms.py:231
 #, python-format
 msgid "Player %(player)i is a vagabond and cannot play a dominance."
 msgstr ""
 "Le joueur %(player)i est un vagabond et ne peut donc pas jouer de domination."
 
-#: .\matchmaking\forms.py:251
+#: .\matchmaking\forms.py:248
 #, fuzzy, python-format
 #| msgid ""
 #| "Player %(player)i does not have a correct tournament "
@@ -126,7 +126,7 @@ msgstr ""
 "(defaite), %(win_score)0.2f (victoire) et %(coal_win)0.2f (victoire en "
 "coalition)."
 
-#: .\matchmaking\forms.py:258
+#: .\matchmaking\forms.py:255
 #, python-format
 msgid ""
 "Player %(player)i does not have a correct tournament "
@@ -136,16 +136,16 @@ msgstr ""
 "Le joueur %(player)i a un score de tournoi incorrect. Scores possibles: 0 "
 "(défaite) et %(win_score)0.2f (victoire)."
 
-#: .\matchmaking\forms.py:267
+#: .\matchmaking\forms.py:264
 #, python-format
 msgid "The total score should be %(total)0.2f."
 msgstr "Le score total devrait être %(total)0.2f."
 
-#: .\matchmaking\forms.py:274
+#: .\matchmaking\forms.py:271
 msgid "This tournament does not allow coalitions."
 msgstr "Ce tournoi n'autorise pas les coalitions."
 
-#: .\matchmaking\forms.py:279
+#: .\matchmaking\forms.py:276
 msgid "This tournament does not allow three-way coalitions."
 msgstr "Ce tournoi n'autorise pas les coalitions à trois."
 
@@ -198,7 +198,7 @@ msgid "map"
 msgstr "plateau"
 
 #: .\matchmaking\models.py:53
-#: .\matchmaking\templates\matchmaking\match_detail.html:56
+#: .\matchmaking\templates\matchmaking\match_detail.html:54
 msgid "random suits"
 msgstr "distribution aléatoire"
 
@@ -250,86 +250,86 @@ msgstr " dans "
 msgid "UnknownPlayer"
 msgstr "JoueurtInconnu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:11
+#: .\matchmaking\templates\matchmaking\match_detail.html:9
 msgid "Match details"
 msgstr "Détails de partie"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:18
+#: .\matchmaking\templates\matchmaking\match_detail.html:16
 msgid "Date registered"
 msgstr "Date de création"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:23
+#: .\matchmaking\templates\matchmaking\match_detail.html:21
 msgid "Date closed"
 msgstr "Date de fin"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:29
-#: .\matchmaking\templates\matchmaking\match_list.html:18
+#: .\matchmaking\templates\matchmaking\match_detail.html:27
+#: .\matchmaking\templates\matchmaking\match_list.html:17
 msgid "Tournament"
 msgstr "Tournoi"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:34
+#: .\matchmaking\templates\matchmaking\match_detail.html:32
 msgid "Setup"
 msgstr "Mise en place"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:38
+#: .\matchmaking\templates\matchmaking\match_detail.html:36
 msgid "Table talk"
 msgstr "Déroulement"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:43
+#: .\matchmaking\templates\matchmaking\match_detail.html:41
 msgid "Table talk URL"
 msgstr "Lien de discussion"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:48
-#: .\matchmaking\templates\matchmaking\match_list.html:21
+#: .\matchmaking\templates\matchmaking\match_detail.html:46
+#: .\matchmaking\templates\matchmaking\match_list.html:20
 msgid "Deck"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:52
-#: .\matchmaking\templates\matchmaking\match_list.html:20
+#: .\matchmaking\templates\matchmaking\match_detail.html:50
+#: .\matchmaking\templates\matchmaking\match_list.html:19
 msgid "Map"
 msgstr "Plateau"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:61
+#: .\matchmaking\templates\matchmaking\match_detail.html:59
 msgid "Undrafted faction"
 msgstr "Faction non sélectionnée"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:70
+#: .\matchmaking\templates\matchmaking\match_detail.html:68
 msgid "Turn order"
 msgstr "Tour de jeu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:71
+#: .\matchmaking\templates\matchmaking\match_detail.html:69
 msgid "Player"
 msgstr "Joueur"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:72
+#: .\matchmaking\templates\matchmaking\match_detail.html:70
 msgid "Faction"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:73
+#: .\matchmaking\templates\matchmaking\match_detail.html:71
 msgid "Game score"
 msgstr "Score de jeu"
 
-#: .\matchmaking\templates\matchmaking\match_detail.html:74
+#: .\matchmaking\templates\matchmaking\match_detail.html:72
 msgid "Tournament score"
 msgstr "Score de tournoi"
 
-#: .\matchmaking\templates\matchmaking\match_form.html:18
+#: .\matchmaking\templates\matchmaking\match_form.html:16
 msgid "Form"
 msgstr "Formulaire"
 
-#: .\matchmaking\templates\matchmaking\match_list.html:7
+#: .\matchmaking\templates\matchmaking\match_list.html:5
 msgid "Match listing"
 msgstr "Liste de parties"
 
-#: .\matchmaking\templates\matchmaking\match_list.html:17
+#: .\matchmaking\templates\matchmaking\match_list.html:16
 msgid "Date"
 msgstr ""
 
-#: .\matchmaking\templates\matchmaking\match_list.html:19
+#: .\matchmaking\templates\matchmaking\match_list.html:18
 msgid "Players"
 msgstr "Joueurs"
 
-#: .\matchmaking\templates\matchmaking\match_list.html:22
+#: .\matchmaking\templates\matchmaking\match_list.html:21
 msgid "Winner(s)"
 msgstr "Vainqueur(s)"
 

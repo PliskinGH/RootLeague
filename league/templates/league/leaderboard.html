@@ -7,7 +7,7 @@
 
 {% block content %}
 
-{% include 'misc/menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url='league:league_leaderboard' paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url='league:tournament_leaderboard' only %}
+{% include 'misc/menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url='league:league_leaderboard' paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url='league:tournament_leaderboard' url_get_param="" only %}
 
 <div class="table-responsive">
 <table class="table table-striped">
