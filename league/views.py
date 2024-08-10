@@ -3,12 +3,13 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import EMPTY_VALUES
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
+from django.core.exceptions import FieldDoesNotExist
 
 from .models import League, Tournament
 from authentification.models import Player
 from matchmaking.models import Participant
 from misc.views import ElidedListView
-from .constants import FACTIONS
+from .constants import FACTIONS, TURN_ORDERS
 
 # Create your views here.
 
@@ -78,29 +79,47 @@ def tournament_leaderboard(request,
                        ordering=ordering,
                        number_per_page=number_per_page)
 
-def faction_stats(request,
-                  league = None,
-                  tournament = None,
-                  title = None):
+def get_stats(rows = None,
+              field = None,
+              tournament = None,
+              league = None):
     stats = []
-    for (faction, faction_name) in FACTIONS:
-        participations = Participant.objects.filter(faction=faction)
-        if (tournament not in EMPTY_VALUES):
-            participations = participations.filter(match__tournament=tournament)
-        elif (league not in EMPTY_VALUES):
-            participations = participations.filter(match__tournament__league=league)
-        total = participations.count()
-        if (total < 1):
-            faction_stats = dict(total=total,
+    if (field in EMPTY_VALUES or rows in EMPTY_VALUES):
+        return stats
+    try:
+        for (row, row_name) in rows:
+            participations = Participant.objects.filter(**{field : row})
+            if (tournament not in EMPTY_VALUES):
+                participations = participations.filter(match__tournament=tournament)
+            elif (league not in EMPTY_VALUES):
+                participations = participations.filter(match__tournament__league=league)
+            total = participations.count()
+            if (total < 1):
+                row_stats = dict(total=total,
                                  score=None,
                                  relative_score=None)
-        else:
-            faction_stats = participations.exclude(tournament_score=None) \
+            else:
+                row_stats = participations.exclude(tournament_score=None) \
                                           .aggregate(score=Sum('tournament_score', default=0))
-            faction_stats['total'] = total
-            faction_stats['relative_score'] = faction_stats['score'] / total * 100
-        faction_stats['name'] = faction_name
-        stats.append(faction_stats)
+                row_stats['total'] = total
+                row_stats['relative_score'] = row_stats['score'] / total * 100
+            row_stats['name'] = row_name
+            stats.append(row_stats)
+    except (AttributeError, FieldDoesNotExist):
+        stats = []
+    return stats
+
+def stats(request,
+          league = None,
+          tournament = None,
+          title = None,
+          rows = None,
+          field = None,
+          stats_name = None):
+    stats = get_stats(rows=rows,
+                      field=field,
+                      tournament=tournament,
+                      league=league)
 
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
@@ -110,10 +129,30 @@ def faction_stats(request,
                                            league=league)
     extra_context['stats'] = stats
     extra_context['title'] = title
+    if (stats_name in EMPTY_VALUES):
+        extra_context['stats_title'] = _("Stats")
+        extra_context['stats_name'] = ""
+    else:
+        extra_context['stats_title'] = stats_name + " " + _("stats")
+        extra_context['stats_name'] = stats_name
+    extra_context['parent_url'] = 'league:league_' + field + '_stats'
+    extra_context['obj_url'] = 'league:tournament_' + field + '_stats'
 
-    return TemplateView.as_view(template_name='league/faction_stats.html',
+    return TemplateView.as_view(template_name='league/stats.html',
                                 extra_context=extra_context
                                 )(request)
+
+def faction_stats(request,
+                  league = None,
+                  tournament = None,
+                  title = None):
+    return stats(request,
+                 league=league,
+                 tournament=tournament,
+                 title=title,
+                 rows=FACTIONS,
+                 field='faction',
+                 stats_name=_('Faction'))
 
 def tournament_faction_stats(request,
                              tournament_id = None):
@@ -124,6 +163,28 @@ def league_faction_stats(request,
                          league_id = None):
     league = get_league(league_id)
     return faction_stats(request, league=league)
+
+def turn_order_stats(request,
+                     league = None,
+                     tournament = None,
+                     title = None):
+    return stats(request,
+                 league=league,
+                 tournament=tournament,
+                 title=title,
+                 rows=TURN_ORDERS,
+                 field='turn_order',
+                 stats_name=_('Turn order'))
+
+def tournament_turn_order_stats(request,
+                             tournament_id = None):
+    tournament = get_tournament(tournament_id)
+    return turn_order_stats(request, tournament=tournament)
+
+def league_turn_order_stats(request,
+                         league_id = None):
+    league = get_league(league_id)
+    return turn_order_stats(request, league=league)
 
 def get_tournament(tournament_id = None):
     tournaments = None

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-09 23:17+0200\n"
+"POT-Creation-Date: 2024-08-10 13:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,42 +22,50 @@ msgstr ""
 msgid "miscellaneous"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:12 .\misc\templates\misc\base.html:27
+#: .\misc\templates\misc\base.html:12 .\misc\templates\misc\base.html:33
 msgid "ROOT Ranked League"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:26
+#: .\misc\templates\misc\base.html:32
 msgid "An unofficial matchmaking and ranking system"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:36
+#: .\misc\templates\misc\base.html:42
 msgid "Match list"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:37
+#: .\misc\templates\misc\base.html:43
 msgid "Register match"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:38
+#: .\misc\templates\misc\base.html:44
 msgid "Leaderboard"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:39
-msgid "Faction stats"
-msgstr ""
-
-#: .\misc\templates\misc\base.html:40
-msgid "About"
-msgstr ""
-
-#: .\misc\templates\misc\base.html:45
-msgid "Log out"
+#: .\misc\templates\misc\base.html:47
+msgid "Stats"
 msgstr ""
 
 #: .\misc\templates\misc\base.html:50
+msgid "Faction stats"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:51
+msgid "Turn order stats"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:58
+msgid "About"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:63
+msgid "Log out"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:68
 msgid "Log in"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:53
+#: .\misc\templates\misc\base.html:71
 msgid "Sign up"
 msgstr ""

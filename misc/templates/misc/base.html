@@ -36,7 +36,18 @@
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'match:listing' %}">{{_("Match list")}}</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'match:register' %}">{{_("Register match")}}</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a></li>
+                        <li class="nav-item dropdown px-lg-4">
+                            <a class="nav-link text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{_("Stats")}}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
+                            <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
+{% comment %}                             <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a> {% endcomment %}
+                            </div>
+                        </li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
                         {%  if user.is_authenticated %}
                         <li class="nav-item px-lg-4">
@@ -83,11 +94,12 @@
         <footer class="footer text-faded text-center py-5">
             <div class="container"><p class="m-0 small">Copyright &copy; Your Website 2021</p></div>
         </footer>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{% static 'matchmaking/js/scripts.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         {% block extra-js %}{% endblock %}
     </body>
 </html>
