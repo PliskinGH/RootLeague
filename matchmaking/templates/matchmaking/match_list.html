@@ -2,11 +2,10 @@
 
 {% load i18n %}
 
+{% block upper_title %}{{_("Match listing")}}{% endblock %}
+{% block lower_title %}{{ title }}{% endblock %}
+
 {% block content %}
-<h2 class="section-heading mb-4">
-    <span class="section-heading-upper">{{_("Match listing")}}</span>
-    <span class="section-heading-lower">{{ title }}</span>
-</h2>
 
 {% include 'matchmaking/search_form.html' %}
 

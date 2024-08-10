@@ -2,11 +2,10 @@
 
 {% load i18n %}
 
+{% block upper_title %}{{_("Leaderboard")}}{% endblock %}
+{% block lower_title %}{{ title }}{% endblock %}
+
 {% block content %}
-<h2 class="section-heading mb-4">
-    <span class="section-heading-upper">{{_("Leaderboard")}}</span>
-    <span class="section-heading-lower">{{ title }}</span>
-</h2>
 
 {% include 'misc/menu_by_pagination.html' with parent_obj=league parent_title=_('All Seasons') parent_url='league:league_leaderboard' paginator=season_paginator page_obj=season_page paginator_range=season_range objects=seasons obj_url='league:tournament_leaderboard' only %}
 

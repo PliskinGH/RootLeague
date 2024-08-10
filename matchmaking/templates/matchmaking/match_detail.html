@@ -6,12 +6,10 @@
 
 {% load custom_tags %}
 
-{% block content %}
-<h2 class="section-heading mb-4">
-    <span class="section-heading-upper">{{_("Match details")}}</span>
-    <span class="section-heading-lower">{{ object.title }}</span>
-</h2>
+{% block upper_title %}{{_("Match details")}}{% endblock %}
+{% block lower_title %}{{ object.title }}{% endblock %}
 
+{% block content %}
 <table class="table table-striped">
   <tbody>
     <tr>

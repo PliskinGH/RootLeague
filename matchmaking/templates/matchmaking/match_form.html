@@ -12,11 +12,10 @@
 {% endfor %}
 {% endblock %}
 
+{% block upper_title %}{{_("Register match")}}{% endblock %}
+{% block lower_title %}{{_("Form")}}{% endblock %}
+
 {% block content %}
-<h2 class="section-heading mb-4">
-    <span class="section-heading-upper">{{_("Register match")}}</span>
-    <span class="section-heading-lower">{{_("Form")}}</span>
-</h2>
 {% if form.is_valid %}
 {% for formset in inlines %}
   {{ formset|as_crispy_errors }}
