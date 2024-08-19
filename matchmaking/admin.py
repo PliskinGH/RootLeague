@@ -115,7 +115,7 @@ class ParticipantResource(resources.ModelResource):
 
 
 @admin.register(Participant)
-class ParticipantAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
+class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
     search_fields = ['player__username', 'player__in_game_name',
                      'player__discord_name', 'player__email']
     autocomplete_fields = ['player']

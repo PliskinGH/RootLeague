@@ -21,15 +21,21 @@
     </tr>
   </thead>
   <tbody>
-    {% for player in page_obj  %}
-    <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ player }}</td>
-      <td>{{ player.total }}</td>
-      <td>{{ player.score|floatformat:"-1" }}</td>
-      <td>{{ player.relative_score|floatformat:"-2" }} %</td>
-    </tr>
-    {% endfor %}
+    {% if page_obj.paginator.count > 0 %}
+      {% for player in page_obj  %}
+      <tr>
+        <th scope="row">{{ page_obj.start_index|add:forloop.counter0 }}</th>
+        <td>{{ player }}</td>
+        <td>{{ player.total }}</td>
+        <td>{{ player.score|floatformat:"-1" }}</td>
+        <td>{{ player.relative_score|floatformat:"-2" }} %</td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <th scope="row" colspan="5" class="text-center">{{ _("No players above the threshold.") }}</th>
+      </tr>
+    {% endif%}
   </tbody>
 </table>
 </div>

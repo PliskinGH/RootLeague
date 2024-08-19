@@ -25,11 +25,22 @@
 {% endblock %}
 
 {% block extra-js %}
+
 {% for formset in inlines %}
   {{formset.media.js}}
 {% endfor %}
-    <!-- Include Django Crispy Formset Modal's JS -->
-    <script src="{% static 'crispy_formset_modal/js/crispy-formset-modal.min.js' %}"></script>
-    
+
+<!-- Include Django Crispy Formset Modal's JS -->
+<script src="{% static 'crispy_formset_modal/js/crispy-formset-modal.min.js' %}"></script>
+
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof window.crispyFormsetModal !== "undefined") {
+      window.crispyFormsetModal.onFormAdded = function (event) {
+        $('.django-select2').djangoSelect2()
+      };
+    }
+  });
+</script>
 {% endblock %}
 
