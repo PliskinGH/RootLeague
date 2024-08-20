@@ -14,5 +14,5 @@ urlpatterns = [
     path('change-password/', views.PlayerPasswordChangeView.as_view(),
          name='password_change'
          ),
-    path('register', views.PlayerSignUpView.as_view(), name='register'),
+    path('register/', views.PlayerSignUpView.as_view(), name='register'),
 ]

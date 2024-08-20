@@ -10,20 +10,26 @@ from . import forms
 
 class PlayerLoginView(SuccessMessageMixin, LoginView):
     form_class = forms.PlayerLoginForm
-    template_name='authentification/login.html'
+    template_name='misc/basic_form.html'
     redirect_authenticated_user=True
     success_message = _("Log in successful!")
+    extra_context = {'upper_title' : _("Account"),
+                     'lower_title' : _("Log in")}
 
 class PlayerSignUpView(SuccessMessageMixin, CreateView):
     model = get_user_model()
-    template_name = 'authentification/register.html'
+    template_name='misc/basic_form.html'
     success_url = reverse_lazy('auth:login')
     form_class = forms.PlayerRegisterForm
     success_message = _("Your player account was successfully created. \
                          You can now log in.")
+    extra_context = {'upper_title' : _("Account"),
+                     'lower_title' : _("Register")}
 
 class PlayerPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
     form_class = forms.PlayerPasswordChangeForm
-    template_name='authentification/password_change.html'
+    template_name='misc/basic_form.html'
     success_url = reverse_lazy('index')
     success_message = _("Password changed successfully!")
+    extra_context = {'upper_title' : _("Account"),
+                     'lower_title' : _("Change Password")}

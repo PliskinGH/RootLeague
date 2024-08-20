@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-10 20:27+0200\n"
+"POT-Creation-Date: 2024-08-20 20:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -258,11 +258,15 @@ msgstr "Score total"
 msgid "Relative Score"
 msgstr "Score relatif"
 
-#: .\league\templates\league\leaderboard.html:40
+#: .\league\templates\league\leaderboard.html:36
+msgid "No players above the threshold."
+msgstr "Aucun joueur au dessus du seuil."
+
+#: .\league\templates\league\leaderboard.html:46
 msgid "Minimum threshold"
 msgstr "Seuil minimal"
 
-#: .\league\templates\league\leaderboard.html:41
+#: .\league\templates\league\leaderboard.html:47
 msgid "game(s)"
 msgstr "partie(s)"
 

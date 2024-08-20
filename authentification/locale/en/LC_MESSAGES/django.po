@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-10 20:51+0200\n"
+"POT-Creation-Date: 2024-08-20 20:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,8 +26,7 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
-#: .\authentification\forms.py:29
-#: .\authentification\templates\authentification\login.html:12
+#: .\authentification\forms.py:29 .\authentification\views.py:17
 msgid "Log in"
 msgstr ""
 
@@ -71,30 +70,29 @@ msgstr ""
 msgid "players"
 msgstr ""
 
-#: .\authentification\templates\authentification\login.html:11
-#: .\authentification\templates\authentification\password_change.html:11
-#: .\authentification\templates\authentification\register.html:11
-msgid "Account"
-msgstr ""
-
-#: .\authentification\templates\authentification\password_change.html:12
-msgid "Change Password"
-msgstr ""
-
-#: .\authentification\templates\authentification\register.html:12
-msgid "Register"
-msgstr ""
-
 #: .\authentification\views.py:15
 msgid "Log in successful!"
 msgstr ""
 
-#: .\authentification\views.py:22
+#: .\authentification\views.py:16 .\authentification\views.py:26
+#: .\authentification\views.py:34
+msgid "Account"
+msgstr ""
+
+#: .\authentification\views.py:24
 msgid ""
 "Your player account was successfully created.                          You "
 "can now log in."
 msgstr ""
 
-#: .\authentification\views.py:29
+#: .\authentification\views.py:27
+msgid "Register"
+msgstr ""
+
+#: .\authentification\views.py:33
 msgid "Password changed successfully!"
+msgstr ""
+
+#: .\authentification\views.py:35
+msgid "Change Password"
 msgstr ""

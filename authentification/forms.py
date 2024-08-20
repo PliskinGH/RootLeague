@@ -33,7 +33,7 @@ class PlayerPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(NonPrimarySubmit("submit", _("Save"), css_class="outline"))
+        self.helper.add_input(NonPrimarySubmit("submit", _("Save"), css_class="btn-outline-secondary"))
 
 class PlayerWidget(s2forms.ModelSelect2Widget):
     model = get_user_model()

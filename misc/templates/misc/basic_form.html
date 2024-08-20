@@ -1,0 +1,12 @@
+{% extends 'misc/base.html' %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block upper_title %}{{ upper_title }}{% endblock %}
+{% block lower_title %}{{ lower_title }}{% endblock %}
+
+{% block content %}
+{% crispy form %}
+{% endblock content %}
