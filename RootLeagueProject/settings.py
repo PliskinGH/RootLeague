@@ -128,9 +128,9 @@ WSGI_APPLICATION = 'RootLeagueProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
-        'NAME': os.environ.get('ROOTLEAGUE_DATABASE', ''), # le nom de notre base de donnees creee precedemment
-        'USER': os.environ.get('ROOTLEAGUE_DATABASE_USER', ''), # attention : remplacez par votre nom d'utilisateur
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': os.environ.get('ROOTLEAGUE_DATABASE', ''), 
+        'USER': os.environ.get('ROOTLEAGUE_DATABASE_USER', ''), 
         'PASSWORD': os.environ.get('ROOTLEAGUE_DATABASE_PASSWORD', ''),
         'HOST': os.environ.get('ROOTLEAGUE_DATABASE_HOST', ''),
         'PORT': os.environ.get('ROOTLEAGUE_DATABASE_PORT', ''),
@@ -210,3 +210,7 @@ if ROOTLEAGUE_ENV == 'PRODUCTION':
     db_from_env = dj_database_url.config(conn_max_age=500)
     DATABASES['default'].update(db_from_env)
 
+    # HTTPS
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
