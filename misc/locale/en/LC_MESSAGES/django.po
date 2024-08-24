@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-24 10:22+0200\n"
+"POT-Creation-Date: 2024-08-24 11:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,16 +22,12 @@ msgstr ""
 msgid "miscellaneous"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:12
-msgid "ROOT Ranked League"
+#: .\misc\templates\misc\base.html:12 .\misc\templates\misc\base.html:27
+msgid "ROOT Digital League"
 msgstr ""
 
 #: .\misc\templates\misc\base.html:26
 msgid "An unofficial game tracking and ranking"
-msgstr ""
-
-#: .\misc\templates\misc\base.html:27
-msgid "ROOT Digital League"
 msgstr ""
 
 #: .\misc\templates\misc\base.html:36
