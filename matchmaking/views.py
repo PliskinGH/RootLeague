@@ -18,7 +18,7 @@ from misc.views import ElidedListView
 def index(request):
     matchs = Match.objects.all().order_by('-date_registered')[:5]
     return listing(request, matchs=matchs,
-                   title=_("Last matches"), number_per_page=5)
+                   title=_("Latest matches"), number_per_page=5)
 
 def listing(request, matchs = None, title = _("All games"),
             number_per_page = 10):
