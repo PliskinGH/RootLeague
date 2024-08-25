@@ -98,7 +98,7 @@ class Participant(models.Model):
                                      null=True, blank=True,
                                      verbose_name=_('coalition'))
     tournament_score = models.DecimalField(max_digits=3, decimal_places=2,
-                                           null=True,
+                                           null=True, blank=True,
                                            verbose_name=_('tournament score'))
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
