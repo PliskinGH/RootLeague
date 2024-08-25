@@ -183,10 +183,9 @@ class ParticipantFormSet(BaseInlineFormSet):
 
                 coals = []
                 for f in forms:
-                    match = f.cleaned_data.get('match', None)
                     coal = f.cleaned_data.get('coalitioned_player', None)
                     if (coal not in EMPTY_VALUES):
-                        coals.append(coal)
+                        coals.append(int(coal))
 
                 index_f = 0
                 total_score = 0
@@ -235,7 +234,7 @@ class ParticipantFormSet(BaseInlineFormSet):
                     if (win_score not in EMPTY_VALUES):
                         actual_win_score = win_score
                         if (coal_mult is not None and
-                            (index_f in coals or coal not in EMPTY_VALUES)):
+                            in_coal):
                             actual_win_score *= coal_mult
                     if (win_score not in EMPTY_VALUES and
                         ((game_score not in EMPTY_VALUES and
