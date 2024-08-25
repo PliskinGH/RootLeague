@@ -27,7 +27,7 @@ class MatchForm(ModelForm):
         self.helper.layout = Layout(
             Row(Column("title")),
             Row(Column("tournament", css_class='col-6'), Column("game_setup", css_class='col-4'), Column("closed", css_class='col-2')),
-            Row(Column("table_talk", css_class='col-3'), Column("table_talk_url")),
+            Row(Column("turn_timing", css_class='col-3'), Column("table_talk_url")),
             Row(Column("deck"), Column("board_map"), Column("random_suits"), Column("undrafted_faction")),
             Fieldset(
                 "Participants",
@@ -94,7 +94,7 @@ class MatchForm(ModelForm):
         fields = [
                    'title',
                    'tournament',
-                   'table_talk',
+                   'turn_timing',
                    'table_talk_url',
                    'game_setup',
                    'undrafted_faction',

@@ -26,10 +26,10 @@ class Match(models.Model):
                                    related_name="matches",
                                    verbose_name=_('tournament'))
     
-    table_talk = models.CharField(max_length=20,
-                                  blank=True, default=TABLETALK_ASYNC,
-                                  choices=TABLETALK_TYPES,
-                                  verbose_name=_('table talk'))
+    turn_timing = models.CharField(max_length=20,
+                                   blank=True, default=TABLETALK_ASYNC,
+                                   choices=TABLETALK_TYPES,
+                                   verbose_name=_('turn timing'))
     table_talk_url = models.URLField(blank=True, null=True,
                                      help_text=_("E.g. Discord thread."),
                                      verbose_name=_('table talk URL'))
