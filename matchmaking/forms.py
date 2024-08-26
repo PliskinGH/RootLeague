@@ -8,10 +8,11 @@ from crispy_forms.layout import Column, Fieldset, Layout, Row
 from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
-from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE
+from .models import Match, Participant
+from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, TURN_TIMING_URLS, TURN_TIMING_TYPES
 from league.models import Tournament
 from authentification.forms import PlayerWidget
-from misc.forms import NonPrimarySubmit
+from misc.forms import NonPrimarySubmit, IconSelect
 
 PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
@@ -102,6 +103,9 @@ class MatchForm(ModelForm):
                    'board_map',
                    'random_suits',
                   ]
+        widgets = {
+            'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS)
+            }
 
 class ParticipantForm(ModelForm):
     coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,

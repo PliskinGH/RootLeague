@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from django.templatetags.static import static
 
 # Constants subject to change
 
@@ -87,12 +88,16 @@ SCORES = [
 
 TURN_ORDERS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 
-TABLETALK_LIVE = "live"
-TABLETALK_ASYNC = "async"
-TABLETALK_TYPES = [
-    (TABLETALK_LIVE, _("Live")),
-    (TABLETALK_ASYNC, _("Async")),
+TURN_TIMING_LIVE = "live"
+TURN_TIMING_ASYNC = "async"
+TURN_TIMING_TYPES = [
+    (TURN_TIMING_LIVE, _("Live")),
+    (TURN_TIMING_ASYNC, _("Async")),
     ]
+
+TURN_TIMING_URLS = {}
+for (timing, value) in TURN_TIMING_TYPES:
+    TURN_TIMING_URLS[timing] = static('league/assets/img/' + timing + '_24.png')
 
 SETUP_ADSET = "adset"
 SETUP_STANDARD = "standard"

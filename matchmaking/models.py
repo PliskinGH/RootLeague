@@ -27,8 +27,8 @@ class Match(models.Model):
                                    verbose_name=_('tournament'))
     
     turn_timing = models.CharField(max_length=20,
-                                   blank=True, default=TABLETALK_ASYNC,
-                                   choices=TABLETALK_TYPES,
+                                   blank=True, default=TURN_TIMING_ASYNC,
+                                   choices=TURN_TIMING_TYPES,
                                    verbose_name=_('turn timing'))
     table_talk_url = models.URLField(blank=True, null=True,
                                      help_text=_("E.g. Discord thread."),

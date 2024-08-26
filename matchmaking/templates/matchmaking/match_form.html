@@ -7,6 +7,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra-css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/css/dd.min.css" />
 {% for formset in inlines %}
   {{formset.media.css}}
 {% endfor %}
@@ -25,6 +26,8 @@
 {% endblock %}
 
 {% block extra-js %}
+
+<script src="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/js/dd.min.js"></script>
 
 {% for formset in inlines %}
   {{formset.media.js}}
