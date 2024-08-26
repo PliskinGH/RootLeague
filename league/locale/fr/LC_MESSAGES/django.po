@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-20 20:16+0200\n"
+"POT-Creation-Date: 2024-08-26 18:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,127 +22,127 @@ msgstr ""
 msgid "league"
 msgstr "ligue"
 
-#: .\league\constants.py:30
+#: .\league\constants.py:31
 msgid "Marquise de Cat"
 msgstr "Marquise de Chat"
 
-#: .\league\constants.py:31
+#: .\league\constants.py:32
 msgid "Eyrie Dynasties"
 msgstr "Dynastie de la Canopée"
 
-#: .\league\constants.py:32
+#: .\league\constants.py:33
 msgid "Woodland Alliance"
 msgstr "Alliance de la forêt"
 
-#: .\league\constants.py:33
+#: .\league\constants.py:34
 msgid "Riverfolk"
 msgstr "Compagnie de la rivière"
 
-#: .\league\constants.py:34
+#: .\league\constants.py:35
 msgid "Lizard Cult"
 msgstr "Culte des lézards"
 
-#: .\league\constants.py:35
+#: .\league\constants.py:36
 msgid "Underground Duchy"
 msgstr "Duché souterrain"
 
-#: .\league\constants.py:36
+#: .\league\constants.py:37
 msgid "Corvid Conspiracy"
 msgstr "Conspiration des corvidés"
 
-#: .\league\constants.py:37
+#: .\league\constants.py:38
 msgid "Lord of the Hundreds"
 msgstr "Seigneur des Cents"
 
-#: .\league\constants.py:38
+#: .\league\constants.py:39
 msgid "Keepers in Iron"
 msgstr "Gardiens de Fer"
 
-#: .\league\constants.py:39
+#: .\league\constants.py:40
 msgid "Vagabond (Ranger)"
 msgstr "Vagabond (Rôdeur)"
 
-#: .\league\constants.py:40
+#: .\league\constants.py:41
 msgid "Vagabond (Thief)"
 msgstr "Vagabond (Voleur)"
 
-#: .\league\constants.py:41
+#: .\league\constants.py:42
 msgid "Vagabond (Tinker)"
 msgstr "Vagabond (Bricoleur)"
 
-#: .\league\constants.py:42
+#: .\league\constants.py:43
 msgid "Vagabond (Vagrant)"
 msgstr "Vagabond (Errant)"
 
-#: .\league\constants.py:43
+#: .\league\constants.py:44
 msgid "Vagabond (Arbiter)"
 msgstr "Vagabond (Médiateur)"
 
-#: .\league\constants.py:44
+#: .\league\constants.py:45
 msgid "Vagabond (Scoundrel)"
 msgstr "Vagabond (Crapule)"
 
-#: .\league\constants.py:45
+#: .\league\constants.py:46
 msgid "Vagabond (Adventurer)"
 msgstr "Vagabond (Aventurier)"
 
-#: .\league\constants.py:46
+#: .\league\constants.py:47
 msgid "Vagabond (Ronin)"
 msgstr "Vagabond (Ronin)"
 
-#: .\league\constants.py:47
+#: .\league\constants.py:48
 msgid "Vagabond (Harrier)"
 msgstr "Vagabond (Busard)"
 
-#: .\league\constants.py:55
+#: .\league\constants.py:56
 msgid "Autumn"
 msgstr "Automne"
 
-#: .\league\constants.py:56
+#: .\league\constants.py:57
 msgid "Winter"
 msgstr "Hiver"
 
-#: .\league\constants.py:57
+#: .\league\constants.py:58
 msgid "Mountain"
 msgstr "Montagne"
 
-#: .\league\constants.py:58
+#: .\league\constants.py:59
 msgid "Lake"
 msgstr "Lac"
 
-#: .\league\constants.py:64 .\league\constants.py:101
+#: .\league\constants.py:65 .\league\constants.py:106
 msgid "Standard"
 msgstr ""
 
-#: .\league\constants.py:65
+#: .\league\constants.py:66
 msgid "Exiles and Partisans"
 msgstr "Exilés et Partisans"
 
-#: .\league\constants.py:73
+#: .\league\constants.py:74
 msgid "Bird dominance"
 msgstr "Domination oiseau"
 
-#: .\league\constants.py:74
+#: .\league\constants.py:75
 msgid "Fox dominance"
 msgstr "Domination renard"
 
-#: .\league\constants.py:75
+#: .\league\constants.py:76
 msgid "Mouse dominance"
 msgstr "Domination souris"
 
-#: .\league\constants.py:76
+#: .\league\constants.py:77
 msgid "Rabbit dominance"
 msgstr "Domination lapin"
 
-#: .\league\constants.py:93
+#: .\league\constants.py:94
 msgid "Live"
 msgstr "Direct"
 
-#: .\league\constants.py:94
+#: .\league\constants.py:95
 msgid "Async"
 msgstr "Différé"
 
-#: .\league\constants.py:100
+#: .\league\constants.py:105
 msgid "Advanced"
 msgstr "Avancée"
 
