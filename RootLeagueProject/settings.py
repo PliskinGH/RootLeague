@@ -205,6 +205,7 @@ if ROOTLEAGUE_ENV == 'PRODUCTION':
     # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    WHITENOISE_MANIFEST_STRICT = False
     
     #
     db_from_env = dj_database_url.config(conn_max_age=500)
