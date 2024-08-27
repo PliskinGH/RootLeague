@@ -59,12 +59,20 @@ MAPS = [
     (MAP_LAKE, _("Lake")),
     ]
 
+MAPS_URLS = {}
+for (map, value) in MAPS:
+    MAPS_URLS[map] = static('league/assets/img/' + map + '_24.png')
+
 DECK_STANDARD = "standard"
 DECK_EP = "e&p"
 DECKS = [
     (DECK_STANDARD, _("Standard")),
     (DECK_EP, _("Exiles and Partisans")),
     ]
+
+DECKS_URLS = {}
+for (deck, value) in DECKS:
+    DECKS_URLS[deck] = static('league/assets/img/' + deck + '_24.png')
 
 SUIT_BIRD = "bird"
 SUIT_FOX = "fox"

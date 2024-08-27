@@ -9,7 +9,7 @@ from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
 from .models import Match, Participant
-from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, TURN_TIMING_URLS, TURN_TIMING_TYPES
+from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
 from league.models import Tournament
 from authentification.forms import PlayerWidget
 from misc.forms import NonPrimarySubmit, IconSelect
@@ -29,7 +29,7 @@ class MatchForm(ModelForm):
             Row(Column("title")),
             Row(Column("tournament", css_class='col-6'), Column("game_setup", css_class='col-4'), Column("closed", css_class='col-2')),
             Row(Column("turn_timing", css_class='col-3'), Column("table_talk_url")),
-            Row(Column("deck"), Column("board_map"), Column("random_suits"), Column("undrafted_faction")),
+            Row(Column("deck", css_class='col-4'), Column("board_map"), Column("random_suits"), Column("undrafted_faction")),
             Fieldset(
                 "Participants",
                 ModalEditFormsetLayout(
@@ -104,7 +104,9 @@ class MatchForm(ModelForm):
                    'random_suits',
                   ]
         widgets = {
-            'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS)
+            'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
+            'deck' : IconSelect(choices_urls=DECKS_URLS),
+            'board_map' : IconSelect(choices_urls=MAPS_URLS)
             }
 
 class ParticipantForm(ModelForm):

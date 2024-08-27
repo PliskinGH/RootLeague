@@ -9,3 +9,11 @@ dumps/
 .spyproject/
 **/*.mo
 .vscode/
+league/static/league/assets/img/async.png
+league/static/league/assets/img/live.png
+league/static/league/assets/img/autumn.jpg
+league/static/league/assets/img/e&p.gif
+league/static/league/assets/img/lake.png
+league/static/league/assets/img/mountain.png
+league/static/league/assets/img/standard.gif
+league/static/league/assets/img/winter.jpg
