@@ -103,11 +103,11 @@ class MatchForm(ModelForm):
                    'board_map',
                    'random_suits',
                   ]
-        widgets = {
-            'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
-            'deck' : IconSelect(choices_urls=DECKS_URLS),
-            'board_map' : IconSelect(choices_urls=MAPS_URLS)
-            }
+        # widgets = {
+        #     'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
+        #     'deck' : IconSelect(choices_urls=DECKS_URLS),
+        #     'board_map' : IconSelect(choices_urls=MAPS_URLS)
+        #     }
 
 class ParticipantForm(ModelForm):
     coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,

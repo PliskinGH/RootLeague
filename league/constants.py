@@ -48,6 +48,10 @@ FACTIONS = [
     (VAGABOND_HARRIER, _("Vagabond (Harrier)")),
     ]
 
+FACTIONS_URLS = {}
+for (faction, value) in FACTIONS:
+    FACTIONS_URLS[faction] = static('league/assets/img/' + faction + '_24.png')
+
 MAP_AUTUMN = "autumn"
 MAP_WINTER = "winter"
 MAP_MOUNTAIN = "mountain"
