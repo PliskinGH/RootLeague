@@ -1,5 +1,6 @@
 from django.db import models
 
+from django.db.models.functions import Lower
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
@@ -23,6 +24,7 @@ class Player(AbstractUser):
     last_name = None
     email = models.EmailField(_('email address'), unique=True)
     discord_name = models.CharField(max_length=200, blank=True,
+                                    unique=True,
                                     verbose_name=_("discord username"))
     in_game_name = models.CharField(max_length=200, blank=True,
                                     verbose_name=_("in-game Username"))
@@ -35,6 +37,13 @@ class Player(AbstractUser):
     class Meta:
         verbose_name = _("player")
         verbose_name_plural = _("players")
+        constraints = [
+            models.UniqueConstraint(
+                Lower('in_game_name'),
+                "in_game_id",
+                name='unique_in_game_id'
+            ),
+        ]
     
     def __str__(self):
         result = ""

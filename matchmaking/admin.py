@@ -3,8 +3,9 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from import_export import resources
-from import_export.admin import ImportExportMixin, ExportActionMixin
+from import_export.admin import ImportMixin, ExportActionMixin
 from import_export.fields import Field
+from import_export.widgets import DateTimeWidget, CharWidget, IntegerWidget, DecimalWidget
 from datetime import datetime 
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
@@ -49,7 +50,7 @@ class ParticipantResource(resources.ModelResource):
         match = getattr(participant, "match", None)
         if (match is not None):
             game_id = getattr(match, "id", 0)
-        return game_id
+        return "DbInput!" + str(game_id)
 
     def dehydrate_timestamp(self, participant):
         date_registered = datetime.now()
@@ -138,11 +139,80 @@ class ParticipationInline(ParticipantInline):
     verbose_name_plural = "Participations"
 
 class MatchResource(resources.ModelResource):
+    timestamp = Field(attribute='timestamp', column_name="Timestamp",
+                      widget=DateTimeWidget(format='%Y-%m-%d %H:%M'))
+    first_player = Field(attribute='first_player', column_name="First Player",
+                         widget=CharWidget())
+    second_player = Field(attribute='second_player', column_name="Second Player",
+                          widget=CharWidget())
+    third_player = Field(attribute='third_player', column_name="Third Player",
+                         widget=CharWidget())
+    fourth_player = Field(attribute='fourth_player', column_name="Fourth Player",
+                          widget=CharWidget())
+    first_faction = Field(attribute='first_faction', column_name="First Player Faction",
+                          widget=CharWidget())
+    second_faction = Field(attribute='second_faction', column_name="Second Player Faction",
+                           widget=CharWidget())
+    third_faction = Field(attribute='third_faction', column_name="Third Player Faction",
+                          widget=CharWidget())
+    fourth_faction = Field(attribute='fourth_faction', column_name="Fourth Player Faction",
+                           widget=CharWidget())
+    unselected_faction = Field(attribute='unselected_faction', column_name="Unselected Faction",
+                               widget=CharWidget())
+    first_game_score = Field(attribute='first_game_score', column_name="First Player Game Score",
+                               widget=CharWidget())
+    second_game_score = Field(attribute='second_game_score', column_name="Second Player Game Score",
+                              widget=CharWidget())
+    third_game_score = Field(attribute='third_game_score', column_name="Third Player Game Score",
+                             widget=CharWidget())
+    fourth_game_score = Field(attribute='fourth_game_score', column_name="Fourth Player Game Score",
+                              widget=CharWidget())
+    first_league_score = Field(attribute='first_league_score', column_name="First Player League Score",
+                               widget=DecimalWidget())
+    second_league_score = Field(attribute='second_league_score', column_name="Second Player League Score",
+                                widget=DecimalWidget())
+    third_league_score = Field(attribute='third_league_score', column_name="Third Player League Score",
+                               widget=DecimalWidget())
+    fourth_league_score = Field(attribute='fourth_league_score', column_name="Fourth Player League Score",
+                                widget=DecimalWidget())
+    board_map = Field(attribute='board_map', column_name="Map",
+                      widget=CharWidget())
+    deck = Field(attribute='deck', column_name="Deck",
+                 widget=CharWidget())
+    clearing_distribution = Field(attribute='clearing_distribution', column_name="Clearing Distribution",
+                                  widget=CharWidget())
+    timing = Field(attribute='timing', column_name="Timing",
+                   widget=CharWidget())
+    discord_link = Field(attribute='discord_link', column_name="Discord Link",
+                         widget=CharWidget())
+
+    def get_import_order(self):
+        return ('timestamp', 'first_player', 'second_player', 'third_player', 'fourth_player',
+                'first_faction', 'second_faction', 'third_faction', 'fourth_faction', 'unselected_faction',
+                'first_game_score', 'second_game_score', 'third_game_score', 'fourth_game_score',
+                'first_league_score', 'second_league_score', 'third_league_score', 'fourth_league_score',
+                'board_map', 'deck', 'clearing_distribution', 'timing', 'discord_link')
+    
+    def import_instance(self, instance, row, **kwargs):
+        player_fields = [self.first_player, self.second_player, self.third_player, self.fourth_player]
+        faction_fields = [self.first_faction, self.second_faction, self.third_faction, self.fourth_faction]
+        game_score_fields = [self.first_game_score, self.second_game_score, self.third_game_score, self.fourth_game_score]
+        league_score_fields = [self.first_league_score, self.second_league_score, self.third_league_score, self.fourth_league_score]
+
+        for i in range(4):
+            player_field = player_fields[i]
+            faction_field = faction_fields[i]
+            game_score_field = game_score_fields[i]
+            league_score_field = league_score_fields[i]
+            
+        pass
+
     class Meta:
         model = Match
+        force_init_instance = True
 
 @admin.register(Match)
-class MatchAdmin(ImportExportMixin, ExportActionMixin, admin.ModelAdmin):
+class MatchAdmin(ImportMixin, admin.ModelAdmin):
     inlines = [ParticipantInline,] # list of participants in the match
     search_fields = ['title', 'participants__player__username',
                      'participants__player__in_game_name',
