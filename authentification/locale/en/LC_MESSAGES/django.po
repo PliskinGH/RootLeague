@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-20 20:16+0200\n"
+"POT-Creation-Date: 2024-12-01 21:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,39 +34,39 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: .\authentification\models.py:13
+#: .\authentification\models.py:14
 msgid "name"
 msgstr ""
 
-#: .\authentification\models.py:15
+#: .\authentification\models.py:16
 msgid "icon"
 msgstr ""
 
-#: .\authentification\models.py:24
+#: .\authentification\models.py:25
 msgid "email address"
 msgstr ""
 
-#: .\authentification\models.py:26
+#: .\authentification\models.py:29
 msgid "discord username"
 msgstr ""
 
-#: .\authentification\models.py:28
+#: .\authentification\models.py:31
 msgid "in-game Username"
 msgstr ""
 
-#: .\authentification\models.py:30
+#: .\authentification\models.py:33
 msgid "in-game ID"
 msgstr ""
 
-#: .\authentification\models.py:33
+#: .\authentification\models.py:36
 msgid "roles"
 msgstr ""
 
-#: .\authentification\models.py:36
+#: .\authentification\models.py:39
 msgid "player"
 msgstr ""
 
-#: .\authentification\models.py:37
+#: .\authentification\models.py:40
 msgid "players"
 msgstr ""
 

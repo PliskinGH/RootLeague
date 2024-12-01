@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 18:30+0200\n"
+"POT-Creation-Date: 2024-12-01 21:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,55 +94,55 @@ msgstr ""
 msgid "Vagabond (Harrier)"
 msgstr ""
 
-#: .\league\constants.py:56
+#: .\league\constants.py:60
 msgid "Autumn"
 msgstr ""
 
-#: .\league\constants.py:57
+#: .\league\constants.py:61
 msgid "Winter"
 msgstr ""
 
-#: .\league\constants.py:58
+#: .\league\constants.py:62
 msgid "Mountain"
 msgstr ""
 
-#: .\league\constants.py:59
+#: .\league\constants.py:63
 msgid "Lake"
 msgstr ""
 
-#: .\league\constants.py:65 .\league\constants.py:106
+#: .\league\constants.py:73 .\league\constants.py:118
 msgid "Standard"
 msgstr ""
 
-#: .\league\constants.py:66
+#: .\league\constants.py:74
 msgid "Exiles and Partisans"
 msgstr ""
 
-#: .\league\constants.py:74
+#: .\league\constants.py:86
 msgid "Bird dominance"
 msgstr ""
 
-#: .\league\constants.py:75
+#: .\league\constants.py:87
 msgid "Fox dominance"
 msgstr ""
 
-#: .\league\constants.py:76
+#: .\league\constants.py:88
 msgid "Mouse dominance"
 msgstr ""
 
-#: .\league\constants.py:77
+#: .\league\constants.py:89
 msgid "Rabbit dominance"
 msgstr ""
 
-#: .\league\constants.py:94
+#: .\league\constants.py:106
 msgid "Live"
 msgstr ""
 
-#: .\league\constants.py:95
+#: .\league\constants.py:107
 msgid "Async"
 msgstr ""
 
-#: .\league\constants.py:105
+#: .\league\constants.py:117
 msgid "Advanced"
 msgstr ""
 
