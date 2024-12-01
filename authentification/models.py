@@ -23,7 +23,8 @@ class Player(AbstractUser):
     first_name = None
     last_name = None
     email = models.EmailField(_('email address'), unique=True)
-    discord_name = models.CharField(max_length=200, blank=True,
+    discord_name = models.CharField(max_length=200,
+                                    blank=True, null=True, default=None,
                                     unique=True,
                                     verbose_name=_("discord username"))
     in_game_name = models.CharField(max_length=200, blank=True,
