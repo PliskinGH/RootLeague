@@ -10,9 +10,11 @@ django-crispy-formset-modal==0.12
 django-debug-toolbar==4.4.6
 django-extra-views==0.14.0
 django-import-export==4.1.1
+django-mailer==2.3.2
 django-multiselectfield==0.1.13
 django-select2==8.2.1
 gunicorn==23.0.0
+lockfile==0.12.2
 packaging==24.1
 pillow==10.4.0
 pip==24.2
