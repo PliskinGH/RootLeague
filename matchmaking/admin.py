@@ -125,7 +125,8 @@ class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
 class ParticipantInline(TabularInlinePaginated, AdminURLMixin):
     model = Participant
     extra = 0
-    readonly_fields = ['participant_link']
+    readonly_fields = ['participant_link', 'faction', 'turn_order',
+                       'game_score','dominance', 'coalition','tournament_score']
     fields = ['participant_link', 'faction', 'turn_order',
               'game_score','dominance', 'coalition','tournament_score']
     def participant_link(self, participant):

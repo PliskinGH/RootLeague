@@ -124,7 +124,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 WSGI_APPLICATION = 'RootLeagueProject.wsgi.application'
 
 # Emails
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'mailer.backend.DbBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'rootdigitalleague.email@gmail.com'
