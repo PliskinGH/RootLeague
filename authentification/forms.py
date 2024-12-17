@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django_select2 import forms as s2forms
@@ -29,6 +29,20 @@ class PlayerLoginForm(AuthenticationForm):
         self.helper.add_input(NonPrimarySubmit("submit", _("Log in"), css_class="btn-outline-secondary"))
 
 class PlayerPasswordChangeForm(PasswordChangeForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(NonPrimarySubmit("submit", _("Save"), css_class="btn-outline-secondary"))
+
+class PlayerPasswordResetForm(PasswordResetForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(NonPrimarySubmit("submit", _("Send confirmation"), css_class="btn-outline-secondary"))
+
+class PlayerPasswordResetConfirmForm(SetPasswordForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -14,5 +14,11 @@ urlpatterns = [
     path('change-password/', views.PlayerPasswordChangeView.as_view(),
          name='password_change'
          ),
+    path('reset-password/', views.PlayerPasswordResetView.as_view(),
+         name='password_reset'
+         ),
+    path('reset-password-confirm/<uidb64>/<token>/', views.PlayerPasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'
+         ),
     path('register/', views.PlayerSignUpView.as_view(), name='register'),
 ]

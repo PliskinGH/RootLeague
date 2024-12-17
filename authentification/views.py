@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.views import PasswordChangeView, LoginView
+from django.contrib.auth.views import PasswordChangeView, LoginView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -33,3 +33,20 @@ class PlayerPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
     success_message = _("Password changed successfully!")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Change Password")}
+
+class PlayerPasswordResetView(SuccessMessageMixin, PasswordResetView):
+    form_class = forms.PlayerPasswordResetForm
+    template_name='misc/basic_form.html'
+    email_template_name='authentification/password_reset_email.html' 
+    success_url = reverse_lazy('index')
+    success_message = _("Confirmation email sent! Please follow the confirmation link to reset your password.")
+    extra_context = {'upper_title' : _("Account"),
+                     'lower_title' : _("Reset Password")}
+
+class PlayerPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmView):
+    form_class = forms.PlayerPasswordResetConfirmForm
+    template_name='misc/basic_form.html'
+    success_url = reverse_lazy('index')
+    success_message = _("Password changed successfully!")
+    extra_context = {'upper_title' : _("Account"),
+                     'lower_title' : _("Reset Password")}
