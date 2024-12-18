@@ -42,6 +42,28 @@ class PlayerPasswordResetForm(PasswordResetForm):
         self.helper = FormHelper()
         self.helper.add_input(NonPrimarySubmit("submit", _("Send confirmation"), css_class="btn-outline-secondary"))
 
+    def get_users(self, email):
+        """Given an email, return matching user(s) who should receive a reset.
+
+        This allows subclasses to more easily customize the default policies
+        that prevent inactive users and users with unusable passwords from
+        resetting their password.
+
+        Reimplemented to allow unusable passwords to be reset.
+        """
+        email_field_name = UserModel.get_email_field_name()
+        active_users = UserModel._default_manager.filter(
+            **{
+                "%s__iexact" % email_field_name: email,
+                "is_active": True,
+            }
+        )
+        return (
+            u
+            for u in active_users
+            if _unicode_ci_compare(email, getattr(u, email_field_name))
+        )
+
 class PlayerPasswordResetConfirmForm(SetPasswordForm):
 
     def __init__(self, *args, **kwargs):

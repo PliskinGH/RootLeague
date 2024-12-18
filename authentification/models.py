@@ -22,7 +22,8 @@ class Player(AbstractUser):
     """
     first_name = None
     last_name = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email address'), unique=True,
+                              blank=True, null=True, default=None)
     discord_name = models.CharField(max_length=200,
                                     blank=True, null=True, default=None,
                                     unique=True,

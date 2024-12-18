@@ -30,7 +30,7 @@ class Match(models.Model):
                                    blank=True, default=TURN_TIMING_ASYNC,
                                    choices=TURN_TIMING_TYPES,
                                    verbose_name=_('turn timing'))
-    table_talk_url = models.URLField(blank=True, null=True,
+    table_talk_url = models.URLField(blank=True, null=True, max_length=1000,
                                      help_text=_("E.g. Discord thread."),
                                      verbose_name=_('table talk URL'))
     

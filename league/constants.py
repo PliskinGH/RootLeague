@@ -48,6 +48,45 @@ FACTIONS = [
     (VAGABOND_HARRIER, _("Vagabond (Harrier)")),
     ]
 
+def invert_faction(full_name):
+    if (full_name == "Marquise de Cat"):
+        return FACTION_CATS
+    if (full_name == "Eyrie Dynasties"):
+        return FACTION_BIRDS
+    if (full_name == "Woodland Alliance"):
+        return FACTION_ALLIANCE
+    if (full_name == "Riverfolk"):
+        return FACTION_OTTERS
+    if (full_name == "Lizard Cult"):
+        return FACTION_LIZARDS
+    if (full_name == "Underground Duchy"):
+        return FACTION_MOLES
+    if (full_name == "Corvid Conspiracy"):
+        return FACTION_CROWS
+    if (full_name == "Lord of the Hundreds"):
+        return FACTION_RATS
+    if (full_name == "Keepers in Iron"):
+        return FACTION_BADGERS
+    if (full_name == "Vagabond (Ranger)"):
+        return VAGABOND_RANGER
+    if (full_name == "Vagabond (Thief)"):
+        return VAGABOND_THIEF
+    if (full_name == "Vagabond (Tinker)"):
+        return VAGABOND_TINKER
+    if (full_name == "Vagabond (Vagrant)"):
+        return VAGABOND_VAGRANT
+    if (full_name == "Vagabond (Arbiter)"):
+        return VAGABOND_ARBITER
+    if (full_name == "Vagabond (Scoundrel)"):
+        return VAGABOND_SCOUNDREL
+    if (full_name == "Vagabond (Adventurer)"):
+        return VAGABOND_ADVENTURER
+    if (full_name == "Vagabond (Ronin)"):
+        return VAGABOND_RONIN
+    if (full_name == "Vagabond (Harrier)"):
+        return VAGABOND_HARRIER
+    return ""
+
 FACTIONS_URLS = {}
 for (faction, value) in FACTIONS:
     FACTIONS_URLS[faction] = static('league/assets/img/' + faction + '_24.png')
@@ -62,6 +101,17 @@ MAPS = [
     (MAP_MOUNTAIN, _("Mountain")),
     (MAP_LAKE, _("Lake")),
     ]
+
+def invert_map(full_name):
+    if (full_name == "Autumn"):
+        return MAP_AUTUMN
+    if (full_name == "Winter"):
+        return MAP_WINTER
+    if (full_name == "Mountain"):
+        return MAP_MOUNTAIN
+    if (full_name == "Lake"):
+        return MAP_LAKE
+    return ""
 
 MAPS_URLS = {}
 for (map, value) in MAPS:

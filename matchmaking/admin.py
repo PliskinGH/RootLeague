@@ -8,8 +8,13 @@ from import_export.fields import Field
 from import_export.widgets import DateTimeWidget, CharWidget, IntegerWidget, DecimalWidget
 from datetime import datetime 
 from django_admin_inline_paginator.admin import TabularInlinePaginated
+from django.core.exceptions import ValidationError
+from django.utils.encoding import force_str
 
 from .models import Match, Participant
+from authentification.models import Player
+from league.constants import DECK_EP, DECK_STANDARD, SUIT_BIRD, SUIT_FOX, SUIT_MOUSE, SUIT_RABBIT, TURN_TIMING_LIVE, TURN_TIMING_ASYNC, invert_faction, invert_map
+from league.models import Tournament
 
 # Mixn
 class AdminURLMixin(object):
@@ -140,77 +145,280 @@ class ParticipationInline(ParticipantInline):
     verbose_name_plural = "Participations"
 
 class MatchResource(resources.ModelResource):
-    timestamp = Field(attribute='timestamp', column_name="Timestamp",
+
+    # Fields
+    timestamp = Field(attribute=None, column_name="Timestamp",
                       widget=DateTimeWidget(format='%Y-%m-%d %H:%M'))
-    first_player = Field(attribute='first_player', column_name="First Player",
+    first_player = Field(attribute=None, column_name="First Player",
                          widget=CharWidget())
-    second_player = Field(attribute='second_player', column_name="Second Player",
+    second_player = Field(attribute=None, column_name="Second Player",
                           widget=CharWidget())
-    third_player = Field(attribute='third_player', column_name="Third Player",
+    third_player = Field(attribute=None, column_name="Third Player",
                          widget=CharWidget())
-    fourth_player = Field(attribute='fourth_player', column_name="Fourth Player",
+    fourth_player = Field(attribute=None, column_name="Fourth Player",
                           widget=CharWidget())
-    first_faction = Field(attribute='first_faction', column_name="First Player Faction",
+    first_faction = Field(attribute=None, column_name="First Player Faction",
                           widget=CharWidget())
-    second_faction = Field(attribute='second_faction', column_name="Second Player Faction",
+    second_faction = Field(attribute=None, column_name="Second Player Faction",
                            widget=CharWidget())
-    third_faction = Field(attribute='third_faction', column_name="Third Player Faction",
+    third_faction = Field(attribute=None, column_name="Third Player Faction",
                           widget=CharWidget())
-    fourth_faction = Field(attribute='fourth_faction', column_name="Fourth Player Faction",
+    fourth_faction = Field(attribute=None, column_name="Fourth Player Faction",
                            widget=CharWidget())
-    unselected_faction = Field(attribute='unselected_faction', column_name="Unselected Faction",
+    unselected_faction = Field(attribute=None, column_name="Unselected Faction",
                                widget=CharWidget())
-    first_game_score = Field(attribute='first_game_score', column_name="First Player Game Score",
+    first_game_score = Field(attribute=None, column_name="First Player Game Score",
                                widget=CharWidget())
-    second_game_score = Field(attribute='second_game_score', column_name="Second Player Game Score",
+    second_game_score = Field(attribute=None, column_name="Second Player Game Score",
                               widget=CharWidget())
-    third_game_score = Field(attribute='third_game_score', column_name="Third Player Game Score",
+    third_game_score = Field(attribute=None, column_name="Third Player Game Score",
                              widget=CharWidget())
-    fourth_game_score = Field(attribute='fourth_game_score', column_name="Fourth Player Game Score",
+    fourth_game_score = Field(attribute=None, column_name="Fourth Player Game Score",
                               widget=CharWidget())
-    first_league_score = Field(attribute='first_league_score', column_name="First Player League Score",
+    first_league_score = Field(attribute=None, column_name="First Player League Score",
                                widget=DecimalWidget())
-    second_league_score = Field(attribute='second_league_score', column_name="Second Player League Score",
+    second_league_score = Field(attribute=None, column_name="Second Player League Score",
                                 widget=DecimalWidget())
-    third_league_score = Field(attribute='third_league_score', column_name="Third Player League Score",
+    third_league_score = Field(attribute=None, column_name="Third Player League Score",
                                widget=DecimalWidget())
-    fourth_league_score = Field(attribute='fourth_league_score', column_name="Fourth Player League Score",
+    fourth_league_score = Field(attribute=None, column_name="Fourth Player League Score",
                                 widget=DecimalWidget())
-    board_map = Field(attribute='board_map', column_name="Map",
+    board_map = Field(attribute=None, column_name="Map",
                       widget=CharWidget())
-    deck = Field(attribute='deck', column_name="Deck",
+    deck = Field(attribute=None, column_name="Deck",
                  widget=CharWidget())
-    clearing_distribution = Field(attribute='clearing_distribution', column_name="Clearing Distribution",
+    clearing_distribution = Field(attribute=None, column_name="Clearing Distribution",
                                   widget=CharWidget())
-    timing = Field(attribute='timing', column_name="Timing",
+    timing = Field(attribute=None, column_name="Timing",
                    widget=CharWidget())
-    discord_link = Field(attribute='discord_link', column_name="Discord Link",
+    discord_link = Field(attribute=None, column_name="Discord Link",
                          widget=CharWidget())
+    tournament = Field(attribute=None, column_name="Tournament",
+                         widget=CharWidget())
+    setup = Field(attribute=None, column_name="Setup",
+                         widget=CharWidget())
+    
+    # Foreign keys to be saved after match is saved
+    participants = []
+
+    class Meta:
+        model = Match
+        force_init_instance = True
+        fields = ('timestamp', 'first_player', 'second_player', 'third_player', 'fourth_player',
+                'first_faction', 'second_faction', 'third_faction', 'fourth_faction', 'unselected_faction',
+                'first_game_score', 'second_game_score', 'third_game_score', 'fourth_game_score',
+                'first_league_score', 'second_league_score', 'third_league_score', 'fourth_league_score',
+                'board_map', 'deck', 'clearing_distribution', 'timing', 'discord_link', 'tournament', 'setup',)
 
     def get_import_order(self):
         return ('timestamp', 'first_player', 'second_player', 'third_player', 'fourth_player',
                 'first_faction', 'second_faction', 'third_faction', 'fourth_faction', 'unselected_faction',
                 'first_game_score', 'second_game_score', 'third_game_score', 'fourth_game_score',
                 'first_league_score', 'second_league_score', 'third_league_score', 'fourth_league_score',
-                'board_map', 'deck', 'clearing_distribution', 'timing', 'discord_link')
+                'board_map', 'deck', 'clearing_distribution', 'timing', 'discord_link', 'tournament', 'setup')
     
     def import_instance(self, instance, row, **kwargs):
-        player_fields = [self.first_player, self.second_player, self.third_player, self.fourth_player]
-        faction_fields = [self.first_faction, self.second_faction, self.third_faction, self.fourth_faction]
-        game_score_fields = [self.first_game_score, self.second_game_score, self.third_game_score, self.fourth_game_score]
-        league_score_fields = [self.first_league_score, self.second_league_score, self.third_league_score, self.fourth_league_score]
+        player_fields = [self.fields['first_player'], self.fields['second_player'], self.fields['third_player'], self.fields['fourth_player']]
+        faction_fields = [self.fields['first_faction'], self.fields['second_faction'], self.fields['third_faction'], self.fields['fourth_faction']]
+        game_score_fields = [self.fields['first_game_score'], self.fields['second_game_score'], self.fields['third_game_score'], self.fields['fourth_game_score']]
+        league_score_fields = [self.fields['first_league_score'], self.fields['second_league_score'], self.fields['third_league_score'], self.fields['fourth_league_score']]
 
+        errors = {}
+        players = [None, None, None, None]
+        factions = [None, None, None, None]
+        game_scores = [None, None, None, None]
+        league_scores = [None, None, None, None]
         for i in range(4):
             player_field = player_fields[i]
             faction_field = faction_fields[i]
             game_score_field = game_score_fields[i]
             league_score_field = league_score_fields[i]
-            
-        pass
 
-    class Meta:
-        model = Match
-        force_init_instance = True
+            try:
+                player_field_split = player_field.clean(row, **kwargs).split('+')
+            except Exception as e:
+                errors[player_field.column_name] = ValidationError(force_str(e), code="invalid")
+                continue
+            if (len(player_field_split) != 2):
+                errors[player_field.column_name] = ValidationError("Invalid name or id", code="invalid")
+                continue
+            player_in_game_name = ""
+            player_in_game_id = None
+            try:
+                player_in_game_name = str(player_field_split[0])
+                player_in_game_id = int(player_field_split[1])
+            except:
+                pass
+            player_qs = Player.objects.filter(in_game_name__iexact=player_in_game_name, in_game_id=player_in_game_id)
+            if (len(player_qs) != 1):
+                errors[player_field.column_name] = ValidationError("Player name or id not found", code="invalid")
+                continue
+            players[i] = player_qs[0]
+
+            try:
+                faction = faction_field.clean(row, **kwargs)
+            except Exception as e:
+                errors[faction_field.column_name] = ValidationError(force_str(e), code="invalid")
+                continue
+            factions[i] = faction
+
+            try:
+                game_score = game_score_field.clean(row, **kwargs)
+            except Exception as e:
+                errors[game_score_field.column_name] = ValidationError(force_str(e), code="invalid")
+                continue
+            game_scores[i] = game_score
+
+            try:
+                league_score = league_score_field.clean(row, **kwargs)
+            except Exception as e:
+                errors[league_score_field.column_name] = ValidationError(force_str(e), code="invalid")
+                continue
+            league_scores[i] = league_score
+
+        if errors:
+            raise ValidationError(errors)
+        
+        coalitioned_players = [None, None, None, None]
+        dominance_suits = [None, None, None, None]
+        for i in range(4):
+            if ("Coalition" in game_scores[i]):
+                coalitioned_faction = game_scores[i].replace("Coalition w/", "")
+                index_coalitioned = factions.index(coalitioned_faction)
+                if (index_coalitioned < 0 or index_coalitioned > 3 or index_coalitioned == i):
+                    errors[game_score_fields[i].column_name] = ValidationError("Invalid game score", code="invalid")
+                    continue
+                coalitioned_players[i] = index_coalitioned
+            if ("Dom" in game_scores[i]):
+                if (game_scores[i] == "Bird Dom"):
+                    dominance_suits[i] = SUIT_BIRD
+                elif (game_scores[i] == "Bunny Dom"):
+                    dominance_suits[i] = SUIT_RABBIT
+                elif (game_scores[i] == "Mouse Dom"):
+                    dominance_suits[i] = SUIT_MOUSE
+                elif (game_scores[i] == "Fox Dom"):
+                    dominance_suits[i] = SUIT_FOX
+                else:
+                    errors[game_score_fields[i].column_name] = ValidationError("Invalid game score", code="invalid")
+                    continue
+
+        if errors:
+            raise ValidationError(errors)
+
+        participants = [None, None, None, None]
+        for i in range(4):
+            try:
+                participants[i] = Participant(player=players[i], match=instance, faction=invert_faction(factions[i]),
+                                              tournament_score=league_scores[i],
+                                              turn_order=i)
+            except Exception as e:
+                errors[player_fields[i].column_name] = ValidationError(force_str(e), code="invalid")
+                continue
+
+        if errors:
+            raise ValidationError(errors)
+        
+        for i in range(4):
+            try:
+                if (coalitioned_players[i] is not None):
+                    participants[i].coalition = participants[coalitioned_players[i]]
+                elif (dominance_suits[i] is not None):
+                    participants[i].dominance = dominance_suits[i]
+                else:
+                    participants[i].game_score = int(game_scores[i])
+            except Exception as e:
+                errors[game_score_fields[i].column_name] = ValidationError(force_str(e), code="invalid")
+                continue
+            
+        if errors:
+            raise ValidationError(errors)
+        
+        date_registered = None
+        try:
+            date_registered = self.fields['timestamp'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['timestamp'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        tournament = None
+        try:
+            tournament_name = self.fields['tournament'].clean(row, **kwargs)
+            tournament = Tournament.objects.get(name=tournament_name)
+        except Exception as e:
+            errors[self.fields['tournament'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        turn_timing = None
+        try:
+            turn_timing = self.fields['timing'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['timing'].column_namee] = ValidationError(force_str(e), code="invalid")
+        
+        table_talk_url = None
+        try:
+            table_talk_url = self.fields['discord_link'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['discord_link'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        game_setup = None
+        try:
+            game_setup = self.fields['setup'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['setup'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        undrafted_faction = None
+        try:
+            undrafted_faction = self.fields['unselected_faction'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['unselected_faction'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        deck = None
+        try:
+            deck = self.fields['deck'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['deck'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        board_map = None
+        try:
+            board_map = self.fields['board_map'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['board_map'].column_name] = ValidationError(force_str(e), code="invalid")
+        
+        clearing_distribution = None
+        try:
+            clearing_distribution = self.fields['clearing_distribution'].clean(row, **kwargs)
+        except Exception as e:
+            errors[self.fields['clearing_distribution'].column_name] = ValidationError(force_str(e), code="invalid")
+            
+        if errors:
+            raise ValidationError(errors)
+        
+        instance.title = "Import game " + str(date_registered)
+        instance.date_registered = date_registered
+        instance.date_closed = date_registered
+        instance.tournament = tournament
+        if (turn_timing == "Live"):
+            instance.turn_timing = TURN_TIMING_LIVE
+        elif (turn_timing == "Async"):
+            instance.turn_timing = TURN_TIMING_ASYNC
+        instance.table_talk_url = table_talk_url
+        instance.game_setup = game_setup
+        instance.undrafted_faction = invert_faction(undrafted_faction)
+        if (deck == "E&P"):
+            instance.deck = DECK_EP
+        elif (deck == "Base"):
+            instance.deck = DECK_STANDARD
+        instance.board_map = invert_map(board_map)
+        instance.random_suits = ("Random" in clearing_distribution)
+
+        self.participants = participants
+
+    def after_save_instance(self, instance, row, **kwargs):
+        for participant in self.participants:
+            if (participant is not None and participant.coalition is None):
+                participant.save()
+        for participant in self.participants:
+            if (participant is not None and participant.coalition is not None):
+                participant.save()
+        self.participants = []
 
 @admin.register(Match)
 class MatchAdmin(ImportMixin, admin.ModelAdmin):
