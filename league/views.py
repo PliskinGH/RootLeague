@@ -20,6 +20,10 @@ def leaderboard(request,
                 players = None,
                 title = None,
                 ordering = '-relative_score', number_per_page = 15):
+    if (league in EMPTY_VALUES and
+        tournament not in EMPTY_VALUES):
+        league = tournament.league
+
     min_games = 1
     if (players is None):
         players = Player.objects.filter(is_active=True)
@@ -124,6 +128,10 @@ def stats(request,
           rows = None,
           field = None,
           stats_name = None):
+    if (league in EMPTY_VALUES and
+        tournament not in EMPTY_VALUES):
+        league = tournament.league
+        
     player_id = request.GET.get('player', None)
     players = None
     if (player_id not in EMPTY_VALUES):
@@ -238,10 +246,10 @@ def get_league(league_id = None):
 def get_title(tournament = None,
               league = None,
               default = _("All games")):
-    if (tournament not in EMPTY_VALUES):
-        title = tournament.name
-    elif (league not in EMPTY_VALUES):
+    if (league not in EMPTY_VALUES):
         title = league.name
+    elif (tournament not in EMPTY_VALUES):
+        title = tournament.name
     else:
         title = default
     return title
