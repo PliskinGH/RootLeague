@@ -9,4 +9,4 @@ from matchmaking.admin import ParticipationInline
 class PlayerAdmin(admin.ModelAdmin):
     inlines = [ParticipationInline,] # list of participants in the match
     search_fields = ['username', 'in_game_name', 'discord_name', 'email']
-    list_filter = ['date_joined']
+    list_filter = ['date_joined', 'is_active', 'is_staff']

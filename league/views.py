@@ -22,7 +22,7 @@ def leaderboard(request,
                 ordering = '-relative_score', number_per_page = 15):
     min_games = 1
     if (players is None):
-        players = Player.objects.all()
+        players = Player.objects.filter(is_active=True)
     if (tournament not in EMPTY_VALUES):
         players = players.annotate(total=Count('participations', filter=Q(participations__match__tournament=tournament)))
         if (tournament.min_games not in EMPTY_VALUES):
