@@ -310,7 +310,7 @@ class MatchResource(resources.ModelResource):
             try:
                 participants[i] = Participant(player=players[i], match=instance, faction=invert_faction(factions[i]),
                                               tournament_score=league_scores[i],
-                                              turn_order=i)
+                                              turn_order=i+1)
             except Exception as e:
                 errors[player_fields[i].column_name] = ValidationError(force_str(e), code="invalid")
                 continue
