@@ -31,7 +31,7 @@ FACTIONS = [
     (FACTION_CATS, _("Marquise de Cat")),
     (FACTION_BIRDS, _("Eyrie Dynasties")),
     (FACTION_ALLIANCE, _("Woodland Alliance")),
-    (FACTION_OTTERS, _("Riverfolk")),
+    (FACTION_OTTERS, _("Riverfolk Company")),
     (FACTION_LIZARDS, _("Lizard Cult")),
     (FACTION_MOLES, _("Underground Duchy")),
     (FACTION_CROWS, _("Corvid Conspiracy")),
@@ -55,7 +55,7 @@ def invert_faction(full_name):
         return FACTION_BIRDS
     if (full_name == "Woodland Alliance"):
         return FACTION_ALLIANCE
-    if (full_name == "Riverfolk"):
+    if (full_name == "Riverfolk Company"):
         return FACTION_OTTERS
     if (full_name == "Lizard Cult"):
         return FACTION_LIZARDS
