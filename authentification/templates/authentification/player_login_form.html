@@ -1,0 +1,18 @@
+{% extends 'misc/basic_form.html' %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block form_footer %}
+Forgot your password, or need to recover an existing account?
+<a href="{% url 'auth:password_reset' %}" class="btn btn-outline-primary">
+    Reset your password
+</a>
+{% endblock form_footer %}
+
+{% block form_footer_wrapper %}
+    {% with form_footer_defined=True %}
+        {{ block.super }}
+    {% endwith%}
+{% endblock form_footer_wrapper%}

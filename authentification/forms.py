@@ -21,6 +21,19 @@ class PlayerRegisterForm(UserCreationForm):
       fields = ('username', 'email', 'discord_name',
                 'in_game_name', 'in_game_id')
 
+class PlayerProfileEditForm(forms.ModelForm):
+  email = forms.EmailField(required=True)
+  
+  def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
+      self.helper = FormHelper()
+      self.helper.add_input(NonPrimarySubmit("submit", _("Save"), css_class="btn-outline-secondary"))
+
+  class Meta:
+      model = get_user_model()
+      fields = ('username', 'email', 'discord_name',
+                'in_game_name', 'in_game_id')
+
 class PlayerLoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):

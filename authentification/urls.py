@@ -11,7 +11,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(
                     next_page='index'),
         name='logout'),
-    path('change-password/', views.PlayerPasswordChangeView.as_view(),
+    path('password/', views.PlayerPasswordChangeView.as_view(),
          name='password_change'
          ),
     path('reset-password/', views.PlayerPasswordResetView.as_view(),
@@ -21,4 +21,5 @@ urlpatterns = [
          name='password_reset_confirm'
          ),
     path('register/', views.PlayerSignUpView.as_view(), name='register'),
+    path('profile/', views.profileEditView, name='profile'),
 ]

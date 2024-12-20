@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-01 21:36+0100\n"
+"POT-Creation-Date: 2024-12-20 16:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,32 +58,36 @@ msgstr "Statistiques de tour de jeu"
 msgid "About"
 msgstr "À propos"
 
-#: .\misc\templates\misc\base.html:57
+#: .\misc\templates\misc\base.html:55
+msgid "Account"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:60
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: .\misc\templates\misc\base.html:62
+#: .\misc\templates\misc\base.html:65
 msgid "Log in"
 msgstr "Connexion"
 
-#: .\misc\templates\misc\base.html:65
+#: .\misc\templates\misc\base.html:68
 msgid "Sign up"
 msgstr "Inscription"
 
-#: .\misc\templates\misc\base.html:102
+#: .\misc\templates\misc\base.html:105
 msgid ""
 "\n"
-"                    Contributions and bug reports are welcome on <a href="
-"\"https://github.com/PliskinGH/RootLeague\">GitHub</a>.\n"
+"                    Contributions and bug reports are welcome on <a "
+"href=\"https://github.com/PliskinGH/RootLeague\">GitHub</a>.\n"
 "                    "
 msgstr ""
 
-#: .\misc\templates\misc\base.html:107
+#: .\misc\templates\misc\base.html:110
 msgid ""
 "\n"
-"                    To join league games, visit the official Root <a href="
-"\"https://discord.gg/woodland-warriors-476234833572397056\">Discord server</"
-"a>.\n"
+"                    To join league games, visit the official Root <a "
+"href=\"https://discord.gg/woodland-warriors-476234833572397056\">Discord "
+"server</a>.\n"
 "                    "
 msgstr ""
 

@@ -51,6 +51,9 @@
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
                         {%  if user.is_authenticated %}
                         <li class="nav-item px-lg-4">
+                            <a class="nav-link text-uppercase" href="{% url 'auth:profile' %}">{{_("Account")}}</a>
+                        </li>
+                        <li class="nav-item px-lg-4">
                             <form method="post" action="{% url 'auth:logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-primary">{{_("Log out")}}</button>

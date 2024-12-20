@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-01 21:36+0100\n"
+"POT-Creation-Date: 2024-12-20 16:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,12 +26,17 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
-#: .\authentification\forms.py:29 .\authentification\views.py:17
+#: .\authentification\forms.py:30 .\authentification\forms.py:49
+#: .\authentification\forms.py:85
+msgid "Save"
+msgstr ""
+
+#: .\authentification\forms.py:42 .\authentification\views.py:19
 msgid "Log in"
 msgstr ""
 
-#: .\authentification\forms.py:36
-msgid "Save"
+#: .\authentification\forms.py:56
+msgid "Send confirmation"
 msgstr ""
 
 #: .\authentification\models.py:14
@@ -46,53 +51,96 @@ msgstr ""
 msgid "email address"
 msgstr ""
 
-#: .\authentification\models.py:29
+#: .\authentification\models.py:30
 msgid "discord username"
 msgstr ""
 
-#: .\authentification\models.py:31
+#: .\authentification\models.py:32
 msgid "in-game Username"
 msgstr ""
 
-#: .\authentification\models.py:33
+#: .\authentification\models.py:34
 msgid "in-game ID"
 msgstr ""
 
-#: .\authentification\models.py:36
+#: .\authentification\models.py:37
 msgid "roles"
 msgstr ""
 
-#: .\authentification\models.py:39
+#: .\authentification\models.py:40
 msgid "player"
 msgstr ""
 
-#: .\authentification\models.py:40
+#: .\authentification\models.py:41
 msgid "players"
 msgstr ""
 
-#: .\authentification\views.py:15
+#: .\authentification\templates\authentification\password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: .\authentification\templates\authentification\password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\authentification\templates\authentification\password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
+msgstr ""
+
+#: .\authentification\templates\authentification\password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\authentification\templates\authentification\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\authentification\views.py:17
 msgid "Log in successful!"
 msgstr ""
 
-#: .\authentification\views.py:16 .\authentification\views.py:26
-#: .\authentification\views.py:34
+#: .\authentification\views.py:18 .\authentification\views.py:28
+#: .\authentification\views.py:37 .\authentification\views.py:49
+#: .\authentification\views.py:58 .\authentification\views.py:66
 msgid "Account"
 msgstr ""
 
-#: .\authentification\views.py:24
+#: .\authentification\views.py:26
 msgid ""
 "Your player account was successfully created.                          You "
 "can now log in."
 msgstr ""
 
-#: .\authentification\views.py:27
+#: .\authentification\views.py:29
 msgid "Register"
 msgstr ""
 
-#: .\authentification\views.py:33
+#: .\authentification\views.py:36
+msgid "Your profile was successfully updated."
+msgstr ""
+
+#: .\authentification\views.py:38
+msgid "Profile"
+msgstr ""
+
+#: .\authentification\views.py:48 .\authentification\views.py:65
 msgid "Password changed successfully!"
 msgstr ""
 
-#: .\authentification\views.py:35
+#: .\authentification\views.py:50
 msgid "Change Password"
+msgstr ""
+
+#: .\authentification\views.py:57
+msgid ""
+"Confirmation email sent! Please follow the confirmation link to reset your "
+"password."
+msgstr ""
+
+#: .\authentification\views.py:59 .\authentification\views.py:67
+msgid "Reset Password"
 msgstr ""

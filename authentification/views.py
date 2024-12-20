@@ -1,7 +1,9 @@
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, LoginView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from . import forms
@@ -10,7 +12,7 @@ from . import forms
 
 class PlayerLoginView(SuccessMessageMixin, LoginView):
     form_class = forms.PlayerLoginForm
-    template_name='misc/basic_form.html'
+    template_name='authentification/player_login_form.html'
     redirect_authenticated_user=True
     success_message = _("Log in successful!")
     extra_context = {'upper_title' : _("Account"),
@@ -25,6 +27,19 @@ class PlayerSignUpView(SuccessMessageMixin, CreateView):
                          You can now log in.")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Register")}
+
+class PlayerProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = get_user_model()
+    template_name='authentification/player_profile_edit_form.html'
+    success_url = reverse_lazy('index')
+    form_class = forms.PlayerProfileEditForm
+    success_message = _("Your profile was successfully updated.")
+    extra_context = {'upper_title' : _("Account"),
+                     'lower_title' : _("Profile")}
+
+@login_required
+def profileEditView(request):
+    return PlayerProfileEditView.as_view()(request, pk=request.user.pk)
 
 class PlayerPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
     form_class = forms.PlayerPasswordChangeForm

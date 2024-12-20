@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-01 21:36+0100\n"
+"POT-Creation-Date: 2024-12-20 16:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,8 @@ msgid "Woodland Alliance"
 msgstr "Alliance de la forêt"
 
 #: .\league\constants.py:34
-msgid "Riverfolk"
+#| msgid "Riverfolk"
+msgid "Riverfolk Company"
 msgstr "Compagnie de la rivière"
 
 #: .\league\constants.py:35
@@ -94,55 +95,55 @@ msgstr "Vagabond (Ronin)"
 msgid "Vagabond (Harrier)"
 msgstr "Vagabond (Busard)"
 
-#: .\league\constants.py:60
+#: .\league\constants.py:99
 msgid "Autumn"
 msgstr "Automne"
 
-#: .\league\constants.py:61
+#: .\league\constants.py:100
 msgid "Winter"
 msgstr "Hiver"
 
-#: .\league\constants.py:62
+#: .\league\constants.py:101
 msgid "Mountain"
 msgstr "Montagne"
 
-#: .\league\constants.py:63
+#: .\league\constants.py:102
 msgid "Lake"
 msgstr "Lac"
 
-#: .\league\constants.py:73 .\league\constants.py:118
+#: .\league\constants.py:123 .\league\constants.py:168
 msgid "Standard"
 msgstr ""
 
-#: .\league\constants.py:74
+#: .\league\constants.py:124
 msgid "Exiles and Partisans"
 msgstr "Exilés et Partisans"
 
-#: .\league\constants.py:86
+#: .\league\constants.py:136
 msgid "Bird dominance"
 msgstr "Domination oiseau"
 
-#: .\league\constants.py:87
+#: .\league\constants.py:137
 msgid "Fox dominance"
 msgstr "Domination renard"
 
-#: .\league\constants.py:88
+#: .\league\constants.py:138
 msgid "Mouse dominance"
 msgstr "Domination souris"
 
-#: .\league\constants.py:89
+#: .\league\constants.py:139
 msgid "Rabbit dominance"
 msgstr "Domination lapin"
 
-#: .\league\constants.py:106
+#: .\league\constants.py:156
 msgid "Live"
 msgstr "Direct"
 
-#: .\league\constants.py:107
+#: .\league\constants.py:157
 msgid "Async"
 msgstr "Différé"
 
-#: .\league\constants.py:117
+#: .\league\constants.py:167
 msgid "Advanced"
 msgstr "Avancée"
 
@@ -290,22 +291,22 @@ msgstr ""
 msgid "View selected %(model)s"
 msgstr ""
 
-#: .\league\views.py:160
+#: .\league\views.py:168
 msgid "Stats"
 msgstr "Statistiques"
 
-#: .\league\views.py:163
+#: .\league\views.py:171
 msgid "stats"
 msgstr "statistiques"
 
-#: .\league\views.py:182
+#: .\league\views.py:190
 msgid "Faction"
 msgstr ""
 
-#: .\league\views.py:204
+#: .\league\views.py:212
 msgid "Turn order"
 msgstr "Tour de jeu"
 
-#: .\league\views.py:240
+#: .\league\views.py:248
 msgid "All games"
 msgstr "Toutes les parties"

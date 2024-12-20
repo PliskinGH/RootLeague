@@ -9,4 +9,16 @@
 
 {% block content %}
 {% crispy form %}
+
+{% block form_footer_wrapper %}
+    {% if form_footer_defined %}
+    <div class="container footer text-faded py-2">
+        <p class="m-0 small">
+    {% endif %}
+        {% block form_footer %}{% endblock %}
+    {% if form_footer_defined %}
+        </p>
+    </div>
+    {% endif %}
+{% endblock form_footer_wrapper%}
 {% endblock content %}

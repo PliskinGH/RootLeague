@@ -1,0 +1,11 @@
+{% extends 'misc/basic_form.html' %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block form_footer %}
+<a href="{% url 'auth:password_change' %}" class="btn btn-outline-secondary">
+    Change password
+</a>
+{% endblock form_footer %}
