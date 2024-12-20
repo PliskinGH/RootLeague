@@ -126,8 +126,8 @@ WSGI_APPLICATION = 'RootLeagueProject.wsgi.application'
 # Emails
 EMAIL_BACKEND = 'mailer.backend.DbBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'rootdigitalleague.email@gmail.com'
+EMAIL_HOST = os.environ.get('ROOTLEAGUE_EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST_USER = os.environ.get('ROOTLEAGUE_EMAIL_HOST_USER', 'rootdigitalleague.email@gmail.com')
 EMAIL_HOST_PASSWORD = os.environ.get('ROOTLEAGUE_EMAIL_HOST_PASSWORD', '')
 EMAIL_PORT = 587
  

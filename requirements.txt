@@ -16,10 +16,10 @@ django-select2==8.2.1
 gunicorn==23.0.0
 lockfile==0.12.2
 packaging==24.1
-pillow==10.4.0
+pillow==11.0.0
 pip==24.2
-psycopg2==2.9.9
-psycopg2-binary==2.9.9
+psycopg2==2.9.10
+psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 setuptools==74.1.2
 sqlparse==0.5.1
