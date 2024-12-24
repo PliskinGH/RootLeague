@@ -262,7 +262,7 @@ def get_menu_by_pagination(league = None,
     
     seasons = Tournament.objects.none()
     if (league not in EMPTY_VALUES):
-        seasons = league.seasons.all().order_by('start_date')
+        seasons = league.seasons.all().order_by('-start_date', '-pk')
     season_paginator = Paginator(seasons, 1)
     season_page = None
     season_range = None
