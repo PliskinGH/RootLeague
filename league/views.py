@@ -202,24 +202,38 @@ def league_faction_stats(request,
 def turn_order_stats(request,
                      league = None,
                      tournament = None,
+                     max_number_players = None,
                      title = None):
+    turn_orders_list = TURN_ORDERS
+    if (max_number_players is not None
+        and max_number_players >= 1
+        and max_number_players < len(turn_orders_list)):
+        turn_orders_list = turn_orders_list[:max_number_players]
     return stats(request,
                  league=league,
                  tournament=tournament,
                  title=title,
-                 rows=TURN_ORDERS,
+                 rows=turn_orders_list,
                  field='turn_order',
                  stats_name=_('Turn order'))
 
 def tournament_turn_order_stats(request,
-                             tournament_id = None):
+                                tournament_id = None):
     tournament = get_tournament(tournament_id)
-    return turn_order_stats(request, tournament=tournament)
+    max_number_players = None
+    if (tournament is not None):
+        max_number_players = tournament.max_players_per_game
+    return turn_order_stats(request, tournament=tournament,
+                            max_number_players=max_number_players)
 
 def league_turn_order_stats(request,
-                         league_id = None):
+                            league_id = None):
     league = get_league(league_id)
-    return turn_order_stats(request, league=league)
+    max_number_players = None
+    if (league is not None):
+        max_number_players = league.max_players_per_game
+    return turn_order_stats(request, league=league,
+                            max_number_players=max_number_players)
 
 def get_tournament(tournament_id = None):
     tournaments = None
