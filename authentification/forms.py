@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, _unicode_ci_compare
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django_select2 import forms as s2forms
@@ -64,6 +64,7 @@ class PlayerPasswordResetForm(PasswordResetForm):
 
         Reimplemented to allow unusable passwords to be reset.
         """
+        UserModel = get_user_model()
         email_field_name = UserModel.get_email_field_name()
         active_users = UserModel._default_manager.filter(
             **{
