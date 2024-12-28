@@ -60,7 +60,7 @@ class PlayerPasswordResetView(SuccessMessageMixin, PasswordResetView):
 
 class PlayerPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmView):
     form_class = forms.PlayerPasswordResetConfirmForm
-    template_name='misc/basic_form.html'
+    template_name='authentification/player_password_reset_form.html'
     success_url = reverse_lazy('index')
     success_message = _("Password changed successfully!")
     extra_context = {'upper_title' : _("Account"),
