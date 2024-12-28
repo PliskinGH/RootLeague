@@ -8,7 +8,10 @@
 {% block lower_title %}{{ lower_title }}{% endblock %}
 
 {% block content %}
+
+{% block form_main %}
 {% crispy form %}
+{% endblock form_main %}
 
 {% block form_footer_wrapper %}
     {% if form_footer_defined %}
@@ -21,4 +24,5 @@
     </div>
     {% endif %}
 {% endblock form_footer_wrapper%}
+
 {% endblock content %}
