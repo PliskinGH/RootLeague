@@ -28,23 +28,33 @@ def leaderboard(request,
     if (players is None):
         players = Player.objects.filter(is_active=True)
     if (tournament not in EMPTY_VALUES):
-        players = players.annotate(total=Count('participations', filter=Q(participations__match__tournament=tournament)))
+        players = players.annotate(total=Count('participations', distinct=True,
+                                               filter=~Q(participations__match__date_closed=None) &
+                                                       Q(participations__match__tournament=tournament)))
         if (tournament.min_games not in EMPTY_VALUES):
             min_games = max(tournament.min_games, min_games)
     elif (league not in EMPTY_VALUES):
-        players = players.annotate(total=Count('participations', filter=Q(participations__match__tournament__league=league)))
+        players = players.annotate(total=Count('participations', distinct=True, 
+                                               filter=~Q(participations__match__date_closed=None) &
+                                                       Q(participations__match__tournament__league=league)))
         if (league.min_games not in EMPTY_VALUES):
             min_games = max(league.min_games, min_games)
     else:
-        players = players.annotate(total=Count('participations'))
+        players = players.annotate(total=Count('participations', distinct=True,
+                                               filter=~Q(participations__match__date_closed=None)))
     players = players.exclude(Q(total=None) | Q(total__lt=min_games))
 
     if (tournament not in EMPTY_VALUES):
-        players = players.annotate(score=Sum('participations__tournament_score', filter=Q(participations__match__tournament=tournament)))
+        players = players.annotate(score=Sum('participations__tournament_score', distinct=True,
+                                             filter=~Q(participations__match__date_closed=None) &
+                                                     Q(participations__match__tournament=tournament)))
     elif (league not in EMPTY_VALUES):
-        players = players.annotate(score=Sum('participations__tournament_score', filter=Q(participations__match__tournament__league=league)))
+        players = players.annotate(score=Sum('participations__tournament_score', distinct=True, 
+                                             filter=~Q(participations__match__date_closed=None) &
+                                                     Q(participations__match__tournament__league=league)))
     else:
-        players = players.annotate(score=Sum('participations__tournament_score'))
+        players = players.annotate(score=Sum('participations__tournament_score', distinct=True, 
+                                             filter=~Q(participations__match__date_closed=None)))
     players = players.exclude(score=None)
 
     players = players.annotate(relative_score=F('score')/F('total')*100)
@@ -98,13 +108,14 @@ def get_stats(rows = None,
         participations_manager = player.participations
     if (participations_manager is None):
         participations_manager = Participant.objects
+    all_participations = participations_manager.exclude(match__date_closed=None)
+    if (tournament not in EMPTY_VALUES):
+        all_participations = all_participations.filter(match__tournament=tournament)
+    elif (league not in EMPTY_VALUES):
+        all_participations = all_participations.filter(match__tournament__league=league)
     try:
         for (row, row_name) in rows:
-            participations = participations_manager.filter(**{field : row})
-            if (tournament not in EMPTY_VALUES):
-                participations = participations.filter(match__tournament=tournament)
-            elif (league not in EMPTY_VALUES):
-                participations = participations.filter(match__tournament__league=league)
+            participations = all_participations.filter(**{field : row})
             total = participations.count()
             if (total < 1):
                 row_stats = dict(total=total,
