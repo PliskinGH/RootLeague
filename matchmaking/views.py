@@ -4,14 +4,14 @@ from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
-from extra_views import InlineFormSetFactory, CreateWithInlinesView, SuccessMessageMixin
+from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView, SuccessMessageMixin
 from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
-from .forms import MatchForm, ParticipantForm, ParticipantFormSet
+from .forms import MatchForm, UpdateMatchForm, ParticipantForm, ParticipantFormSet
 from misc.views import ElidedListView
 
 # Create your views here.
@@ -62,6 +62,17 @@ class ParticipantInline(InlineFormSetFactory):
                { 'turn_order': 4},
                { 'turn_order': 5},
                { 'turn_order': 6},]
+
+    def get_initial(self):
+        if (self.object):
+            return []
+        return super().get_initial()
+
+    def get_factory_kwargs(self):
+        kwargs = super().get_factory_kwargs()
+        if (self.object):
+            kwargs["extra"] = 0
+        return kwargs
 
 class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
     model = Match
@@ -119,6 +130,67 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
             self.object.date_closed = self.object.date_registered
         if (self.request.user):
             self.object.submitted_by = self.request.user
+        if (len(inlines) == 1):
+            participants_formset = inlines[0]
+            index_participant = 0
+            participants = [participant
+                            for participant in self.object.participants.all()]
+            for form in participants_formset.forms:
+                index_participant += 1
+                index_coalitioned = form.cleaned_data.get('coalitioned_player', '')
+                if (not(index_coalitioned in [None, ''])):
+                    index_coalitioned = int(index_coalitioned)
+                    participant = participants[index_participant-1]
+                    coalitioned_player = participants[index_coalitioned-1]
+                    if (coalitioned_player is not None):
+                        participant.coalition = coalitioned_player
+                        participant.save()
+        self.object.save()
+        return response
+
+# TODO factorize
+class UpdateMatchView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView):
+    model = Match
+    inlines = [ParticipantInline]
+    form_class = UpdateMatchForm
+    success_message = _("Match successfully updated!")
+    pk_url_kwarg='match_id'
+    
+    def get_success_url(self):
+        return reverse_lazy('match:match_detail', args=(self.object.id,))
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form and formset instances with the
+        passed POST variables and then checked for validity.
+        Rewrite of ProcessFormWithInlinesView.post due to formsets being validated
+        despite parent form being invalid.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        initial_object = self.object
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            form_validated = True
+        else:
+            form_validated = False
+
+        inlines = self.construct_inlines()
+
+        if form_validated and all_valid(inlines): # change order of conditions
+            return self.forms_valid(form, inlines)
+        self.object = initial_object
+        return self.forms_invalid(form, inlines)
+
+    def forms_valid(self, form, inlines):
+        response = super().forms_valid(form, inlines)
+        is_closed = form.cleaned_data.get('closed', False)
+        if (is_closed and self.object.date_closed is None):
+            self.object.date_closed = self.object.date_modified
+        elif (not(is_closed) and self.object.date_closed is not None):
+            self.object.date_closed = None
         if (len(inlines) == 1):
             participants_formset = inlines[0]
             index_participant = 0

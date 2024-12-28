@@ -109,6 +109,12 @@ class MatchForm(ModelForm):
         #     'board_map' : IconSelect(choices_urls=MAPS_URLS)
         #     }
 
+class UpdateMatchForm(MatchForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if (self.instance and self.instance.date_closed is None):
+            self.fields['closed'].initial = False
+
 class ParticipantForm(ModelForm):
     coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,
                                      label=_('Coalition with'))
