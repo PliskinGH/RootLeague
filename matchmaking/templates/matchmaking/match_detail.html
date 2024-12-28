@@ -13,13 +13,23 @@
 <table class="table table-striped">
   <tbody>
     <tr>
-      <th scope="row">{{_("Date registered")}}</th>
+      <th scope="row">{{_("Created")}}</th>
       <td>{{ object.date_registered }}</td>
+    </tr>
+    <tr>
+      <th scope="row">{{_("Last modified")}}</th>
+      <td>{{ object.date_modified }}</td>
     </tr>
     {% if object.date_closed %}
     <tr>
-      <th scope="row">{{_("Date closed")}}</th>
+      <th scope="row">{{_("Closed")}}</th>
       <td>{{ object.date_closed }}</td>
+    </tr>
+    {% endif %}
+    {% if object.submitted_by %}
+    <tr>
+      <th scope="row">{{_("Submitted by")}}</th>
+      <td>{{ object.submitted_by }}</td>
     </tr>
     {% endif %}
     {% if object.tournament %}

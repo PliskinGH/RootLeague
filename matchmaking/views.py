@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from extra_views import InlineFormSetFactory, CreateWithInlinesView, SuccessMessageMixin
 from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
+from django.core.validators import EMPTY_VALUES
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
@@ -16,14 +17,14 @@ from misc.views import ElidedListView
 # Create your views here.
 
 def index(request):
-    matchs = Match.objects.all().order_by('-date_registered')[:5]
+    matchs = Match.objects.exclude(date_closed=None).order_by('-date_closed', '-date_modified', '-date_registered')[:5]
     return listing(request, matchs=matchs,
                    title=_("Latest matches"), number_per_page=5)
 
 def listing(request, matchs = None, title = _("All games"),
             number_per_page = 10):
     if (matchs is None):
-        matchs = Match.objects.all().order_by('-date_registered')
+        matchs = Match.objects.exclude(date_closed=None).order_by('-date_closed', '-date_modified', '-date_registered')
     return ElidedListView.as_view(model=Match,
                                   queryset=matchs,
                                   paginate_by=number_per_page,
@@ -74,7 +75,7 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
         if (self.request.method == 'GET'):
             initial_tournament_name = self.request.GET.get("tournament", "")
         initial_tournaments = []
-        if (initial_tournament_name not in ["", None]):
+        if (initial_tournament_name not in EMPTY_VALUES):
             initial_tournaments = form.fields['tournament'].queryset.filter(name=initial_tournament_name)
         initial_tournament = None
         if (len(initial_tournaments) == 1):
@@ -116,6 +117,8 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
         response = super().forms_valid(form, inlines)
         if (form.cleaned_data.get('closed', False)):
             self.object.date_closed = self.object.date_registered
+        if (self.request.user):
+            self.object.submitted_by = self.request.user
         if (len(inlines) == 1):
             participants_formset = inlines[0]
             index_participant = 0
@@ -143,7 +146,8 @@ def search(request):
                                       Q(participants__player__in_game_name__icontains=query) |
                                       Q(participants__player__username__icontains=query) |
                                       Q(participants__player__discord_name__icontains=query))
+        matchs = matchs.distinct()
     if matchs.exists():
-        matchs = matchs.order_by('-date_registered')
+        matchs = matchs.order_by('-date_closed', '-date_modified', '-date_registered')
     title = _("Search results for the request %s")%query
     return listing(request, matchs=matchs, title=title)

@@ -18,8 +18,13 @@ class Match(models.Model):
                              verbose_name=_('title'))
     date_registered = models.DateTimeField(auto_now_add=True,
                                            verbose_name=_('date registered'))
+    date_modified = models.DateTimeField(auto_now=True,
+                                         verbose_name=_('date modified'))
     date_closed = models.DateTimeField(blank=True, null=True,
                                        verbose_name=_('date closed'))
+    submitted_by = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True,
+                                     blank=True, related_name="submissions",
+                                     verbose_name=_('player'))
     tournament = models.ForeignKey(Tournament, on_delete=models.SET_NULL,
                                    null=True, blank=False,
                                    default=Tournament.get_default_pk,
@@ -54,7 +59,7 @@ class Match(models.Model):
 
     class Meta:
         verbose_name = _("match")
-        ordering = ['-date_registered']
+        ordering = ['-date_closed', '-date_modified', '-date_registered']
 
     
     def __str__(self, mention_participants=True):

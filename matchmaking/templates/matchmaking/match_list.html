@@ -24,7 +24,15 @@
   <tbody>
     {% for match in page_obj %}
     <tr>
-      <th scope="row"><a href="{% url 'match:match_detail' match_id=match.id %}">{{ match.date_registered }}</a></th>
+      <th scope="row">
+        <a href="{% url 'match:match_detail' match_id=match.id %}">
+          {% if match.date_closed %}
+          {{ match.date_closed }}
+          {% else %}
+          {{ match.date_registered }}
+          {% endif %}
+        </a>
+      </th>
       <td>
         {% if match.tournament != None %}
         {{ match.tournament }}

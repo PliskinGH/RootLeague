@@ -58,11 +58,11 @@ class ParticipantResource(resources.ModelResource):
         return "DbInput!" + str(game_id)
 
     def dehydrate_timestamp(self, participant):
-        date_registered = datetime.now()
+        date_closed = datetime.now()
         match = getattr(participant, "match", None)
         if (match is not None):
-            date_registered = getattr(match, "date_registered", date_registered)
-        return date_registered
+            date_closed = getattr(match, "date_closed", date_closed)
+        return date_closed
 
     def dehydrate_player(self, participant):
         return participant.__str__(mention_match=False)
@@ -333,9 +333,9 @@ class MatchResource(resources.ModelResource):
         if errors:
             raise ValidationError(errors)
         
-        date_registered = None
+        date_closed = None
         try:
-            date_registered = self.fields['timestamp'].clean(row, **kwargs)
+            date_closed = self.fields['timestamp'].clean(row, **kwargs)
         except Exception as e:
             errors[self.fields['timestamp'].column_name] = ValidationError(force_str(e), code="invalid")
         
@@ -391,9 +391,8 @@ class MatchResource(resources.ModelResource):
         if errors:
             raise ValidationError(errors)
         
-        instance.title = "Import game " + str(date_registered)
-        instance.date_registered = date_registered
-        instance.date_closed = date_registered
+        instance.title = "Import game " + str(date_closed)
+        instance.date_closed = date_closed
         instance.tournament = tournament
         if (turn_timing == "Live"):
             instance.turn_timing = TURN_TIMING_LIVE
@@ -427,8 +426,8 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
                      'participants__player__in_game_name',
                      'participants__player__discord_name',
                      'participants__player__email']
-    list_filter = ['date_registered', 'date_closed',
+    list_filter = ['date_registered', 'date_modified', 'date_closed',
                    'tournament',
                    'board_map', 'deck', 'random_suits']
-    readonly_fields = ["date_registered"]
+    readonly_fields = ['date_registered', 'date_modified']
     resource_classes = [MatchResource]

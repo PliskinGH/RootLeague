@@ -18,7 +18,7 @@ PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 
 class MatchForm(ModelForm):
-    closed = BooleanField(required=False, initial=True, label=_("Closed"))
+    closed = BooleanField(required=False, initial=True, label=_("Final Results"))
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
