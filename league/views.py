@@ -45,15 +45,15 @@ def leaderboard(request,
     players = players.exclude(Q(total=None) | Q(total__lt=min_games))
 
     if (tournament not in EMPTY_VALUES):
-        players = players.annotate(score=Sum('participations__tournament_score', distinct=True,
+        players = players.annotate(score=Sum('participations__tournament_score',
                                              filter=~Q(participations__match__date_closed=None) &
                                                      Q(participations__match__tournament=tournament)))
     elif (league not in EMPTY_VALUES):
-        players = players.annotate(score=Sum('participations__tournament_score', distinct=True, 
+        players = players.annotate(score=Sum('participations__tournament_score',
                                              filter=~Q(participations__match__date_closed=None) &
                                                      Q(participations__match__tournament__league=league)))
     else:
-        players = players.annotate(score=Sum('participations__tournament_score', distinct=True, 
+        players = players.annotate(score=Sum('participations__tournament_score',
                                              filter=~Q(participations__match__date_closed=None)))
     players = players.exclude(score=None)
 
