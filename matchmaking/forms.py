@@ -19,6 +19,7 @@ PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 
 class MatchForm(ModelForm):
     closed = BooleanField(required=False, initial=True, label=_("Final Results"))
+    submit_text = _("Register match")
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,7 +45,7 @@ class MatchForm(ModelForm):
                         'tournament_score'],
                 ),
             ),
-            NonPrimarySubmit("submit", _("Register match"), css_class="btn-outline-secondary"),
+            NonPrimarySubmit("submit", self.submit_text, css_class="btn-outline-secondary"),
         )
 
     def clean(self):
@@ -110,6 +111,8 @@ class MatchForm(ModelForm):
         #     }
 
 class UpdateMatchForm(MatchForm):
+    submit_text = _("Edit match")
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if (self.instance and self.instance.date_closed is None):

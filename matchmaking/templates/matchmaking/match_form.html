@@ -1,4 +1,4 @@
-{% extends 'misc/base.html' %}
+{% extends 'misc/basic_form.html' %}
 
 {% load static %}
 
@@ -13,17 +13,13 @@
 {% endfor %}
 {% endblock %}
 
-{% block upper_title %}{{_("Register match")}}{% endblock %}
-{% block lower_title %}{{_("Form")}}{% endblock %}
-
-{% block content %}
+{% block form_header %}
 {% if form.is_valid %}
-{% for formset in inlines %}
-  {{ formset|as_crispy_errors }}
-{% endfor %}
+  {% for formset in inlines %}
+    {{ formset|as_crispy_errors }}
+  {% endfor %}
 {% endif %}
-{% crispy form %}
-{% endblock %}
+{% endblock form_header %}
 
 {% block extra-js %}
 

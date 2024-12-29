@@ -74,27 +74,10 @@ class ParticipantInline(InlineFormSetFactory):
             kwargs["extra"] = 0
         return kwargs
 
-class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
+class MatchViewMixin(object):
     model = Match
     inlines = [ParticipantInline]
-    form_class = MatchForm
-    success_message = _("Match successfully registered!")
-    
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        initial_tournament_name = ""
-        if (self.request.method == 'GET'):
-            initial_tournament_name = self.request.GET.get("tournament", "")
-        initial_tournaments = []
-        if (initial_tournament_name not in EMPTY_VALUES):
-            initial_tournaments = form.fields['tournament'].queryset.filter(name=initial_tournament_name)
-        initial_tournament = None
-        if (len(initial_tournaments) == 1):
-            initial_tournament = initial_tournaments[0]
-        if (initial_tournament is not None):
-            form.fields['tournament'].initial = initial_tournament
-            form.fields['tournament'].disabled = True
-        return form
+    pk_url_kwarg='match_id'
     
     def get_success_url(self):
         return reverse_lazy('match:match_detail', args=(self.object.id,))
@@ -106,7 +89,6 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
         Rewrite of ProcessFormWithInlinesView.post due to formsets being validated
         despite parent form being invalid.
         """
-        self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
 
@@ -126,10 +108,6 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
 
     def forms_valid(self, form, inlines):
         response = super().forms_valid(form, inlines)
-        if (form.cleaned_data.get('closed', False)):
-            self.object.date_closed = self.object.date_registered
-        if (self.request.user):
-            self.object.submitted_by = self.request.user
         if (len(inlines) == 1):
             participants_formset = inlines[0]
             index_participant = 0
@@ -148,41 +126,50 @@ class CreateMatchView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlines
         self.object.save()
         return response
 
-# TODO factorize
-class UpdateMatchView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView):
-    model = Match
-    inlines = [ParticipantInline]
-    form_class = UpdateMatchForm
-    success_message = _("Match successfully updated!")
-    pk_url_kwarg='match_id'
+class CreateMatchView(LoginRequiredMixin, MatchViewMixin, SuccessMessageMixin, CreateWithInlinesView):
+    form_class = MatchForm
+    success_message = _("Match successfully registered!")
+    extra_context = {'upper_title' : _("Register match"),
+                     'lower_title' : _("Form")}
     
-    def get_success_url(self):
-        return reverse_lazy('match:match_detail', args=(self.object.id,))
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        initial_tournament_name = ""
+        if (self.request.method == 'GET'):
+            initial_tournament_name = self.request.GET.get("tournament", "")
+        initial_tournaments = []
+        if (initial_tournament_name not in EMPTY_VALUES):
+            initial_tournaments = form.fields['tournament'].queryset.filter(name=initial_tournament_name)
+        initial_tournament = None
+        if (len(initial_tournaments) == 1):
+            initial_tournament = initial_tournaments[0]
+        if (initial_tournament is not None):
+            form.fields['tournament'].initial = initial_tournament
+            form.fields['tournament'].disabled = True
+        return form
     
     def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, instantiating a form and formset instances with the
-        passed POST variables and then checked for validity.
-        Rewrite of ProcessFormWithInlinesView.post due to formsets being validated
-        despite parent form being invalid.
-        """
+        self.object = None
+        return super().post(request, *args, **kwargs)
+
+    def forms_valid(self, form, inlines):
+        response = super().forms_valid(form, inlines)
+        if (form.cleaned_data.get('closed', False)):
+            self.object.date_closed = self.object.date_registered
+        if (self.request.user):
+            self.object.submitted_by = self.request.user
+        self.object.save()
+        return response
+
+class UpdateMatchView(LoginRequiredMixin, MatchViewMixin, SuccessMessageMixin, UpdateWithInlinesView):
+    form_class = UpdateMatchForm
+    success_message = _("Match successfully updated!")
+    extra_context = {'upper_title' : _("Update match"),
+                     'lower_title' : _("Form")}
+    
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-
-        initial_object = self.object
-        if form.is_valid():
-            self.object = form.save(commit=False)
-            form_validated = True
-        else:
-            form_validated = False
-
-        inlines = self.construct_inlines()
-
-        if form_validated and all_valid(inlines): # change order of conditions
-            return self.forms_valid(form, inlines)
-        self.object = initial_object
-        return self.forms_invalid(form, inlines)
+        return super().post(request, *args, **kwargs)
 
     def forms_valid(self, form, inlines):
         response = super().forms_valid(form, inlines)
@@ -191,21 +178,6 @@ class UpdateMatchView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlines
             self.object.date_closed = self.object.date_modified
         elif (not(is_closed) and self.object.date_closed is not None):
             self.object.date_closed = None
-        if (len(inlines) == 1):
-            participants_formset = inlines[0]
-            index_participant = 0
-            participants = [participant
-                            for participant in self.object.participants.all()]
-            for form in participants_formset.forms:
-                index_participant += 1
-                index_coalitioned = form.cleaned_data.get('coalitioned_player', '')
-                if (not(index_coalitioned in [None, ''])):
-                    index_coalitioned = int(index_coalitioned)
-                    participant = participants[index_participant-1]
-                    coalitioned_player = participants[index_coalitioned-1]
-                    if (coalitioned_player is not None):
-                        participant.coalition = coalitioned_player
-                        participant.save()
         self.object.save()
         return response
 
