@@ -19,7 +19,8 @@ def leaderboard(request,
                 tournament = None,
                 players = None,
                 title = None,
-                ordering = '-relative_score', number_per_page = 15):
+                ordering = None,
+                number_per_page = 15):
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
@@ -55,7 +56,7 @@ def leaderboard(request,
     else:
         players = players.annotate(score=Sum('participations__tournament_score',
                                              filter=~Q(participations__match__date_closed=None)))
-    players = players.exclude(score=None)
+    players = players.exclude(Q(score=None) | Q(score__lt=1))
 
     players = players.annotate(relative_score=F('score')/F('total')*100)
 
@@ -66,6 +67,9 @@ def leaderboard(request,
     extra_context = get_menu_by_pagination(tournament=tournament,
                                            league=league)
     extra_context['min_games'] = min_games
+
+    if (ordering is None):
+        ordering = ['-relative_score', '-score', '-total']
     
     return ElidedListView.as_view(model=Player,
                                   queryset=players,
@@ -78,7 +82,7 @@ def leaderboard(request,
 
 def league_leaderboard(request,
                        league_id = None,
-                       ordering = '-relative_score',
+                       ordering = None,
                        number_per_page = 15):
     league = get_league(league_id)
     return leaderboard(request, league=league,
@@ -87,7 +91,7 @@ def league_leaderboard(request,
 
 def tournament_leaderboard(request,
                            tournament_id = None,
-                           ordering = '-relative_score',
+                           ordering = None,
                            number_per_page = 15):
     tournament = get_tournament(tournament_id)
     return leaderboard(request, tournament=tournament,
