@@ -1,10 +1,14 @@
 {% if page_obj.has_other_pages %}
-<div class="btn-group" role="group" aria-label="pagination">
+<div class="container d-flex align-items-center justify-content-center">
+<div class="row row-cols-auto btn-group" role="group" aria-label="pagination">
     {% if page_obj.has_previous %}
+    <div class="col g-0">
         <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+    </div>
     {% endif %}
 
     {% for page_number in paginator_range %}
+        <div class="col g-0">
         {% if page_obj.number == page_number %}
             <span class="btn btn-outline-primary active">{{ page_number }} <span class="sr-only">(current)</span></span>
         {% else %}
@@ -16,10 +20,12 @@
             </a>
             {% endif %}
         {% endif %}
+        </div>
     {% endfor %}
 
     {% if page_obj.has_next %}
         <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
     {% endif %}
+</div>
 </div>
 {% endif %}

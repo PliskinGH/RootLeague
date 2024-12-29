@@ -1,6 +1,8 @@
 {% if paginator_range %}
 {% load custom_tags %}
-<div class="btn-group" role="group" aria-label="menu">
+<div class="container d-flex align-items-center justify-content-center">
+<div class="row row-cols-auto btn-group" role="group" aria-label="menu">
+    <div class="col g-0">
     {% if page_obj %}
         <a href="{% url parent_url parent_obj.id %}{{ url_get_param }}" class="btn btn-outline-primary">
             {{ parent_title }}
@@ -8,7 +10,9 @@
     {% else %}
         <span class="btn btn-outline-primary active">{{ parent_title }}</span>
     {% endif %}
+    </div>
     {% for page_number in paginator_range %}
+    <div class="col g-0">
         {% if page_obj and page_obj.number == page_number %}
             {% with index_obj=page_number|add:'-1' %}
             {% with obj=objects|index:index_obj %}
@@ -28,7 +32,9 @@
                 {% endwith %}
             {% endif %}
         {% endif %}
+    </div>
     {% endfor %}
+</div>
 </div>
 
 <br />
