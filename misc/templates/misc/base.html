@@ -22,58 +22,55 @@
     </head>
     <body>
         <header>
-            <h1 class="site-heading text-center text-faded">
+            <h1 class="site-heading text-center text-faded my-4 my-md-5">
                 <span class="site-heading-upper text-primary mb-3 d-none d-md-block">{{_("An unofficial game tracking and ranking")}}</span>
                 <span class="site-heading-lower">{{_("ROOT Digital League")}}</span>
             </h1>
         </header>
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-md navbar-dark py-lg-4" id="mainNav">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item px-lg-4 px-md-2"><a class="nav-link text-uppercase" href="{% url 'match:listing' %}">{{_("Match list")}}</a></li>
-                        <li class="nav-item px-lg-4 px-md-2"><a class="nav-link text-uppercase" href="{% url 'match:register' %}">{{_("Register match")}}</a></li>
-                        <li class="nav-item px-lg-4 px-md-2"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
-                        <li class="nav-item dropdown px-lg-4">
-                            <a class="nav-link text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{_("Stats")}}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
-                            <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
+        <nav class="navbar navbar-expand-md navbar-dark my-md-4" id="mainNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'match:listing' %}">{{_("Match list")}}</a></li>
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase justify-text-center" href="{% url 'match:register' %}">{{_("Register match")}}</a></li>
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
+                    <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">
+                        <a class="nav-link mx-auto text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{_("Stats")}}
+                        </a>
+                        <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
+                        <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
 {% comment %}                             <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a> {% endcomment %}
-                            </div>
-                        </li>
-                        <li class="nav-item px-lg-4 px-md-2"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
-                        {%  if user.is_authenticated %}
-                        <li class="nav-item px-lg-4 px-md-2">
-                            <a class="nav-link text-uppercase" href="{% url 'auth:profile' %}">{{_("Account")}}</a>
-                        </li>
-                        <li class="nav-item px-lg-4 px-md-2">
-                            <form method="post" action="{% url 'auth:logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-primary">{{_("Log out")}}</button>
-                            </form>
-                        </li>
-                        {% else %}
-                        <li class="nav-item px-lg-4 px-md-2">
-                            <a class="nav-link text-uppercase" href="{% url 'auth:login' %}">{{_("Log in")}}</a>
-                        </li>
-                        <li class="nav-item px-lg-4 px-md-2">
-                            <a class="nav-link text-uppercase" href="{% url 'auth:register' %}">{{_("Sign up")}}</a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                    
-                </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a> {% endcomment %}
+                        </div>
+                    </li>
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
+                    {%  if user.is_authenticated %}
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4">
+                        <a class="nav-link text-uppercase" href="{% url 'auth:profile' %}">{{_("Account")}}</a>
+                    </li>
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4">
+                        <form method="post" action="{% url 'auth:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary">{{_("Log out")}}</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4">
+                        <a class="nav-link text-uppercase" href="{% url 'auth:login' %}">{{_("Log in")}}</a>
+                    </li>
+                    <li class="nav-item mx-auto px-lg-2 px-xl-4">
+                        <a class="nav-link text-uppercase" href="{% url 'auth:register' %}">{{_("Sign up")}}</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </nav>
 
-        <section class="page-section about-heading">
+        <section class="page-section my-4">
             <div class="container">
                 <div class="about-heading-content">
                     <div class="bg-faded rounded p-5">
