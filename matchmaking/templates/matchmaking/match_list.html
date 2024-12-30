@@ -25,6 +25,7 @@
     </tr>
   </thead>
   <tbody>
+  {% if page_obj.paginator.count > 0 %}
     {% for match in page_obj %}
     <tr>
       <th scope="row">
@@ -66,6 +67,11 @@
       </td>
     </tr>
     {% endfor %}
+  {% else %}
+    <tr>
+      <th scope="row" colspan="5" class="text-center">{{ _("No games found.") }}</th>
+    </tr>
+  {% endif%}
   </tbody>
 </table>
 </div>
