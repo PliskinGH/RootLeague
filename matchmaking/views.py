@@ -2,12 +2,14 @@
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView, SuccessMessageMixin
 from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
+from django.core.exceptions import PermissionDenied
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
@@ -22,25 +24,57 @@ def index(request):
                    title=_("Latest matches"), number_per_page=5)
 
 def listing(request, matchs = None, title = _("All games"),
-            number_per_page = 10):
+            number_per_page = 10,
+            display_search = True):
     if (matchs is None):
         matchs = Match.objects.exclude(date_closed=None).order_by('-date_closed', '-date_modified', '-date_registered')
     return ElidedListView.as_view(model=Match,
                                   queryset=matchs,
                                   paginate_by=number_per_page,
-                                  title=title
+                                  title=title,
+                                  extra_context={'display_search' : display_search}
                                   )(request)
+
+def search(request):
+    query = request.GET.get('query')
+    if not query:
+        matchs = Match.objects.all()
+    else:
+        matchs = Match.objects.filter(Q(title__icontains=query) |
+                                      Q(participants__player__in_game_name__icontains=query) |
+                                      Q(participants__player__username__icontains=query) |
+                                      Q(participants__player__discord_name__icontains=query))
+        matchs = matchs.distinct()
+    if matchs.exists():
+        matchs = matchs.order_by('-date_closed', '-date_modified', '-date_registered')
+    title = _("Search results for the request %s")%query
+    return listing(request, matchs=matchs, title=title)
+
+@login_required
+def submissions(request, number_per_page = 10):
+    player = request.user
+    if (player):
+        matchs = player.submissions.order_by('-date_closed', '-date_modified', '-date_registered')
+    else:
+        matchs = Match.objects.none()
+    title = _("Submitted games")
+    return listing(request, matchs=matchs, title=title,
+                   number_per_page=number_per_page,
+                   display_search=False)
+
 
 class MatchDetailView(DetailView):
     model = Match
-    queryset = Match.objects.all()
     pk_url_kwarg='match_id'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        match = self.object
+        context['display_edit'] = match.is_editable_by(self.request.user)
+        return context
     
     def post(self, *args, **kwargs):
         return self.get(*args, **kwargs)
-
-def match_detail(*args, **kwargs):
-    return MatchDetailView.as_view()(*args, **kwargs)
 
 class ParticipantInline(InlineFormSetFactory):
     model = Participant
@@ -74,7 +108,7 @@ class ParticipantInline(InlineFormSetFactory):
             kwargs["extra"] = 0
         return kwargs
 
-class MatchViewMixin(object):
+class EditMatchViewMixin(object):
     model = Match
     inlines = [ParticipantInline]
     pk_url_kwarg='match_id'
@@ -126,7 +160,7 @@ class MatchViewMixin(object):
         self.object.save()
         return response
 
-class CreateMatchView(LoginRequiredMixin, MatchViewMixin, SuccessMessageMixin, CreateWithInlinesView):
+class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixin, CreateWithInlinesView):
     form_class = MatchForm
     success_message = _("Match successfully registered!")
     extra_context = {'upper_title' : _("Register match"),
@@ -161,11 +195,17 @@ class CreateMatchView(LoginRequiredMixin, MatchViewMixin, SuccessMessageMixin, C
         self.object.save()
         return response
 
-class UpdateMatchView(LoginRequiredMixin, MatchViewMixin, SuccessMessageMixin, UpdateWithInlinesView):
+class UpdateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixin, UpdateWithInlinesView):
     form_class = UpdateMatchForm
     success_message = _("Match successfully updated!")
     extra_context = {'upper_title' : _("Update match"),
                      'lower_title' : _("Form")}
+
+    def get_object(self, *args, **kwargs):
+        match = super().get_object(*args, **kwargs)
+        if not(match.is_editable_by(self.request.user)):
+            raise PermissionDenied()
+        return match
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -180,18 +220,3 @@ class UpdateMatchView(LoginRequiredMixin, MatchViewMixin, SuccessMessageMixin, U
             self.object.date_closed = None
         self.object.save()
         return response
-
-def search(request):
-    query = request.GET.get('query')
-    if not query:
-        matchs = Match.objects.all()
-    else:
-        matchs = Match.objects.filter(Q(title__icontains=query) |
-                                      Q(participants__player__in_game_name__icontains=query) |
-                                      Q(participants__player__username__icontains=query) |
-                                      Q(participants__player__discord_name__icontains=query))
-        matchs = matchs.distinct()
-    if matchs.exists():
-        matchs = matchs.order_by('-date_closed', '-date_modified', '-date_registered')
-    title = _("Search results for the request %s")%query
-    return listing(request, matchs=matchs, title=title)

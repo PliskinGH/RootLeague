@@ -60,7 +60,6 @@ class Match(models.Model):
     class Meta:
         verbose_name = _("match")
         ordering = ['-date_closed', '-date_modified', '-date_registered']
-
     
     def __str__(self, mention_participants=True):
         result = ""
@@ -74,6 +73,9 @@ class Match(models.Model):
             ", ".join([participant.__str__(mention_match=False) for participant in participants]) + \
                 ")"
         return result
+    
+    def is_editable_by(self, user):
+        return (user is not None and self.submitted_by == user and self.date_closed is None)
     
 class Participant(models.Model):
     """

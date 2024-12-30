@@ -10,6 +10,16 @@
 {% block lower_title %}{{ object.title }}{% endblock %}
 
 {% block content %}
+
+{% if display_edit %}
+<a href="{% url 'match:update' match_id=object.id %}" class="btn btn-outline-primary">
+  Update results
+</a>
+
+<br />
+<br />
+{% endif %}
+
 <table class="table table-striped">
   <tbody>
     <tr>
@@ -20,12 +30,16 @@
       <th scope="row">{{_("Last modified")}}</th>
       <td>{{ object.date_modified }}</td>
     </tr>
-    {% if object.date_closed %}
     <tr>
       <th scope="row">{{_("Closed")}}</th>
-      <td>{{ object.date_closed }}</td>
+      <td>
+      {% if object.date_closed %}
+        {{ object.date_closed }}
+      {% else %}
+        In progress
+      {% endif %}
+    </td>
     </tr>
-    {% endif %}
     {% if object.submitted_by %}
     <tr>
       <th scope="row">{{_("Submitted by")}}</th>

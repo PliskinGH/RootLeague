@@ -7,17 +7,20 @@
 
 {% block content %}
 
+{% if display_search %}
 {% include 'matchmaking/search_form.html' %}
+{% endif %}
 
 <div class="table-responsive">
 <table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">{{_("Date")}}</th>
+      <th scope="col">{{_("Title")}}</th>
       <th scope="col">{{_("Tournament")}}</th>
       <th scope="col">{{_("Players")}}</th>
-      <th scope="col">{{_("Map")}}</th>
-      <th scope="col">{{_("Deck")}}</th>
+      {% comment %} <th scope="col">{{_("Map")}}</th>
+      <th scope="col">{{_("Deck")}}</th> {% endcomment %}
       <th scope="col">{{_("Winner(s)")}}</th>
     </tr>
   </thead>
@@ -29,10 +32,11 @@
           {% if match.date_closed %}
           {{ match.date_closed }}
           {% else %}
-          {{ match.date_registered }}
+          In progress
           {% endif %}
         </a>
       </th>
+      <td>{{ match.title }}</td>
       <td>
         {% if match.tournament != None %}
         {{ match.tournament }}
@@ -47,8 +51,8 @@
           {% endif %}
       {% endfor %}
       </td>
-      <td>{{ match.get_board_map_display }}</td>
-      <td>{{ match.get_deck_display }}</td>
+      {% comment %} <td>{{ match.get_board_map_display }}</td>
+      <td>{{ match.get_deck_display }}</td> {% endcomment %}
       <td>
       {% for participant in match.participants.all %}
           {% if participant.tournament_score > 0 %}

@@ -54,7 +54,7 @@
                             {{_("Account")}}
                         </a>
                         <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
-                            {% comment %} <a class="dropdown-item" href="{% url 'auth:profile' %}">{{_("Submitted games")}}</a> {% endcomment %}
+                            <a class="dropdown-item" href="{% url 'match:submissions' %}">{{_("Submitted games")}}</a>
                             <a class="dropdown-item" href="{% url 'auth:profile' %}">{{_("Profile")}}</a>
                         </div>
                     </li>
