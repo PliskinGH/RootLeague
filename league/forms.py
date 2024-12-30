@@ -62,8 +62,8 @@ class PlayerInStatsForm(Form):
         self.helper = FormHelper()
         self.helper.form_method = 'GET'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.label_class = 'col-7 col-sm-5 col-md-4 col-lg-3 text-end'
+        self.helper.field_class = 'col-5 col-sm-7 col-md-8 col-lg-9'
         self.helper.layout = Layout(
             Row(Column("player", css_class='col-10'),
                 Column(NonPrimarySubmit("", _("Filter"), css_class="btn-outline-secondary"), css_class='col-2')

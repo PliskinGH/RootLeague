@@ -90,4 +90,8 @@ class PlayerWidget(s2forms.ModelSelect2Widget):
     search_fields = ['username__icontains',
                      'in_game_name__icontains',
                      'discord_name__icontains']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.attrs['style'] = 'width : 100%'
     

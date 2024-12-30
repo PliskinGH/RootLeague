@@ -49,8 +49,14 @@
                     </li>
                     <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
                     {%  if user.is_authenticated %}
-                    <li class="nav-item mx-auto px-lg-2 px-xl-4">
-                        <a class="nav-link text-uppercase" href="{% url 'auth:profile' %}">{{_("Account")}}</a>
+                    <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">
+                        <a class="nav-link mx-auto text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{_("Account")}}
+                        </a>
+                        <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
+                            {% comment %} <a class="dropdown-item" href="{% url 'auth:profile' %}">{{_("Submitted games")}}</a> {% endcomment %}
+                            <a class="dropdown-item" href="{% url 'auth:profile' %}">{{_("Profile")}}</a>
+                        </div>
                     </li>
                     <li class="nav-item mx-auto px-lg-2 px-xl-4">
                         <form method="post" action="{% url 'auth:logout' %}">

@@ -137,7 +137,7 @@ class ParticipantForm(ModelForm):
             'coalition',
             ]
         widgets = {
-            'player' : PlayerWidget(attrs={'style': 'width : 100%'})
+            'player' : PlayerWidget
             }
 
     def __init__(self, *args, **kwargs):
