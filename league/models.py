@@ -57,6 +57,9 @@ class AbstractTournament(models.Model):
     random_suits = models.BooleanField(blank=True, null=True,
                                        verbose_name=_('random suits'))
     
+    stats_display = models.BooleanField(default=False,
+                                        verbose_name="displayed in stats")
+    
     class Meta:
         abstract = True
     

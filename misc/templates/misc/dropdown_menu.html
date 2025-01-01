@@ -1,0 +1,63 @@
+<div class="btn-group container justify-content-center">
+
+<div class="dropdown mx-auto">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    {% if parent %}
+    {{ parent.name }}
+    {% else %}
+    {{ empty_parent }}
+    {% endif %}
+    </a>
+
+    {% if parents %}
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    {% for other_parent in parents %}
+        {% if other_parent != parent_obj %}
+        <li>
+            <a class="dropdown-item" href="{% url parent_url other_parent.id %}{{ url_get_param }}">
+                {{ other_parent.name }}
+            </a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<div class="dropdown mx-auto">
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    {% if child %}
+    {{ child.name }}
+    {% elif parent %}
+    {{ all_children }}
+    {% else %}
+    {{ empty_child }}
+    {% endif %}
+    </a>
+
+    {% if children %}
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    {% if parent and child %}
+    <li>
+        <a class="dropdown-item" href="{% url parent_url parent.id %}{{ url_get_param }}">
+        {{ all_children }}
+        </a>
+    </li>
+    {% endif %}
+    {% for other_child in children %}
+        {% if other_child != child %}
+        <li>
+            <a class="dropdown-item" href="{% url child_url other_child.id %}{{ url_get_param }}">
+            {{ other_child.name }}
+            </a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+</div>
+
+<br />
+<br />

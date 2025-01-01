@@ -64,8 +64,8 @@ def leaderboard(request,
         title = get_title(tournament=tournament,
                           league=league)
     
-    extra_context = get_menu_by_pagination(tournament=tournament,
-                                           league=league)
+    extra_context = get_dropdown_menu(tournament=tournament,
+                                      league=league)
     extra_context['min_games'] = min_games
 
     if (ordering is None):
@@ -166,9 +166,9 @@ def stats(request,
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
                           league=league)
-    
-    extra_context = get_menu_by_pagination(tournament=tournament,
-                                           league=league)
+        
+    extra_context = get_dropdown_menu(tournament=tournament,
+                                      league=league)
     
     extra_context['player'] = None
     extra_context['player_get_param'] = ""
@@ -314,3 +314,26 @@ def get_menu_by_pagination(league = None,
                 season_page=season_page,
                 season_range=season_range,
                 season_paginator=season_paginator)
+
+def get_dropdown_menu(league = None,
+                      tournament = None):
+    if (league in EMPTY_VALUES and
+        tournament not in EMPTY_VALUES):
+        league = tournament.league
+    
+    seasons = Tournament.objects.none()
+    if (league not in EMPTY_VALUES):
+        seasons = league.seasons.filter(stats_display=True).order_by('-start_date', '-pk')
+
+    leagues = League.objects.filter(stats_display=True)
+    nbLeagues = leagues.count()
+    if (nbLeagues > 1 or
+        (not(league) and nbLeagues)):
+        leagues = leagues.order_by('-start_date', '-pk')
+    else:
+        leagues = None
+    
+    return dict(league=league,
+                season=tournament,
+                seasons=seasons,
+                leagues=leagues)
