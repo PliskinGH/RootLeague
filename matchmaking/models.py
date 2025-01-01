@@ -24,7 +24,7 @@ class Match(models.Model):
                                        verbose_name=_('date closed'))
     submitted_by = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True,
                                      blank=True, related_name="submissions",
-                                     verbose_name=_('player'))
+                                     verbose_name=_('submitted by'))
     tournament = models.ForeignKey(Tournament, on_delete=models.SET_NULL,
                                    null=True, blank=False,
                                    default=Tournament.get_default_pk,
@@ -105,7 +105,7 @@ class Participant(models.Model):
                                      null=True, blank=True,
                                      verbose_name=_('coalition'))
     tournament_score = models.DecimalField(max_digits=3, decimal_places=2,
-                                           null=True, blank=True,
+                                           null=True, blank=True, default=0.,
                                            verbose_name=_('tournament score'))
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
