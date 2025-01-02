@@ -1,6 +1,8 @@
 <div class="col-lg-12 detail-separator">
-  <form class="d-flex" action="{% url 'match:search' %}" method="get" accept-charset="utf-8">
-    <input id="searchForm" name="query" class="form-control me-2" type="search" placeholder="{{_("Find a match")}}" aria-label="Search" >
+  <form class="d-flex" action="{% url url_search %}" method="get" accept-charset="utf-8">
+    <input id="searchForm" name="q" class="form-control me-2"
+          type="search" placeholder="{{ search_placeholder }}"
+          value="{{ search_query }}" aria-label="Search" >
     <button class="btn btn-outline-secondary" type="submit">{{_("Search")}}</button>
   </form>
 </div>

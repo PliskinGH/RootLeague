@@ -14,41 +14,35 @@ from django.core.exceptions import PermissionDenied
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
 from .forms import MatchForm, UpdateMatchForm, ParticipantForm, ParticipantFormSet
-from misc.views import ElidedListView
+from misc.views import SearchableElidedListView
 
 # Create your views here.
 
 def index(request):
     matchs = Match.objects.exclude(date_closed=None).order_by('-date_closed', '-date_modified', '-date_registered')[:5]
     return listing(request, matchs=matchs,
-                   title=_("Latest matches"), number_per_page=5)
+                   title=_("Latest matches"), number_per_page=5,
+                   use_search=False)
 
 def listing(request, matchs = None, title = _("All games"),
             number_per_page = 10,
-            display_search = True):
+            use_search = True,
+            url_search = 'match:listing',
+            search_placeholder = _("Find a match")):
     if (matchs is None):
-        matchs = Match.objects.exclude(date_closed=None).order_by('-date_closed', '-date_modified', '-date_registered')
-    return ElidedListView.as_view(model=Match,
-                                  queryset=matchs,
-                                  paginate_by=number_per_page,
-                                  title=title,
-                                  extra_context={'display_search' : display_search}
-                                  )(request)
-
-def search(request):
-    query = request.GET.get('query')
-    if not query:
-        matchs = Match.objects.all()
-    else:
-        matchs = Match.objects.filter(Q(title__icontains=query) |
-                                      Q(participants__player__in_game_name__icontains=query) |
-                                      Q(participants__player__username__icontains=query) |
-                                      Q(participants__player__discord_name__icontains=query))
-        matchs = matchs.distinct()
-    if matchs.exists():
-        matchs = matchs.order_by('-date_closed', '-date_modified', '-date_registered')
-    title = _("Search results for the request %s")%query
-    return listing(request, matchs=matchs, title=title)
+        matchs = Match.objects.order_by('-date_closed', '-date_modified', '-date_registered')
+    return SearchableElidedListView.as_view(model=Match,
+                                            queryset=matchs,
+                                            paginate_by=number_per_page,
+                                            search_use_q=use_search,
+                                            url_search=url_search,
+                                            search_placeholder=search_placeholder,
+                                            search_fields = ['title',
+                                                             'participants__player__in_game_name',
+                                                             'participants__player__username',
+                                                             'participants__player__discord_name'],
+                                            title=title,
+                                           )(request)
 
 @login_required
 def submissions(request, number_per_page = 10):
@@ -60,7 +54,7 @@ def submissions(request, number_per_page = 10):
     title = _("Submitted games")
     return listing(request, matchs=matchs, title=title,
                    number_per_page=number_per_page,
-                   display_search=False)
+                   url_search='match:submissions')
 
 
 class MatchDetailView(DetailView):

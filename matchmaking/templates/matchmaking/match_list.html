@@ -8,7 +8,7 @@
 {% block content %}
 
 {% if display_search %}
-{% include 'matchmaking/search_form.html' %}
+{% include 'matchmaking/search_form.html' with url_search=url_search %}
 {% endif %}
 
 <div class="table-responsive">

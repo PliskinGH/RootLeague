@@ -25,14 +25,14 @@ def import_users(csv_file_name, test_run = True, ignore_failures=False):
         reader = csv.DictReader(csvfile)
         for row in reader:
             player = Player()
-            discord_name = str(row['Discord'])
+            discord_name = str(row['Discord']).strip()
             if (discord_name not in EMPTY_VALUES):
                 player.username = discord_name
                 player.discord_name = discord_name
-            ign = str(row['IGN'])
+            ign = str(row['IGN']).strip()
             ign_split = ign.split('+')
             try:
-                in_game_name = str(ign_split[0])
+                in_game_name = str(ign_split[0]).strip()
                 player.in_game_name = in_game_name
             except Exception as e:
                 errors[ign] = ValidationError(force_str(e), code="invalid")

@@ -9,7 +9,7 @@ from .models import League, Tournament
 from .forms import PlayerInStatsForm
 from authentification.models import Player
 from matchmaking.models import Participant
-from misc.views import ElidedListView
+from misc.views import SearchableElidedListView
 from .constants import FACTIONS, TURN_ORDERS
 
 # Create your views here.
@@ -71,14 +71,14 @@ def leaderboard(request,
     if (ordering is None):
         ordering = ['-relative_score', '-score', '-total']
     
-    return ElidedListView.as_view(model=Player,
-                                  queryset=players,
-                                  template_name='league/leaderboard.html',
-                                  paginate_by=number_per_page,
-                                  title=title,
-                                  ordering=ordering,
-                                  extra_context=extra_context
-                                  )(request)
+    return SearchableElidedListView.as_view(model=Player,
+                                            queryset=players,
+                                            template_name='league/leaderboard.html',
+                                            paginate_by=number_per_page,
+                                            title=title,
+                                            ordering=ordering,
+                                            extra_context=extra_context
+                                           )(request)
 
 def league_leaderboard(request,
                        league_id = None,
