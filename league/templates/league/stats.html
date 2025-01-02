@@ -37,7 +37,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for row in stats  %}
+    {% for row in stats.values  %}
     <tr>
       <th scope="row">{{ row.name }}</th>
       <td>{{ row.total }}</td>

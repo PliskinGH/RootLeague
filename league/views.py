@@ -5,12 +5,14 @@ from django.core.paginator import Paginator
 from django.views.generic import TemplateView
 from django.core.exceptions import FieldDoesNotExist
 
+from decimal import Decimal
+
 from .models import League, Tournament
 from .forms import PlayerInStatsForm
 from authentification.models import Player
 from matchmaking.models import Participant
 from misc.views import SearchableElidedListView
-from .constants import FACTIONS, TURN_ORDERS
+from .constants import FACTIONS, TURN_ORDERS, VAGABOND
 
 # Create your views here.
 
@@ -102,8 +104,9 @@ def get_stats(rows = None,
               field = None,
               tournament = None,
               league = None,
-              player = None):
-    stats = []
+              player = None,
+              totals = []):
+    stats = {}
     if (field in EMPTY_VALUES or rows in EMPTY_VALUES):
         return stats
     
@@ -131,9 +134,24 @@ def get_stats(rows = None,
                 row_stats['total'] = total
                 row_stats['relative_score'] = row_stats['score'] / total * 100
             row_stats['name'] = row_name
-            stats.append(row_stats)
+            stats[row] = row_stats
+        for total_key, total_name, summed_rows in totals:
+            total = 0
+            score = Decimal(0)
+            relative_score = None
+            for row in summed_rows:
+                total += stats[row]['total']
+                if (stats[row]['score'] is not None):
+                    score += stats[row]['score']
+            if (total >= 1):
+                relative_score = score / total * 100
+            row_stats = dict(name=total_name,
+                             total=total,
+                             score=score,
+                             relative_score=relative_score)
+            stats[total_key] = row_stats
     except (AttributeError, FieldDoesNotExist):
-        stats = []
+        stats = {}
     return stats
 
 def stats(request,
@@ -142,7 +160,8 @@ def stats(request,
           title = None,
           rows = None,
           field = None,
-          stats_name = None):
+          stats_name = None,
+          totals = []):
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
@@ -161,7 +180,8 @@ def stats(request,
                       field=field,
                       tournament=tournament,
                       league=league,
-                      player=player)
+                      player=player,
+                      totals=totals)
 
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
@@ -196,13 +216,19 @@ def faction_stats(request,
                   league = None,
                   tournament = None,
                   title = None):
+    all_vagabonds = [key for (key, _) in FACTIONS if VAGABOND in key]
+    all_factions = [key for (key, _) in FACTIONS]
+    totals = []
+    totals.append(('vb_total', _('All Vagabonds'), all_vagabonds))
+    totals.append(('factions_total', _('All Factions'), all_factions))
     return stats(request,
                  league=league,
                  tournament=tournament,
                  title=title,
                  rows=FACTIONS,
                  field='faction',
-                 stats_name=_('Faction'))
+                 stats_name=_('Faction'),
+                 totals=totals)
 
 def tournament_faction_stats(request,
                              tournament_id = None):
