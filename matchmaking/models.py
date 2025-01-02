@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from authentification.models import Player
 from league.models import Tournament
@@ -75,7 +76,9 @@ class Match(models.Model):
         return result
     
     def is_editable_by(self, user):
-        return (user is not None and self.submitted_by == user and self.date_closed is None)
+        return (user is not None and
+                self.submitted_by == user and
+                (self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME))
     
 class Participant(models.Model):
     """

@@ -1,7 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 from django.templatetags.static import static
+from datetime import timedelta
 
 # Constants subject to change
+
+MAX_EDIT_TIMEFRAME = timedelta(days=1)
 
 MAX_NUMBER_OF_PLAYERS_IN_MATCH = 6
 DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH = 4
