@@ -14,4 +14,8 @@ urlpatterns = [
     path('register/', views.CreateMatchView.as_view(), name='register'),
     path('update/<int:match_id>/', views.UpdateMatchView.as_view(), name='update'),
     path('submitted/', views.submissions, name='submissions'),
+    path('submitted/league/', views.league_submissions, name='default_league_submissions'),
+    path('submitted/league/<int:league_id>/', views.league_submissions, name='league_submissions'),
+    path('submitted/tournament/', views.tournament_submissions, name='default_tournament_submissions'),
+    path('submitted/tournament/<int:tournament_id>/', views.tournament_submissions, name='tournament_submissions'),
 ]

@@ -20,10 +20,12 @@ from misc.views import SearchableElidedListView
 # Create your views here.
 
 def index(request):
-    matchs = Match.objects.exclude(date_closed=None).order_by('-date_closed', '-date_modified', '-date_registered')[:5]
+    matchs = Match.objects.exclude(date_closed=None)
     return listing(request, matchs=matchs,
-                   title=_("Latest matches"), number_per_page=5,
-                   use_search=False)
+                   title=_("Latest matches"),
+                   total_number=5, number_per_page=5,
+                   use_search=False,
+                   use_league_menu=False)
 
 def listing(request,
             matchs = None,
@@ -31,37 +33,52 @@ def listing(request,
             league = None,
             tournament = None,
             ordering = ['-date_closed', '-date_modified', '-date_registered'],
+            total_number = None,
             number_per_page = 10,
             use_search = True,
-            url_search = 'match:listing',
-            url_search_arg = "",
-            search_placeholder = _("Find a match")):
+            use_league_menu = True,
+            current_url = 'match:listing',
+            current_url_arg = "",
+            search_placeholder = _("Find a match"),
+            global_url = 'match:listing',
+            league_url = 'match:league_listing',
+            tournament_url = 'match:tournament_listing'):
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
     
-    if (matchs is None and tournament not in EMPTY_VALUES):
-        matchs = tournament.matches.order_by(*ordering)
-    
-    if (matchs is None and league not in EMPTY_VALUES):
-        matchs = Match.objects.filter(tournament__league=league).order_by(*ordering)
-    
     if (matchs is None):
-        matchs = Match.objects.order_by(*ordering)
+        matchs = Match.objects.all()
+    
+    if (tournament not in EMPTY_VALUES):
+        matchs = matchs.filter(tournament=tournament)
+    elif (league not in EMPTY_VALUES):
+        matchs = matchs.filter(tournament__league=league)
+    
+    matchs = matchs.order_by(*ordering)
+
+    if (total_number is not None):
+        matchs = matchs[:total_number]
 
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
                           league=league)
     
-    extra_context = get_dropdown_menu(tournament=tournament,
-                                      league=league)
+    extra_context = {}
+    if (use_league_menu):
+        extra_context = get_dropdown_menu(tournament=tournament,
+                                          league=league)
+        extra_context['global_url'] = global_url
+        extra_context['league_url'] = league_url
+        extra_context['tournament_url'] = tournament_url
+    extra_context['display_league_menu'] = use_league_menu
     
     return SearchableElidedListView.as_view(model=Match,
                                             queryset=matchs,
                                             paginate_by=number_per_page,
                                             search_use_q=use_search,
-                                            url_search=url_search,
-                                            url_search_arg=url_search_arg,
+                                            current_url=current_url,
+                                            current_url_arg=current_url_arg,
                                             search_placeholder=search_placeholder,
                                             search_fields = ['title',
                                                              'participants__player__in_game_name',
@@ -75,39 +92,79 @@ def league_listing(request,
                    league_id = None,
                    number_per_page = 10):
     league = get_league(league_id)
-    url_search_arg = ""
+    current_url_arg = ""
     if (league):
-        url_search_arg = league.id
+        current_url_arg = league.id
     return listing(request,
                    league=league,
-                   url_search = 'match:league_listing',
-                   url_search_arg = url_search_arg,
+                   current_url = 'match:league_listing',
+                   current_url_arg = current_url_arg,
                    number_per_page=number_per_page)
 
 def tournament_listing(request,
                        tournament_id = None,
                        number_per_page = 10):
     tournament = get_tournament(tournament_id)
-    url_search_arg = ""
+    current_url_arg = ""
     if (tournament):
-        url_search_arg = tournament.id
+        current_url_arg = tournament.id
     return listing(request,
                    tournament=tournament,
-                   url_search = 'match:tournament_listing',
-                   url_search_arg = url_search_arg,
+                   current_url = 'match:tournament_listing',
+                   current_url_arg = current_url_arg,
                    number_per_page=number_per_page)
 
 @login_required
-def submissions(request, number_per_page = 10):
+def submissions(request,
+                league = None,
+                tournament = None,
+                current_url = 'match:submissions',
+                current_url_arg = "",
+                number_per_page = 10):
     player = request.user
     if (player):
-        matchs = player.submissions.order_by('-date_closed', '-date_modified', '-date_registered')
+        matchs = player.submissions.all()
     else:
         matchs = Match.objects.none()
     title = _("Submitted games")
-    return listing(request, matchs=matchs, title=title,
+    return listing(request, matchs=matchs,
+                   league=league, tournament=tournament,
+                   title=title,
                    number_per_page=number_per_page,
-                   url_search='match:submissions')
+                   current_url=current_url,
+                   current_url_arg=current_url_arg,
+                   global_url='match:submissions',
+                   league_url='match:league_submissions',
+                   tournament_url='match:tournament_submissions',
+                  )
+
+@login_required
+def league_submissions(request,
+                       league_id = None,
+                       number_per_page = 10):
+    league = get_league(league_id)
+    current_url_arg = ""
+    if (league):
+        current_url_arg = league.id
+    return submissions(request,
+                       league=league,
+                       current_url = 'match:league_submissions',
+                       current_url_arg = current_url_arg,
+                       number_per_page=number_per_page)
+
+@login_required
+def tournament_submissions(request,
+                           tournament_id = None,
+                           number_per_page = 10):
+    tournament = get_tournament(tournament_id)
+    current_url_arg = ""
+    if (tournament):
+        current_url_arg = tournament.id
+    return submissions(request,
+                       tournament=tournament,
+                       current_url = 'match:tournament_submissions',
+                       current_url_arg = current_url_arg,
+                       number_per_page=number_per_page)
 
 
 class MatchDetailView(DetailView):
