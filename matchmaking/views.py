@@ -89,7 +89,7 @@ class ParticipantInline(InlineFormSetFactory):
         'tournament_score']
     factory_kwargs = {"extra" : DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH, 
                       "max_num" : MAX_NUMBER_OF_PLAYERS_IN_MATCH,
-                      "absolute_max" : MAX_NUMBER_OF_PLAYERS_IN_MATCH}
+                      "validate_max" : True}
     initial = [{ 'turn_order': 1},
                { 'turn_order': 2},
                { 'turn_order': 3},
