@@ -7,6 +7,19 @@
 
 {% block content %}
 
+{% include 'misc/dropdown_menu.html' with parent=league
+                                          parents=leagues
+                                          empty_parent=_('No league selected')
+                                          parent_url='match:league_listing'
+                                          all_parents=_('All Leagues')
+                                          all_parents_url='match:listing'
+                                          child=season
+                                          children=seasons
+                                          empty_child=_('No tournament selected')
+                                          all_children=_('All Seasons')
+                                          child_url='match:tournament_listing'
+                                          url_get_param='' only %}
+
 {% if display_search %}
 {% include 'matchmaking/search_form.html' with url_search=url_search %}
 {% endif %}

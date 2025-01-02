@@ -9,6 +9,7 @@ class SearchableElidedListView(SearchableListMixin, ListView):
     title = ""
     search_use_q = False
     url_search = "index"
+    url_search_arg = ""
     search_placeholder = ""
     
     def get_context_data(self, *args, **kwargs):
@@ -18,6 +19,7 @@ class SearchableElidedListView(SearchableListMixin, ListView):
         context['title'] = self.title
         context['display_search'] = self.search_use_q
         context['url_search'] = self.url_search
+        context['url_search_arg'] = self.url_search_arg
         context['search_placeholder'] = self.search_placeholder
         context['search_query'] = ""
         query = self.get_search_query()

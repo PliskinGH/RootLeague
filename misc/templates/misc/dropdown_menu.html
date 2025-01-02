@@ -11,8 +11,15 @@
 
     {% if parents %}
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    {% if all_parents_url and all_parents and parent %}
+        <li>
+            <a class="dropdown-item" href="{% url all_parents_url %}{{ url_get_param }}">
+                {{ all_parents }}
+            </a>
+        </li>
+    {% endif %}
     {% for other_parent in parents %}
-        {% if other_parent != parent_obj %}
+        {% if other_parent != parent %}
         <li>
             <a class="dropdown-item" href="{% url parent_url other_parent.id %}{{ url_get_param }}">
                 {{ other_parent.name }}
@@ -38,11 +45,11 @@
     {% if children %}
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     {% if parent and child %}
-    <li>
-        <a class="dropdown-item" href="{% url parent_url parent.id %}{{ url_get_param }}">
-        {{ all_children }}
-        </a>
-    </li>
+        <li>
+            <a class="dropdown-item" href="{% url parent_url parent.id %}{{ url_get_param }}">
+            {{ all_children }}
+            </a>
+        </li>
     {% endif %}
     {% for other_child in children %}
         {% if other_child != child %}

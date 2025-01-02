@@ -13,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
+from league.views import get_league, get_tournament, get_dropdown_menu, get_title
 from .forms import MatchForm, UpdateMatchForm, ParticipantForm, ParticipantFormSet
 from misc.views import SearchableElidedListView
 
@@ -24,25 +25,77 @@ def index(request):
                    title=_("Latest matches"), number_per_page=5,
                    use_search=False)
 
-def listing(request, matchs = None, title = _("All games"),
+def listing(request,
+            matchs = None,
+            title = None,
+            league = None,
+            tournament = None,
+            ordering = ['-date_closed', '-date_modified', '-date_registered'],
             number_per_page = 10,
             use_search = True,
             url_search = 'match:listing',
+            url_search_arg = "",
             search_placeholder = _("Find a match")):
+    if (league in EMPTY_VALUES and
+        tournament not in EMPTY_VALUES):
+        league = tournament.league
+    
+    if (matchs is None and tournament not in EMPTY_VALUES):
+        matchs = tournament.matches.order_by(*ordering)
+    
+    if (matchs is None and league not in EMPTY_VALUES):
+        matchs = Match.objects.filter(tournament__league=league).order_by(*ordering)
+    
     if (matchs is None):
-        matchs = Match.objects.order_by('-date_closed', '-date_modified', '-date_registered')
+        matchs = Match.objects.order_by(*ordering)
+
+    if (title in EMPTY_VALUES):
+        title = get_title(tournament=tournament,
+                          league=league)
+    
+    extra_context = get_dropdown_menu(tournament=tournament,
+                                      league=league)
+    
     return SearchableElidedListView.as_view(model=Match,
                                             queryset=matchs,
                                             paginate_by=number_per_page,
                                             search_use_q=use_search,
                                             url_search=url_search,
+                                            url_search_arg=url_search_arg,
                                             search_placeholder=search_placeholder,
                                             search_fields = ['title',
                                                              'participants__player__in_game_name',
                                                              'participants__player__username',
                                                              'participants__player__discord_name'],
                                             title=title,
+                                            extra_context=extra_context,
                                            )(request)
+
+def league_listing(request,
+                   league_id = None,
+                   number_per_page = 10):
+    league = get_league(league_id)
+    url_search_arg = ""
+    if (league):
+        url_search_arg = league.id
+    return listing(request,
+                   league=league,
+                   url_search = 'match:league_listing',
+                   url_search_arg = url_search_arg,
+                   number_per_page=number_per_page)
+
+def tournament_listing(request,
+                       tournament_id = None,
+                       number_per_page = 10):
+    tournament = get_tournament(tournament_id)
+    url_search_arg = ""
+    if (tournament):
+        url_search_arg = tournament.id
+    return listing(request,
+                   tournament=tournament,
+                   url_search = 'match:tournament_listing',
+                   url_search_arg = url_search_arg,
+                   number_per_page=number_per_page)
 
 @login_required
 def submissions(request, number_per_page = 10):
