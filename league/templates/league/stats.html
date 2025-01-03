@@ -37,7 +37,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for row in stats.values  %}
+    {% for row in stats  %}
     <tr>
       <th scope="row">{{ row.name }}</th>
       <td>{{ row.total }}</td>
@@ -51,6 +51,10 @@
         {{ row.relative_score|floatformat:"-2" }} %
         {% endif %}
       </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <th scope="row" colspan="4" class="text-center">{{ _("Nothing to display.") }}</th>
     </tr>
     {% endfor %}
   </tbody>

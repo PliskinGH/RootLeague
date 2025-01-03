@@ -145,6 +145,8 @@ def get_stats(rows = None,
                     score += stats[row]['score']
             if (total >= 1):
                 relative_score = score / total * 100
+            else:
+                score = None
             row_stats = dict(name=total_name,
                              total=total,
                              score=score,
@@ -182,6 +184,11 @@ def stats(request,
                       league=league,
                       player=player,
                       totals=totals)
+    cleaned_stats = []
+    for row in stats.values():
+        total = row.get('total', 0)
+        if (total >= 1):
+            cleaned_stats.append(row)
 
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
@@ -197,7 +204,7 @@ def stats(request,
         extra_context['player'] = player
         extra_context['player_get_param'] = "?player=" + str(player.id)
     
-    extra_context['stats'] = stats
+    extra_context['stats'] = cleaned_stats
     extra_context['title'] = title
     if (stats_name in EMPTY_VALUES):
         extra_context['stats_title'] = _("Stats")
