@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
 
 from .models import Match, Participant
+from .forms import ParticipantAdminForm
 from authentification.models import Player
 from league.constants import DECK_EP, DECK_STANDARD, SUIT_BIRD, SUIT_FOX, SUIT_MOUSE, SUIT_RABBIT, TURN_TIMING_LIVE, TURN_TIMING_ASYNC, invert_faction, invert_map
 from league.models import Tournament
@@ -124,8 +125,13 @@ class ParticipantResource(resources.ModelResource):
 class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
     search_fields = ['player__username', 'player__in_game_name',
                      'player__discord_name', 'player__email']
+    fields = ['player', 'match', 'turn_order', 'faction',
+              'game_score', 'dominance', 'coalition',
+              'tournament_score']
     autocomplete_fields = ['player']
+    readonly_fields = ['match']
     resource_classes = [ParticipantResource]
+    form = ParticipantAdminForm
 
 class ParticipantInline(TabularInlinePaginated, AdminURLMixin):
     model = Participant
@@ -429,5 +435,6 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
     list_filter = ['date_registered', 'date_modified', 'date_closed',
                    'tournament',
                    'board_map', 'deck', 'random_suits']
+    autocomplete_fields = ['submitted_by', 'tournament']
     readonly_fields = ['date_registered', 'date_modified']
     resource_classes = [MatchResource]

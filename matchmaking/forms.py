@@ -323,4 +323,16 @@ class ParticipantFormSet(BaseInlineFormSet):
                 raise ValidationError(errors)
         except AttributeError:
             pass
-        
+
+class ParticipantAdminForm(ModelForm):
+    class Meta:
+        model = Participant
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if (self.instance):
+            if (self.instance.pk is not None and self.instance.match.pk is not None):
+                self.fields['coalition'].queryset = self.instance.match.participants.exclude(pk=self.instance.pk)
+            else:
+                self.fields['coalition'].queryset = Participant.objects.none()        

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.validators import EMPTY_VALUES
 
 from authentification.models import Player
 from league.models import Tournament
@@ -62,17 +63,12 @@ class Match(models.Model):
         verbose_name = _("match")
         ordering = ['-date_closed', '-date_modified', '-date_registered']
     
-    def __str__(self, mention_participants=True):
+    def __str__(self):
         result = ""
-        if (self.title not in [None, ""]):
+        if (self.title not in EMPTY_VALUES):
             result = self.title
         else:
-            result = _("Match") + str(self.id)
-        participants = self.participants.all()
-        if (mention_participants and len(participants) >= 1):
-            result = result + " (" + \
-            ", ".join([participant.__str__(mention_match=False) for participant in participants]) + \
-                ")"
+            result = _("Match#") + str(self.id)
         return result
     
     def is_editable_by(self, user):
@@ -123,7 +119,7 @@ class Participant(models.Model):
         if (self.player is not None):
             result = self.player.__str__()
             if (mention_match and self.match is not None):
-                result = result + _(" in ") + self.match.__str__(mention_participants=False)
+                result = result + _(" in ") + self.match.__str__()
         else:
-            result = _("UnknownPlayer") + str(self.id)
+            result = _("UnknownParticipant#") + str(self.id)
         return result

@@ -12,6 +12,8 @@ class LeagueAdmin(admin.ModelAdmin):
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
+    search_fields = ['name', 'league__name']
+
     def get_changeform_initial_data(self, request):
         initial_data = super().get_changeform_initial_data(request)
         league_id = request.GET.get('league', None)
