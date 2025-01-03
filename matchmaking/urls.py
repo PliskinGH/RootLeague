@@ -18,4 +18,9 @@ urlpatterns = [
     path('submitted/league/<int:league_id>/', views.league_submissions, name='league_submissions'),
     path('submitted/tournament/', views.tournament_submissions, name='default_tournament_submissions'),
     path('submitted/tournament/<int:tournament_id>/', views.tournament_submissions, name='tournament_submissions'),
+    path('played/', views.played_games, name='played_games'),
+    path('played/league/', views.league_played_games, name='default_league_played_games'),
+    path('played/league/<int:league_id>/', views.league_played_games, name='league_played_games'),
+    path('played/tournament/', views.tournament_played_games, name='default_tournament_played_games'),
+    path('played/tournament/<int:tournament_id>/', views.tournament_played_games, name='tournament_played_games'),
 ]

@@ -30,6 +30,8 @@ def index(request):
 def listing(request,
             matchs = None,
             title = None,
+            player = None,
+            submitted_by = None,
             league = None,
             tournament = None,
             ordering = ['-date_closed', '-date_modified', '-date_registered'],
@@ -49,6 +51,12 @@ def listing(request,
     
     if (matchs is None):
         matchs = Match.objects.all()
+    
+    if (player not in EMPTY_VALUES):
+        matchs = matchs.filter(participants__player=player)
+    
+    if (submitted_by not in EMPTY_VALUES):
+        matchs = matchs.filter(submitted_by=submitted_by)
     
     if (tournament not in EMPTY_VALUES):
         matchs = matchs.filter(tournament=tournament)
@@ -122,12 +130,9 @@ def submissions(request,
                 current_url_arg = "",
                 number_per_page = 10):
     player = request.user
-    if (player):
-        matchs = player.submissions.all()
-    else:
-        matchs = Match.objects.none()
     title = _("Submitted games")
-    return listing(request, matchs=matchs,
+    return listing(request,
+                   submitted_by=player,
                    league=league, tournament=tournament,
                    title=title,
                    number_per_page=number_per_page,
@@ -165,6 +170,55 @@ def tournament_submissions(request,
                        current_url = 'match:tournament_submissions',
                        current_url_arg = current_url_arg,
                        number_per_page=number_per_page)
+
+@login_required
+def played_games(request,
+                 league = None,
+                 tournament = None,
+                 current_url = 'match:played_games',
+                 current_url_arg = "",
+                 number_per_page = 10):
+    player = request.user
+    title = _("Played games")
+    return listing(request,
+                   player=player,
+                   league=league, tournament=tournament,
+                   title=title,
+                   number_per_page=number_per_page,
+                   current_url=current_url,
+                   current_url_arg=current_url_arg,
+                   global_url='match:played_games',
+                   league_url='match:league_played_games',
+                   tournament_url='match:tournament_played_games',
+                  )
+
+@login_required
+def league_played_games(request,
+                        league_id = None,
+                        number_per_page = 10):
+    league = get_league(league_id)
+    current_url_arg = ""
+    if (league):
+        current_url_arg = league.id
+    return played_games(request,
+                        league=league,
+                        current_url = 'match:league_played_games',
+                        current_url_arg = current_url_arg,
+                        number_per_page=number_per_page)
+
+@login_required
+def tournament_played_games(request,
+                            tournament_id = None,
+                            number_per_page = 10):
+    tournament = get_tournament(tournament_id)
+    current_url_arg = ""
+    if (tournament):
+        current_url_arg = tournament.id
+    return played_games(request,
+                        tournament=tournament,
+                        current_url = 'match:tournament_played_games',
+                        current_url_arg = current_url_arg,
+                        number_per_page=number_per_page)
 
 
 class MatchDetailView(DetailView):
@@ -328,6 +382,8 @@ class UpdateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixi
         is_closed = form.cleaned_data.get('closed', False)
         if (is_closed and self.object.date_closed is None):
             self.object.date_closed = self.object.date_modified
+            if (self.request.user):
+                self.object.submitted_by = self.request.user
         elif (not(is_closed) and self.object.date_closed is not None):
             self.object.date_closed = None
         self.object.save()

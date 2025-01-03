@@ -72,9 +72,13 @@ class Match(models.Model):
         return result
     
     def is_editable_by(self, user):
-        return (user is not None and
-                self.submitted_by == user and
-                (self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME))
+        editable = False
+        if user is not None:
+            if self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME:
+                editable = self.submitted_by == user
+                if (not(editable) and self.date_closed is None):
+                    editable = self.participants.filter(player=user).count() >= 1
+        return editable
     
 class Participant(models.Model):
     """
