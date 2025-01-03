@@ -344,8 +344,22 @@ class ParticipantAdminForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if (self.instance):
-            if (self.instance.pk is not None and self.instance.match.pk is not None):
-                self.fields['coalition'].queryset = self.instance.match.participants.exclude(pk=self.instance.pk)
-            else:
-                self.fields['coalition'].queryset = Participant.objects.none()        
+        if (self.instance and self.instance.pk is not None and self.instance.match.pk is not None):
+            self.fields['coalition'].queryset = self.instance.match.participants.exclude(pk=self.instance.pk)
+        else:
+            self.fields['coalition'].queryset = Participant.objects.none()
+        self.fields['player'].widget.can_add_related = False
+        self.fields['player'].widget.can_delete_related = False
+        self.fields['coalition'].widget.can_add_related = False
+        self.fields['coalition'].widget.can_delete_related = False
+
+class MatchAdminForm(ModelForm):
+    class Meta:
+        model = Match
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['submitted_by'].widget.can_add_related = False
+        self.fields['submitted_by'].widget.can_delete_related = False
+        self.fields['tournament'].widget.can_delete_related = False

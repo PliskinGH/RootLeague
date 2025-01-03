@@ -31,24 +31,33 @@ class LeagueAdminForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if (self.instance):
-            if (self.instance.pk is not None):
-                self.fields['active_season'].queryset = self.instance.seasons.all()
-            else:
-                self.fields['active_season'].queryset = Tournament.objects.none()
+        self.fields['active_season'].widget.can_delete_related = False
+        if (self.instance and self.instance.pk is not None):
+            self.fields['active_season'].queryset = self.instance.seasons.all()
             widget = self.fields['active_season'].widget
             self.fields['active_season'].widget = (
-            TournamentFieldWidgetWrapper( 
-                widget.widget,
-                widget.rel,            
-                widget.admin_site,
-                can_add_related=widget.can_add_related,
-                can_change_related=widget.can_change_related,
-                can_delete_related=widget.can_delete_related,
-                can_view_related=widget.can_view_related,
-                extra_param=self.instance.id,
+                    TournamentFieldWidgetWrapper( 
+                        widget.widget,
+                        widget.rel,            
+                        widget.admin_site,
+                        can_add_related=widget.can_add_related,
+                        can_change_related=widget.can_change_related,
+                        can_delete_related=widget.can_delete_related,
+                        can_view_related=widget.can_view_related,
+                        extra_param=self.instance.id,
+                    )
             )
-       )
+        else:
+            self.fields['active_season'].queryset = Tournament.objects.none()
+
+class TournamentAdminForm(ModelForm):
+    class Meta:
+        model = League
+        fields = "__all__"
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['league'].widget.can_delete_related = False
 
 class PlayerInStatsForm(Form):
     player = ModelChoiceField(queryset=Player.objects.all().order_by('username'),

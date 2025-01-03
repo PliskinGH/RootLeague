@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
 
 from .models import Match, Participant
-from .forms import ParticipantAdminForm
+from .forms import ParticipantAdminForm, MatchAdminForm
 from authentification.models import Player
 from league.constants import DECK_EP, DECK_STANDARD, SUIT_BIRD, SUIT_FOX, SUIT_MOUSE, SUIT_RABBIT, TURN_TIMING_LIVE, TURN_TIMING_ASYNC, invert_faction, invert_map
 from league.models import Tournament
@@ -438,3 +438,4 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
     autocomplete_fields = ['submitted_by', 'tournament']
     readonly_fields = ['date_registered', 'date_modified']
     resource_classes = [MatchResource]
+    form = MatchAdminForm

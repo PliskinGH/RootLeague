@@ -2,17 +2,20 @@ from django.contrib import admin
 from django.core.validators import EMPTY_VALUES
 
 from .models import League, Tournament
-from .forms import LeagueAdminForm
+from .forms import LeagueAdminForm, TournamentAdminForm
 
 # Register your models here.
 
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
     form = LeagueAdminForm
+    search_fields = ['name']
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
+    form = TournamentAdminForm
     search_fields = ['name', 'league__name']
+    autocomplete_fields = ['league']
 
     def get_changeform_initial_data(self, request):
         initial_data = super().get_changeform_initial_data(request)
