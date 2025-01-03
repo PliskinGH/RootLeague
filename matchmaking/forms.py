@@ -152,6 +152,19 @@ class ParticipantForm(ModelForm):
             'coalitioned_player',
             'tournament_score'
         )
+        if self.instance and self.instance.pk is not None:
+            coalitioned_participant = self.instance.coalition
+            match = self.instance.match
+            in_coalition = False
+            index_coalitioned = 0
+            if (coalitioned_participant is not None and match is not None):
+                for participant in match.participants.all():
+                    index_coalitioned += 1
+                    if (participant == coalitioned_participant):
+                        in_coalition = True
+                        break
+            if (in_coalition):
+                self.fields['coalitioned_player'].initial = index_coalitioned
 
     def has_changed(self):
         """

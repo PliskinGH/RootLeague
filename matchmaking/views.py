@@ -253,14 +253,22 @@ class EditMatchViewMixin(object):
                             for participant in self.object.participants.all()]
             for form in participants_formset.forms:
                 index_participant += 1
+                if (index_participant > len(participants)):
+                    break
+                participant = participants[index_participant-1]
                 index_coalitioned = form.cleaned_data.get('coalitioned_player', '')
-                if (not(index_coalitioned in [None, ''])):
+                in_coalition = False
+                if (not(index_coalitioned in EMPTY_VALUES)):
                     index_coalitioned = int(index_coalitioned)
-                    participant = participants[index_participant-1]
-                    coalitioned_player = participants[index_coalitioned-1]
-                    if (coalitioned_player is not None):
-                        participant.coalition = coalitioned_player
-                        participant.save()
+                    if (index_coalitioned >= 1 and index_coalitioned <= len(participants)):
+                        coalitioned_participant = participants[index_coalitioned-1]
+                        if (coalitioned_participant is not None):
+                            in_coalition = True
+                            participant.coalition = coalitioned_participant
+                            participant.save()
+                if (not(in_coalition) and participant.coalition is not None):
+                    participant.coalition = None
+                    participant.save()
         self.object.save()
         return response
 
