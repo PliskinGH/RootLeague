@@ -73,7 +73,7 @@ class Match(models.Model):
     
     def is_editable_by(self, user):
         editable = False
-        if user is not None:
+        if user is not None and user.is_authenticated and user.pk is not None:
             if self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME:
                 editable = self.submitted_by == user
                 if (not(editable) and self.date_closed is None):
