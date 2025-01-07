@@ -27,6 +27,8 @@ urlpatterns = [
     path('auth/', include('authentification.urls', namespace='auth')),
     path('league/', include('league.urls', namespace='league')),
     path('admin/', admin.site.urls),
+    path('tinymce/', include('tinymce.urls')),
+    path("pages/", include("django.contrib.flatpages.urls")),
 ]
 
 if settings.DEBUG:

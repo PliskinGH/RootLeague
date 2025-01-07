@@ -1,0 +1,14 @@
+{% extends 'misc/base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block upper_title %}{{ flatpage.title }}{% endblock %}
+{% block lower_title %}{{ _("Root Digital league") }}{% endblock %}
+
+{% block content %}
+
+{{ flatpage.content }}
+
+{% endblock %}

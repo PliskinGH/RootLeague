@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'extra_views',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -62,6 +64,7 @@ INSTALLED_APPS = [
     'import_export',
     'django_admin_inline_paginator',
     "mailer",
+    'tinymce',
     'authentification',
     'matchmaking',
     'league',
@@ -79,6 +82,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+SITE_ID=1
 
 # Toolbar
 if DEBUG:
