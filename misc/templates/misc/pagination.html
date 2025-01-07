@@ -24,7 +24,9 @@
     {% endfor %}
 
     {% if page_obj.has_next %}
+    <div class="col g-0">
         <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+    </div>
     {% endif %}
 </div>
 </div>
