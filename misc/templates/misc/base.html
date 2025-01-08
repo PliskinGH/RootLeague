@@ -57,7 +57,7 @@
                         </a>
                         <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
                         {% for page in about_pages  %}
-                            <a class="dropdown-item" href="{% url 'django.contrib.flatpages.views.flatpage' url=page.url %}">{{ page.title }}</a>
+                            <a class="dropdown-item" href="{{ page.get_absolute_url }}">{{ page.title }}</a>
                         {% endfor %}
                         </div>
                     </li>

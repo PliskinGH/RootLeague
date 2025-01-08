@@ -200,6 +200,21 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, "locale"),
 )
 
+# TinyMCE
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 500,
+    "menubar": "file edit view insert format tools table help",
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+    "code,help,wordcount,pagebreak,emoticons",
+    "toolbar": "undo redo | styles | bold italic underline strikethrough removeformat | "
+    "link image | alignleft aligncenter alignright alignjustify | "
+    "bullist numlist outdent indent | print preview media fullscreen | "
+    "forecolor backcolor emoticons | help",
+    "toolbar_mode" : "sliding",
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
