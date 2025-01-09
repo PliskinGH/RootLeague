@@ -1,0 +1,10 @@
+{% extends 'misc/basic_form.html' %}
+
+{% load i18n %}
+
+{% block upper_title %}{{ _("Delete match") }}{% endblock %}
+{% block lower_title %}{{ object.title }}{% endblock %}
+
+{% block form_header %}
+<p> {% blocktranslate %}Are you sure? This match will be <strong>permanently</strong> deleted.{% endblocktranslate %}</p>
+{% endblock form_header %}

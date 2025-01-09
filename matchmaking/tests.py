@@ -22,13 +22,13 @@ class MatchDetailslPageTestCase(TestCase):
     # test that detail page returns a 200 if the match exists
     def test_details_page_returns_200(self):
         match_id = self.match.id
-        response = self.client.get(reverse('match:match_detail', args=(match_id,)))
+        response = self.client.get(reverse('match:detail', args=(match_id,)))
         self.assertEqual(response.status_code, 200)
 
     # test that detail page returns a 404 if the item match does not exist
     def test_details_page_returns_404(self):
         match_id = self.match.id + 1
-        response = self.client.get(reverse('match:match_detail', args=(match_id,)))
+        response = self.client.get(reverse('match:detail', args=(match_id,)))
         self.assertEqual(response.status_code, 404)
 
 class NewMatchPageTestCase(TestCase):

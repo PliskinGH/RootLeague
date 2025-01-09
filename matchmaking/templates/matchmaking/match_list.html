@@ -44,7 +44,7 @@
     {% for match in page_obj %}
     <tr>
       <th scope="row">
-        <a href="{% url 'match:match_detail' match_id=match.id %}">
+        <a href="{{ match.get_absolute_url }}">
           {% if match.date_closed %}
           {{ match.date_closed }}
           {% else %}

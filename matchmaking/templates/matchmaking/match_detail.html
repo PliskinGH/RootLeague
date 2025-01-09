@@ -12,9 +12,18 @@
 {% block content %}
 
 {% if display_edit %}
-<a href="{% url 'match:update' match_id=object.id %}" class="btn btn-outline-primary">
-  Update results
-</a>
+<div class="row row-cols-auto btn-group" role="group">
+  <div class="dropdown col mx-auto">
+    <a href="{% url 'match:update' match_id=object.id %}" class="btn btn-outline-primary">
+      {{ _('Update results') }}
+    </a>
+  </div>
+  <div class="dropdown col mx-auto">
+    <a href="{% url 'match:delete' match_id=object.id %}" class="btn btn-outline-danger">
+      {{ _('Delete match') }}
+    </a>
+  </div>
+</div>
 
 <br />
 <br />

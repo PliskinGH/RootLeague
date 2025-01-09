@@ -3,9 +3,10 @@
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, DeleteView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView, SuccessMessageMixin
+from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView, SuccessMessageMixin as SuccessMessageMixinWithInlines
 from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
@@ -14,7 +15,7 @@ from django.core.exceptions import PermissionDenied
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from league.models import Tournament
 from league.views import get_league, get_tournament, get_dropdown_menu, get_title
-from .forms import MatchForm, UpdateMatchForm, ParticipantForm, ParticipantFormSet
+from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
 from misc.views import SearchableElidedListView
 
 # Create your views here.
@@ -230,9 +231,6 @@ class MatchDetailView(DetailView):
         match = self.object
         context['display_edit'] = match.is_editable_by(self.request.user)
         return context
-    
-    def post(self, *args, **kwargs):
-        return self.get(*args, **kwargs)
 
 class ParticipantInline(InlineFormSetFactory):
     model = Participant
@@ -270,9 +268,6 @@ class EditMatchViewMixin(object):
     model = Match
     inlines = [ParticipantInline]
     pk_url_kwarg='match_id'
-    
-    def get_success_url(self):
-        return reverse_lazy('match:match_detail', args=(self.object.id,))
     
     def post(self, request, *args, **kwargs):
         """
@@ -326,7 +321,14 @@ class EditMatchViewMixin(object):
         self.object.save()
         return response
 
-class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixin, CreateWithInlinesView):
+class EditMatchPermissionsMixin(object):
+    def get_object(self, *args, **kwargs):
+        match = super().get_object(*args, **kwargs)
+        if not(match.is_editable_by(self.request.user)):
+            raise PermissionDenied()
+        return match
+
+class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, CreateWithInlinesView):
     form_class = MatchForm
     success_message = _("Match successfully registered!")
     extra_context = {'upper_title' : _("Register match"),
@@ -361,7 +363,7 @@ class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixi
         self.object.save()
         return response
 
-class UpdateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixin, UpdateWithInlinesView):
+class UpdateMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, UpdateWithInlinesView):
     form_class = UpdateMatchForm
     success_message = _("Match successfully updated!")
     extra_context = {'upper_title' : _("Update match"),
@@ -388,3 +390,10 @@ class UpdateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixi
             self.object.date_closed = None
         self.object.save()
         return response
+
+class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMessageMixin, DeleteView):
+    model = Match
+    form_class = DeleteMatchForm
+    pk_url_kwarg='match_id'
+    success_message = _("Match successfully deleted!")
+    success_url = reverse_lazy('match:submissions')

@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ChoiceField, BooleanField, BaseInlineFormSet
+from django.forms import Form, ModelForm, ChoiceField, BooleanField, BaseInlineFormSet
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
@@ -117,6 +117,14 @@ class UpdateMatchForm(MatchForm):
         super().__init__(*args, **kwargs)
         if (self.instance and self.instance.date_closed is None):
             self.fields['closed'].initial = False
+
+class DeleteMatchForm(Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            NonPrimarySubmit("submit", _("Confirm"), css_class="btn-outline-danger"),
+        )
 
 class ParticipantForm(ModelForm):
     coalitioned_player = ChoiceField(required=False, choices=PLAYERS_SEATS,

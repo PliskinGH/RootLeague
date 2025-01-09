@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.core.validators import EMPTY_VALUES
+from django.urls import reverse_lazy
 
 from authentification.models import Player
 from league.models import Tournament
@@ -79,6 +80,9 @@ class Match(models.Model):
                 if (not(editable) and self.date_closed is None):
                     editable = self.participants.filter(player=user).count() >= 1
         return editable
+    
+    def get_absolute_url(self):
+        return reverse_lazy('match:detail', args=(self.id,))
     
 class Participant(models.Model):
     """
