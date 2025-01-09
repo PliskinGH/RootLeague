@@ -1,6 +1,10 @@
 {% extends 'misc/base.html' %}
 
+{% load static %}
+
 {% load i18n %}
+
+{% load custom_tags %}
 
 {% block upper_title %}{{_("Match listing")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
@@ -31,6 +35,9 @@
   <thead>
     <tr>
       <th scope="col">{{_("Date")}}</th>
+      {% if display_edit %}
+      <th scope="col">{{_("Edit")}}</th>
+      {% endif %}
       <th scope="col">{{_("Title")}}</th>
       <th scope="col">{{_("Tournament")}}</th>
       <th scope="col">{{_("Players")}}</th>
@@ -52,6 +59,18 @@
           {% endif %}
         </a>
       </th>
+      {% if display_edit %}
+      <td>
+        {% if display_edit|dict_value:match.id %}
+        <a title="{{_("Update results")}}" href="{% url 'match:update' match.id %}">
+          <img src="{% static 'admin/img/icon-changelink.svg' %}" alt="" width="20" height="20">
+        </a>
+        <a title="{{_("Delete match")}}" href="{% url 'match:delete' match.id %}">
+          <img src="{% static 'admin/img/icon-deletelink.svg' %}" alt="" width="20" height="20">
+        </a>
+        {% endif %}
+      </td>
+      {% endif %}
       <td>{{ match.title }}</td>
       <td>
         {% if match.tournament != None %}

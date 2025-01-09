@@ -10,3 +10,7 @@ def sort_by(queryset, order):
 @register.filter
 def index(indexable, i):
     return indexable[i]
+
+@register.filter
+def dict_value(dictionnary, key):
+    return dictionnary.get(key)

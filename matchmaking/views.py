@@ -1,6 +1,6 @@
 
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models import Value
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, DeleteView
@@ -40,6 +40,7 @@ def listing(request,
             number_per_page = 10,
             use_search = True,
             use_league_menu = True,
+            display_edit = False,
             current_url = 'match:listing',
             current_url_arg = "",
             search_placeholder = _("Find a match"),
@@ -72,6 +73,13 @@ def listing(request,
     if (title in EMPTY_VALUES):
         title = get_title(tournament=tournament,
                           league=league)
+        
+    if (display_edit):
+        display_edit = {}
+        for match in matchs:
+            display_edit[match.id] = match.is_editable_by(request.user)
+        if (not(True in display_edit.values())):
+            display_edit = False
     
     extra_context = {}
     if (use_league_menu):
@@ -81,6 +89,7 @@ def listing(request,
         extra_context['league_url'] = league_url
         extra_context['tournament_url'] = tournament_url
     extra_context['display_league_menu'] = use_league_menu
+    extra_context['display_edit'] = display_edit
     
     return SearchableElidedListView.as_view(model=Match,
                                             queryset=matchs,
@@ -137,6 +146,7 @@ def submissions(request,
                    league=league, tournament=tournament,
                    title=title,
                    number_per_page=number_per_page,
+                   display_edit=True,
                    current_url=current_url,
                    current_url_arg=current_url_arg,
                    global_url='match:submissions',
@@ -186,6 +196,7 @@ def played_games(request,
                    league=league, tournament=tournament,
                    title=title,
                    number_per_page=number_per_page,
+                   display_edit=True,
                    current_url=current_url,
                    current_url_arg=current_url_arg,
                    global_url='match:played_games',
