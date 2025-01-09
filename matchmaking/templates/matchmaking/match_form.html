@@ -35,9 +35,15 @@
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {
     if (typeof window.crispyFormsetModal !== "undefined") {
+
       window.crispyFormsetModal.onFormAdded = function (event) {
         $('.django-select2').djangoSelect2()
       };
+
+      window.crispyFormsetModal.onModalFormOpened = function (modalForm) {
+        $('.django-select2').djangoSelect2()
+      };
+
     }
   });
 </script>

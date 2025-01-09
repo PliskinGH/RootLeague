@@ -215,6 +215,22 @@ TINYMCE_DEFAULT_CONFIG = {
     "toolbar_mode" : "sliding",
 }
 
+# CACHE
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "default-cache",
+    },
+    "select2": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "select2-cache",
+        "TIMEOUT" : None,
+        "OPTIONS": {"MAX_ENTRIES": 100},
+    },
+}
+# Set the cache backend to select2
+SELECT2_CACHE_BACKEND = 'select2'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
