@@ -1,4 +1,4 @@
-from django.forms import Form, ModelForm, ChoiceField, BooleanField, BaseInlineFormSet
+from django.forms import Form, ModelForm, ChoiceField, BooleanField, BaseInlineFormSet, NumberInput
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
@@ -145,7 +145,8 @@ class ParticipantForm(ModelForm):
             'coalition',
             ]
         widgets = {
-            'player' : PlayerWidget
+            'player' : PlayerWidget,
+            'tournament_score' : NumberInput(attrs={'step': 0.5}),
             }
 
     def __init__(self, *args, **kwargs):
