@@ -35,7 +35,7 @@ def listing(request,
             submitted_by = None,
             league = None,
             tournament = None,
-            ordering = ['-date_closed', '-date_modified', '-date_registered'],
+            ordering = None,
             total_number = None,
             number_per_page = 10,
             use_search = True,
@@ -64,6 +64,10 @@ def listing(request,
         matchs = matchs.filter(tournament=tournament)
     elif (league not in EMPTY_VALUES):
         matchs = matchs.filter(tournament__league=league)
+
+    if (ordering is None):
+        ordering = ['-date_closed', '-date_modified', '-date_registered']
+    ordering += ['title', 'pk']
     
     matchs = matchs.order_by(*ordering)
 

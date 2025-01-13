@@ -72,6 +72,7 @@ def leaderboard(request,
 
     if (ordering is None):
         ordering = ['-relative_score', '-score', '-total']
+    ordering += ['in_game_name', 'in_game_id', 'pk']
     
     return SearchableElidedListView.as_view(model=Player,
                                             queryset=players,
