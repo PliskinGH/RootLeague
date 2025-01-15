@@ -4,7 +4,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Column, Fieldset, Layout, Row
+from crispy_forms.layout import Column, Fieldset, Layout, Row, Field
+from crispy_forms.bootstrap import FormActions
 from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
@@ -27,10 +28,10 @@ class MatchForm(ModelForm):
             self.fields['tournament'].queryset = Tournament.objects.exclude(Q(active_in_league = None) & ~Q(league = None))
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Row(Column("title")),
-            Row(Column("tournament", css_class='col-md-6'), Column("game_setup", css_class='col-md-4'), Column("closed", css_class='col-md-2')),
+            Row(Column("title", css_class='col-md-8'), Column("tournament", css_class='col-md-4')),
+            Row(Column("game_setup", css_class='col-md-6'), Column("undrafted_faction", css_class='col-md-6')),
             Row(Column("turn_timing", css_class='col-md-3'), Column("table_talk_url", css_class='col-md-9')),
-            Row(Column("deck", css_class='col-md-4'), Column("board_map"), Column("random_suits"), Column("undrafted_faction")),
+            Row(Column("deck", css_class='col-md-4'), Column("board_map", css_class='col-md-4'), Column("random_suits", css_class='col-md-4')),
             Fieldset(
                 "Participants",
                 ModalEditFormsetLayout(
@@ -45,7 +46,7 @@ class MatchForm(ModelForm):
                         'tournament_score'],
                 ),
             ),
-            NonPrimarySubmit("submit", self.submit_text, css_class="btn-outline-secondary"),
+            Row(Column(NonPrimarySubmit("submit", self.submit_text, css_class="btn-outline-secondary"), css_class='col'), Column("closed", css_class='col'), css_class='row-cols-auto'),
         )
 
     def clean(self):
@@ -111,7 +112,7 @@ class MatchForm(ModelForm):
         #     }
 
 class UpdateMatchForm(MatchForm):
-    submit_text = _("Edit match")
+    submit_text = _("Update match")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -167,7 +168,7 @@ class ParticipantForm(ModelForm):
             in_coalition = False
             index_coalitioned = 0
             if (coalitioned_participant is not None and match is not None):
-                for participant in match.participants.all():
+                for participant in match.participants.order_by('turn_order'):
                     index_coalitioned += 1
                     if (participant == coalitioned_participant):
                         in_coalition = True

@@ -312,24 +312,30 @@ class EditMatchViewMixin(object):
         response = super().forms_valid(form, inlines)
         if (len(inlines) == 1):
             participants_formset = inlines[0]
-            index_participant = 0
+            index_participant = -1
             participants = [participant
-                            for participant in self.object.participants.all()]
-            for form in participants_formset.forms:
+                            for participant in self.object.participants.exclude(turn_order=None).order_by('turn_order')]
+            turn_order = lambda f : f.cleaned_data.get('turn_order', None)
+            forms = [f for f in participants_formset.forms
+                       if  f.cleaned_data
+                       and not f.cleaned_data.get('DELETE', False)
+                       and f.cleaned_data.get('turn_order', None) is not None]
+            forms.sort(key=turn_order)
+            for form in forms:
                 index_participant += 1
-                if (index_participant > len(participants)):
+                if (index_participant >= len(participants)):
                     break
-                participant = participants[index_participant-1]
-                index_coalitioned = form.cleaned_data.get('coalitioned_player', '')
+                participant = participants[index_participant]
+                turn_coalitioned = form.cleaned_data.get('coalitioned_player', '')
                 in_coalition = False
-                if (not(index_coalitioned in EMPTY_VALUES)):
-                    index_coalitioned = int(index_coalitioned)
-                    if (index_coalitioned >= 1 and index_coalitioned <= len(participants)):
-                        coalitioned_participant = participants[index_coalitioned-1]
-                        if (coalitioned_participant is not None):
+                if (not(turn_coalitioned in EMPTY_VALUES)):
+                    turn_coalitioned = int(turn_coalitioned)
+                    for candidate in participants:
+                        if (candidate is not None and candidate.turn_order == turn_coalitioned):
                             in_coalition = True
-                            participant.coalition = coalitioned_participant
+                            participant.coalition = candidate
                             participant.save()
+                            break
                 if (not(in_coalition) and participant.coalition is not None):
                     participant.coalition = None
                     participant.save()
