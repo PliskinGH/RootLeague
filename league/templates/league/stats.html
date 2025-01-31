@@ -36,6 +36,9 @@
       <th scope="col">{{_("Total Games")}}</th>
       <th scope="col">{{_("Total Score")}}</th>
       <th scope="col">{{_("Relative Score")}}</th>
+      {% if with_game_score %}
+      <th scope="col">{{_("Average Game Score")}}</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -53,6 +56,13 @@
         {{ row.relative_score|floatformat:"-2" }} %
         {% endif %}
       </td>
+      {% if with_game_score %}
+      <td>
+        {% if row.average_game_score != None %}
+        {{ row.average_game_score|floatformat:"-1" }}
+        {% endif %}
+      </td>
+      {% endif %}
     </tr>
     {% empty %}
     <tr>

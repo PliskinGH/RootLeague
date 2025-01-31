@@ -107,7 +107,8 @@ def get_stats(rows = None,
               tournament = None,
               league = None,
               player = None,
-              totals = []):
+              totals = [],
+              with_game_score = False):
     stats = {}
     if (field in EMPTY_VALUES or rows in EMPTY_VALUES):
         return stats
@@ -129,30 +130,59 @@ def get_stats(rows = None,
             if (total < 1):
                 row_stats = dict(total=total,
                                  score=None,
-                                 relative_score=None)
+                                 relative_score=None,
+                                 total_with_game_score=None,
+                                 game_score=None,
+                                 average_game_score=None)
             else:
                 row_stats = participations.exclude(tournament_score=None) \
                                           .aggregate(score=Sum('tournament_score', default=0))
                 row_stats['total'] = total
                 row_stats['relative_score'] = row_stats['score'] / total * 100
+                if (with_game_score):
+                    row_game_score_stats = \
+                        participations.exclude(Q(game_score=None) | (~Q(dominance=None) & ~Q(dominance="")) | ~Q(coalition=None)) \
+                                      .aggregate(total_with_game_score=Count('id'), game_score=Sum('game_score', default=0))
+                    row_stats.update(row_game_score_stats)
+                    if (row_stats['total_with_game_score'] < 1):
+                        row_stats['average_game_score'] = None
+                    else:
+                        row_stats['average_game_score'] = row_stats['game_score'] / row_stats['total_with_game_score']
             row_stats['name'] = row_name
             stats[row] = row_stats
         for total_key, total_name, summed_rows in totals:
             total = 0
             score = Decimal(0)
-            relative_score = None
+            relative_score = Decimal(0)
+            total_with_game_score = 0
+            game_score = Decimal(0)
+            average_game_score = Decimal(0)
             for row in summed_rows:
                 total += stats[row]['total']
                 if (stats[row]['score'] is not None):
                     score += stats[row]['score']
+                if (with_game_score):
+                    if (stats[row]['total_with_game_score'] is not None):
+                        total_with_game_score += stats[row]['total_with_game_score']
+                    if (stats[row]['game_score'] is not None):
+                        game_score += stats[row]['game_score']
             if (total >= 1):
                 relative_score = score / total * 100
             else:
                 score = None
+                relative_score = None
+            if (total_with_game_score >= 1):
+                average_game_score = game_score / total_with_game_score
+            else:
+                game_score = None
+                average_game_score = None
             row_stats = dict(name=total_name,
                              total=total,
                              score=score,
-                             relative_score=relative_score)
+                             relative_score=relative_score,
+                             total_with_game_score=total_with_game_score,
+                             game_score=game_score,
+                             average_game_score=average_game_score)
             stats[total_key] = row_stats
     except (AttributeError, FieldDoesNotExist):
         stats = {}
@@ -165,7 +195,8 @@ def stats(request,
           rows = None,
           field = None,
           stats_name = None,
-          totals = []):
+          totals = [],
+          with_game_score = False):
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
@@ -185,7 +216,8 @@ def stats(request,
                       tournament=tournament,
                       league=league,
                       player=player,
-                      totals=totals)
+                      totals=totals,
+                      with_game_score=with_game_score)
     cleaned_stats = []
     for row in stats.values():
         total = row.get('total', 0)
@@ -214,6 +246,8 @@ def stats(request,
     else:
         extra_context['stats_title'] = stats_name + " " + _("stats")
         extra_context['stats_name'] = stats_name
+    extra_context['with_game_score'] = with_game_score
+
     extra_context['league_url'] = 'league:league_' + field + '_stats'
     extra_context['tournament_url'] = 'league:tournament_' + field + '_stats'
     extra_context['global_url'] = 'league:global_' + field + '_stats'
@@ -238,7 +272,8 @@ def faction_stats(request,
                  rows=FACTIONS,
                  field='faction',
                  stats_name=_('Faction'),
-                 totals=totals)
+                 totals=totals,
+                 with_game_score=True)
 
 def tournament_faction_stats(request,
                              tournament_id = None):
