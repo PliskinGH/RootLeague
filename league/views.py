@@ -69,6 +69,7 @@ def leaderboard(request,
     extra_context = get_dropdown_menu(tournament=tournament,
                                       league=league)
     extra_context['min_games'] = min_games
+    extra_context['global_url'] = 'league:global_leaderboard'
 
     if (ordering is None):
         ordering = ['-relative_score', '-score', '-total']
@@ -215,6 +216,7 @@ def stats(request,
         extra_context['stats_name'] = stats_name
     extra_context['league_url'] = 'league:league_' + field + '_stats'
     extra_context['tournament_url'] = 'league:tournament_' + field + '_stats'
+    extra_context['global_url'] = 'league:global_' + field + '_stats'
 
     return TemplateView.as_view(template_name='league/stats.html',
                                 extra_context=extra_context
