@@ -1,0 +1,29 @@
+{% load static %}
+
+{% load i18n %}
+
+<div class="row row-cols-auto">
+    <div class="col">
+        {{ name }}
+    </div>
+    <div class="col">
+        {% if url_get_asc %}
+        {% if sorted and sort_type == 'asc' %}
+        <img src="{% static 'misc/assets/img/icon-asc-primary.svg' %}" alt="" width="20" height="20">
+        {% else %} 
+        <a title="{{_('Sort ascending')}}" href="{% if url_sort_arg %}{% url url_sort url_sort_arg %}{% else %}{% url url_sort %}{% endif %}{{ url_get_asc }}">
+            <img src="{% static 'misc/assets/img/icon-asc-secondary.svg' %}" alt="" width="20" height="20">
+        </a>
+        {% endif %}
+        {% endif %}
+        {% if url_get_desc %}
+        {% if sorted and sort_type == 'desc'  %}
+        <img src="{% static 'misc/assets/img/icon-desc-primary.svg' %}" alt="" width="20" height="20">
+        {% else %} 
+        <a title="{{_('Sort descending')}}" href="{% if url_sort_arg %}{% url url_sort url_sort_arg %}{% else %}{% url url_sort %}{% endif %}{{ url_get_desc }}">
+            <img src="{% static 'misc/assets/img/icon-desc-secondary.svg' %}" alt="" width="20" height="20">
+        </a>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>

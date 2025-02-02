@@ -16,7 +16,7 @@ from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_
 from league.models import Tournament
 from league.views import get_league, get_tournament, get_dropdown_menu, get_title
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
-from misc.views import SearchableElidedListView
+from misc.views import ImprovedListView
 
 # Create your views here.
 
@@ -95,20 +95,20 @@ def listing(request,
     extra_context['display_league_menu'] = use_league_menu
     extra_context['display_edit'] = display_edit
     
-    return SearchableElidedListView.as_view(model=Match,
-                                            queryset=matchs,
-                                            paginate_by=number_per_page,
-                                            search_use_q=use_search,
-                                            current_url=current_url,
-                                            current_url_arg=current_url_arg,
-                                            search_placeholder=search_placeholder,
-                                            search_fields = ['title',
-                                                             'participants__player__in_game_name',
-                                                             'participants__player__username',
-                                                             'participants__player__discord_name'],
-                                            title=title,
-                                            extra_context=extra_context,
-                                           )(request)
+    return ImprovedListView.as_view(model=Match,
+                                    queryset=matchs,
+                                    paginate_by=number_per_page,
+                                    search_use_q=use_search,
+                                    current_url=current_url,
+                                    current_url_arg=current_url_arg,
+                                    search_placeholder=search_placeholder,
+                                    search_fields = ['title',
+                                                     'participants__player__in_game_name',
+                                                     'participants__player__username',
+                                                     'participants__player__discord_name'],
+                                    title=title,
+                                    extra_context=extra_context,
+                                    )(request)
 
 def league_listing(request,
                    league_id = None,

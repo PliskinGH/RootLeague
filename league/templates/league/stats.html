@@ -32,12 +32,52 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">{{ stats_name }}</th>
-      <th scope="col">{{_("Total Games")}}</th>
-      <th scope="col">{{_("Total Score")}}</th>
-      <th scope="col">{{_("Relative Score")}}</th>
+      <th scope="col">
+        {% include 'misc/sorting.html' with name=stats_name
+                                            sorted=sort_helper.is_sorted_by_name
+                                            sort_type=sort_helper.initial_sort_type
+                                            url_sort=url_sort
+                                            url_sort_arg=url_sort_arg
+                                            url_get_asc=sort_helper.get_sort_query_by_name_asc
+                                            url_get_desc=sort_helper.get_sort_query_by_name_desc only %}
+      </th>
+      <th scope="col">
+        {% include 'misc/sorting.html' with name=_("Total Games")
+                                            sorted=sort_helper.is_sorted_by_total
+                                            sort_type=sort_helper.initial_sort_type
+                                            url_sort=url_sort
+                                            url_sort_arg=url_sort_arg
+                                            url_get_asc=sort_helper.get_sort_query_by_total_asc
+                                            url_get_desc=sort_helper.get_sort_query_by_total_desc only %}
+      </th>
+      <th scope="col">
+        {% include 'misc/sorting.html' with name=_("Total Score")
+                                            sorted=sort_helper.is_sorted_by_score
+                                            sort_type=sort_helper.initial_sort_type
+                                            url_sort=url_sort
+                                            url_sort_arg=url_sort_arg
+                                            url_get_asc=sort_helper.get_sort_query_by_score_asc
+                                            url_get_desc=sort_helper.get_sort_query_by_score_desc only %}
+      </th>
+      <th scope="col">
+        {% include 'misc/sorting.html' with name=_("Relative Score")
+                                            sorted=sort_helper.is_sorted_by_relative_score
+                                            sort_type=sort_helper.initial_sort_type
+                                            url_sort=url_sort
+                                            url_sort_arg=url_sort_arg
+                                            url_get_asc=sort_helper.get_sort_query_by_relative_score_asc
+                                            url_get_desc=sort_helper.get_sort_query_by_relative_score_desc only %}
+      </th>
       {% if with_game_score %}
-      <th scope="col">{{_("Average Game Score")}}</th>
+      <th scope="col">
+        {% include 'misc/sorting.html' with name=_("Average Game Score")
+                                            sorted=sort_helper.is_sorted_by_average_game_score
+                                            sort_type=sort_helper.initial_sort_type
+                                            url_sort=url_sort
+                                            url_sort_arg=url_sort_arg
+                                            url_get_asc=sort_helper.get_sort_query_by_average_game_score_asc
+                                            url_get_desc=sort_helper.get_sort_query_by_average_game_score_desc only %}
+      </th>
       {% endif %}
     </tr>
   </thead>
@@ -66,7 +106,7 @@
     </tr>
     {% empty %}
     <tr>
-      <th scope="row" colspan="4" class="text-center">{{ _("Nothing to display.") }}</th>
+      <th scope="row" colspan="{% if with_game_score %}5{% else %}4{% endif %}" class="text-center">{{ _("Nothing to display.") }}</th>
     </tr>
     {% endfor %}
   </tbody>

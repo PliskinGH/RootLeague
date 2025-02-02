@@ -27,7 +27,10 @@
 {% endif %}
 
 {% if display_search %}
-{% include 'matchmaking/search_form.html' with url_search=url_search %}
+{% include 'matchmaking/search_form.html' with url_search=url_search
+                                               url_search_arg=url_search_arg
+                                               search_placeholder=search_placeholder
+                                               search_query=search_query only %}
 {% endif %}
 
 <div class="table-responsive">

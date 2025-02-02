@@ -11,7 +11,7 @@ from .models import League, Tournament
 from .forms import PlayerInStatsForm
 from authentification.models import Player
 from matchmaking.models import Participant
-from misc.views import SearchableElidedListView
+from misc.views import ImprovedListView
 from .constants import FACTIONS, TURN_ORDERS, VAGABOND
 
 # Create your views here.
@@ -75,14 +75,14 @@ def leaderboard(request,
         ordering = ['-relative_score', '-score', '-total']
     ordering += ['in_game_name', 'in_game_id', 'pk']
     
-    return SearchableElidedListView.as_view(model=Player,
-                                            queryset=players,
-                                            template_name='league/leaderboard.html',
-                                            paginate_by=number_per_page,
-                                            title=title,
-                                            ordering=ordering,
-                                            extra_context=extra_context
-                                           )(request)
+    return ImprovedListView.as_view(model=Player,
+                                    queryset=players,
+                                    template_name='league/leaderboard.html',
+                                    paginate_by=number_per_page,
+                                    title=title,
+                                    ordering=ordering,
+                                    extra_context=extra_context
+                                    )(request)
 
 def league_leaderboard(request,
                        league_id = None,
@@ -196,7 +196,10 @@ def stats(request,
           field = None,
           stats_name = None,
           totals = [],
-          with_game_score = False):
+          with_game_score = False,
+          sort_fields = None,
+          current_url = '',
+          current_url_arg = ''):
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
@@ -238,28 +241,35 @@ def stats(request,
         extra_context['player'] = player
         extra_context['player_get_param'] = "?player=" + str(player.id)
     
-    extra_context['stats'] = cleaned_stats
-    extra_context['title'] = title
     if (stats_name in EMPTY_VALUES):
         extra_context['stats_title'] = _("Stats")
         extra_context['stats_name'] = ""
     else:
         extra_context['stats_title'] = stats_name + " " + _("stats")
         extra_context['stats_name'] = stats_name
+
     extra_context['with_game_score'] = with_game_score
 
     extra_context['league_url'] = 'league:league_' + field + '_stats'
     extra_context['tournament_url'] = 'league:tournament_' + field + '_stats'
     extra_context['global_url'] = 'league:global_' + field + '_stats'
 
-    return TemplateView.as_view(template_name='league/stats.html',
-                                extra_context=extra_context
-                                )(request)
+    return ImprovedListView.as_view(queryset=cleaned_stats,
+                                    template_name='league/stats.html',
+                                    title=title,
+                                    context_object_name='stats',
+                                    sort_fields=sort_fields,
+                                    current_url=current_url,
+                                    current_url_arg=current_url_arg,
+                                    extra_context=extra_context
+                                   )(request)
 
 def faction_stats(request,
                   league = None,
                   tournament = None,
-                  title = None):
+                  title = None,
+                  current_url = 'league:global_faction_stats',
+                  current_url_arg = ''):
     all_vagabonds = [key for (key, _) in FACTIONS if VAGABOND in key]
     all_factions = [key for (key, _) in FACTIONS]
     totals = []
@@ -273,23 +283,44 @@ def faction_stats(request,
                  field='faction',
                  stats_name=_('Faction'),
                  totals=totals,
-                 with_game_score=True)
+                 with_game_score=True,
+                 sort_fields=['name', 'total', 'score', 'relative_score', 'average_game_score'],
+                 current_url=current_url,
+                 current_url_arg=current_url_arg)
 
 def tournament_faction_stats(request,
                              tournament_id = None):
     tournament = get_tournament(tournament_id)
-    return faction_stats(request, tournament=tournament)
+    current_url = 'league:default_tournament_faction_stats'
+    current_url_arg = ''
+    if (tournament is not None):
+        current_url = 'league:tournament_faction_stats'
+        current_url_arg = tournament.id
+    return faction_stats(request,
+                         tournament=tournament,
+                         current_url=current_url,
+                         current_url_arg=current_url_arg)
 
 def league_faction_stats(request,
                          league_id = None):
     league = get_league(league_id)
-    return faction_stats(request, league=league)
+    current_url = 'league:default_faction_stats'
+    current_url_arg = ''
+    if (league is not None):
+        current_url = 'league:league_faction_stats'
+        current_url_arg = league.id
+    return faction_stats(request,
+                         league=league,
+                         current_url=current_url,
+                         current_url_arg=current_url_arg)
 
 def turn_order_stats(request,
                      league = None,
                      tournament = None,
                      max_number_players = None,
-                     title = None):
+                     title = None,
+                     current_url = 'league:global_turn_order_stats',
+                     current_url_arg = ''):
     turn_orders_list = TURN_ORDERS
     if (max_number_players is not None
         and max_number_players >= 1
@@ -301,7 +332,9 @@ def turn_order_stats(request,
                  title=title,
                  rows=turn_orders_list,
                  field='turn_order',
-                 stats_name=_('Turn order'))
+                 stats_name=_('Turn order'),
+                 current_url=current_url,
+                 current_url_arg=current_url_arg)
 
 def tournament_turn_order_stats(request,
                                 tournament_id = None):
@@ -309,8 +342,15 @@ def tournament_turn_order_stats(request,
     max_number_players = None
     if (tournament is not None):
         max_number_players = tournament.max_players_per_game
+    current_url = 'league:default_tournament_turn_order_stats'
+    current_url_arg = ''
+    if (tournament is not None):
+        current_url = 'league:tournament_turn_order_stats'
+        current_url_arg = tournament.id
     return turn_order_stats(request, tournament=tournament,
-                            max_number_players=max_number_players)
+                            max_number_players=max_number_players,
+                            current_url=current_url,
+                            current_url_arg=current_url_arg)
 
 def league_turn_order_stats(request,
                             league_id = None):
@@ -318,8 +358,15 @@ def league_turn_order_stats(request,
     max_number_players = None
     if (league is not None):
         max_number_players = league.max_players_per_game
+    current_url = 'league:default_turn_order_stats'
+    current_url_arg = ''
+    if (league is not None):
+        current_url = 'league:league_turn_order_stats'
+        current_url_arg = league.id
     return turn_order_stats(request, league=league,
-                            max_number_players=max_number_players)
+                            max_number_players=max_number_players,
+                            current_url=current_url,
+                            current_url_arg=current_url_arg)
 
 def get_tournament(tournament_id = None):
     tournaments = None
