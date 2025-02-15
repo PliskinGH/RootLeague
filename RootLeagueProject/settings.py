@@ -181,6 +181,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_URL = '/auth/'
 LOGIN_REDIRECT_URL = 'index'
 AUTH_USER_MODEL = 'authentification.Player'
+AUTHENTICATION_BACKENDS = ['authentification.backends.EmailBackend']
 
 
 # Internationalization

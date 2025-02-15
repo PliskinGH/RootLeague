@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django_select2 import forms as s2forms
+from django.utils.text import capfirst
 
 from misc.forms import NonPrimarySubmit
 
@@ -35,9 +36,13 @@ class PlayerProfileEditForm(forms.ModelForm):
                 'in_game_name', 'in_game_id')
 
 class PlayerLoginForm(AuthenticationForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        UserModel = get_user_model()
+        self.email_field = UserModel._meta.get_field(UserModel.EMAIL_FIELD)
+        self.fields["username"].label = capfirst(self.username_field.verbose_name) + \
+                                        _(" or ") + \
+                                        capfirst(self.email_field.verbose_name)
         self.helper = FormHelper()
         self.helper.add_input(NonPrimarySubmit("submit", _("Log in"), css_class="btn-outline-secondary"))
 
