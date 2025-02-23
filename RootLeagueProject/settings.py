@@ -233,6 +233,9 @@ CACHES = {
 # Set the cache backend to select2
 SELECT2_CACHE_BACKEND = 'select2'
 
+# IMPORT EXPORT
+IMPORT_EXPORT_SKIP_ADMIN_ACTION_EXPORT_UI = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
