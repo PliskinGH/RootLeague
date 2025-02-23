@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_select2',
     'crispy_formset_modal',
+    'more_admin_filters',
     'import_export',
     'django_admin_inline_paginator',
     "mailer",

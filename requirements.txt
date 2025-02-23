@@ -11,6 +11,7 @@ django-debug-toolbar==4.4.6
 django-extra-views==0.14.0
 django-import-export==4.1.1
 django-mailer==2.3.2
+django-more-admin-filters==1.10
 django-multiselectfield==0.1.13
 django-select2==8.2.1
 django-tinymce==4.1.0

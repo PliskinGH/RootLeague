@@ -10,12 +10,16 @@ from datetime import datetime
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
+from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
+from more_admin_filters.filters import MultiSelectRelatedFilter, MultiSelectFilter
 
 from .models import Match, Participant
 from .forms import ParticipantAdminForm, MatchAdminForm
 from authentification.models import Player
 from league.constants import DECK_EP, DECK_STANDARD, SUIT_BIRD, SUIT_FOX, SUIT_MOUSE, SUIT_RABBIT, TURN_TIMING_LIVE, TURN_TIMING_ASYNC, invert_faction, invert_map
 from league.models import Tournament
+from misc.admin import MultiSelectChoicesFilter
 
 # Mixn
 class AdminURLMixin(object):
@@ -120,6 +124,39 @@ class ParticipantResource(resources.ModelResource):
                 season = getattr(tournament, "name", season)
         return season
 
+class CoalitionListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _("coalition")
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = "coalition"
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return [
+            ("yes", _("Yes")),
+            ("no", _("No")),
+        ]
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == "yes":
+            return queryset.filter(~Q(coalition=None))
+        if self.value() == "no":
+            return queryset.filter(coalition=None)
 
 @admin.register(Participant)
 class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
@@ -128,6 +165,16 @@ class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
     fields = ['player', 'match', 'turn_order', 'faction',
               'game_score', 'dominance', 'coalition',
               'tournament_score']
+    list_filter = ['match__date_registered', 'match__date_closed',
+                   ('match__tournament', MultiSelectRelatedFilter),
+                   ('match__board_map', MultiSelectChoicesFilter),
+                   ('match__deck', MultiSelectChoicesFilter),
+                   'match__random_suits',
+                   ('faction', MultiSelectChoicesFilter),
+                   ('tournament_score', MultiSelectFilter),
+                   ('turn_order', MultiSelectChoicesFilter),
+                   ('dominance', MultiSelectChoicesFilter),
+                   CoalitionListFilter]
     autocomplete_fields = ['player']
     readonly_fields = ['match']
     resource_classes = [ParticipantResource]
