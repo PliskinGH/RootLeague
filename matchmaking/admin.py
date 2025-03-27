@@ -493,6 +493,9 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
     list_filter = ['date_registered', 'date_modified', 'date_closed',
                    'tournament',
                    'board_map', 'deck', 'random_suits']
+    list_display = ['title', 'date_registered', 'date_closed',
+                   'tournament',
+                   'board_map', 'deck', 'random_suits']
     autocomplete_fields = ['submitted_by', 'tournament']
     readonly_fields = ['date_registered', 'date_modified']
     resource_classes = [MatchResource]

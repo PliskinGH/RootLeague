@@ -11,8 +11,9 @@
 
 {% block content %}
 
-{% if display_edit %}
+{% if display_edit or user.is_staff  %}
 <div class="row row-cols-auto btn-group" role="group">
+  {% if display_edit %}
   <div class="dropdown col mx-auto">
     <a href="{% url 'match:update' match_id=object.id %}" class="btn btn-outline-primary">
       {{ _('Update results') }}
@@ -23,6 +24,14 @@
       {{ _('Delete match') }}
     </a>
   </div>
+  {% endif %}
+  {% if user.is_staff  %}
+  <div class="dropdown col mx-auto">
+    <a href="{% url 'admin:matchmaking_match_change' object.id %}" class="btn btn-outline-info">
+      {{ _('Admin page') }}
+    </a>
+  </div>
+  {% endif %}
 </div>
 
 <br />

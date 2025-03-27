@@ -73,6 +73,9 @@
                             <a class="dropdown-item" href="{% url 'match:submissions' %}">{{_("Submitted games")}}</a>
                             <a class="dropdown-item" href="{% url 'match:played_games' %}">{{_("Played games")}}</a>
                             <a class="dropdown-item" href="{% url 'auth:profile' %}">{{_("Profile")}}</a>
+                            {%  if user.is_staff %}
+                            <a class="dropdown-item" href="{% url 'admin:index' %}">{{_("Admin")}}</a>
+                            {% endif %}
                         </div>
                     </li>
                     <li class="nav-item mx-auto px-lg-2 px-xl-4">
