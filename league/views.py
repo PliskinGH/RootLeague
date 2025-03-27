@@ -45,6 +45,7 @@ def leaderboard(request,
     else:
         players = players.annotate(total=Count('participations', distinct=True,
                                                filter=~Q(participations__match__date_closed=None)))
+        min_games = max(10, min_games) # TODO user choice
     players = players.exclude(Q(total=None) | Q(total__lt=min_games))
 
     if (tournament not in EMPTY_VALUES):
