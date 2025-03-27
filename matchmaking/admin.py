@@ -43,6 +43,7 @@ class ParticipantResource(resources.ModelResource):
     clearing_distribution = Field(attribute='clearing_distribution', column_name="Clearing Distribution")
     deck = Field(attribute='deck', column_name="Deck")
     undrafted_faction = Field(attribute='undrafted_faction', column_name="Undrafted Faction")
+    turn_timing = Field(attribute='turn_timing', column_name="Turn Timing")
     dom_coal = Field(attribute='dom_coal', column_name="Dom/Coal")
     season = Field(attribute='season', column_name="Season")
 
@@ -50,7 +51,7 @@ class ParticipantResource(resources.ModelResource):
         return ('game_id', 'timestamp', 'player', 'faction', 'turn_order',
                 'game_score', 'tournament_score', 'board_map',
                 'clearing_distribution', 'deck', 'undrafted_faction',
-                'dom_coal', 'season')
+                'turn_timing', 'dom_coal', 'season')
 
     class Meta:
         model = Participant
@@ -104,6 +105,13 @@ class ParticipantResource(resources.ModelResource):
         if (match is not None):
             undrafted_faction = match.get_undrafted_faction_display()
         return undrafted_faction
+
+    def dehydrate_turn_timing(self, participant):
+        turn_timing = ""
+        match = getattr(participant, "match", None)
+        if (match is not None):
+            turn_timing = match.get_turn_timing_display()
+        return turn_timing
 
     def dehydrate_dom_coal(self, participant):
         dom_coal = ""
@@ -170,11 +178,14 @@ class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
                    ('match__board_map', MultiSelectChoicesFilter),
                    ('match__deck', MultiSelectChoicesFilter),
                    'match__random_suits',
+                   ('match__turn_timing', MultiSelectChoicesFilter),
                    ('faction', MultiSelectChoicesFilter),
                    ('tournament_score', MultiSelectFilter),
                    ('turn_order', MultiSelectChoicesFilter),
                    ('dominance', MultiSelectChoicesFilter),
                    CoalitionListFilter]
+    list_display = ['player', 'match',
+                    'faction', 'game_score', 'tournament_score', 'turn_order']
     autocomplete_fields = ['player']
     readonly_fields = ['match']
     resource_classes = [ParticipantResource]
