@@ -4,6 +4,8 @@
 
 {% load i18n %}
 
+{% load flatpages %}
+
 {% load crispy_forms_tags %}
 
 {% block extra-css %}
@@ -14,11 +16,26 @@
 {% endblock %}
 
 {% block form_header %}
+
 {% if form.is_valid %}
   {% for formset in inlines %}
     {{ formset|as_crispy_errors }}
   {% endfor %}
 {% endif %}
+
+{% get_flatpages '/about/rules/' for request.user as rules_pages  %}
+{% if rules_pages  %}
+  {% for rules_page in rules_pages %}
+    {% if forloop.first %}
+      <p>
+        {% blocktrans with rules_url=rules_page.get_absolute_url %}
+        Please make sure to read the <a href="{{ rules_url }}">rules</a> before submitting a game.
+        {% endblocktrans %}
+      </p>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
 {% endblock form_header %}
 
 {% block extra-js %}
