@@ -184,7 +184,7 @@ class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
                    ('turn_order', MultiSelectChoicesFilter),
                    ('dominance', MultiSelectChoicesFilter),
                    CoalitionListFilter]
-    list_display = ['player', 'match',
+    list_display = ['player', 'match', 'match__date_closed',
                     'faction', 'game_score', 'tournament_score', 'turn_order']
     autocomplete_fields = ['player']
     readonly_fields = ['match']
