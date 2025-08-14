@@ -110,6 +110,7 @@ class Participant(models.Model):
                                  verbose_name=_('dominance'))
     coalition = models.OneToOneField('Participant', on_delete=models.SET_NULL,
                                      null=True, blank=True,
+                                     related_name="coalitioned_vagabond",
                                      verbose_name=_('coalition'))
     tournament_score = models.DecimalField(max_digits=3, decimal_places=2,
                                            null=True, blank=True, default=0.,

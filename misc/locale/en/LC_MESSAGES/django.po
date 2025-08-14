@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 16:36+0100\n"
+"POT-Creation-Date: 2025-08-14 18:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,63 +18,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: .\misc\admin.py:67
+msgid "All"
+msgstr ""
+
 #: .\misc\apps.py:6
 msgid "miscellaneous"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:12 .\misc\templates\misc\base.html:27
+#: .\misc\templates\flatpages\default.html:8
+msgid "Root Digital league"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:14 .\misc\templates\misc\base.html:29
 msgid "ROOT Digital League"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:26
+#: .\misc\templates\misc\base.html:28
 msgid "An unofficial game tracking and ranking"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:36
+#: .\misc\templates\misc\base.html:37
 msgid "Match list"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:37
+#: .\misc\templates\misc\base.html:38
 msgid "Register match"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:38
+#: .\misc\templates\misc\base.html:39
 msgid "Leaderboard"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:41
+#: .\misc\templates\misc\base.html:42
 msgid "Stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:44
+#: .\misc\templates\misc\base.html:45
 msgid "Faction stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:45
+#: .\misc\templates\misc\base.html:46
 msgid "Turn order stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:52
+#: .\misc\templates\misc\base.html:57 .\misc\templates\misc\base.html:66
 msgid "About"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:55
+#: .\misc\templates\misc\base.html:71
 msgid "Account"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:60
+#: .\misc\templates\misc\base.html:74
+msgid "Submitted games"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:75
+msgid "Played games"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:76
+msgid "Profile"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:78
+msgid "Admin"
+msgstr ""
+
+#: .\misc\templates\misc\base.html:85
 msgid "Log out"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:65
+#: .\misc\templates\misc\base.html:90
 msgid "Log in"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:68
+#: .\misc\templates\misc\base.html:93
 msgid "Sign up"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:105
+#: .\misc\templates\misc\base.html:124
 msgid ""
 "\n"
 "                    Contributions and bug reports are welcome on <a "
@@ -82,11 +106,19 @@ msgid ""
 "                    "
 msgstr ""
 
-#: .\misc\templates\misc\base.html:110
+#: .\misc\templates\misc\base.html:129
 msgid ""
 "\n"
 "                    To join league games, visit the official Root <a "
 "href=\"https://discord.gg/woodland-warriors-476234833572397056\">Discord "
 "server</a>.\n"
 "                    "
+msgstr ""
+
+#: .\misc\templates\misc\sorting.html:14
+msgid "Sort ascending"
+msgstr ""
+
+#: .\misc\templates\misc\sorting.html:23
+msgid "Sort descending"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 16:36+0100\n"
+"POT-Creation-Date: 2025-08-14 18:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,24 +18,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: .\authentification\admin.py:18 .\authentification\admin.py:39
+msgid "Personal info"
+msgstr ""
+
+#: .\authentification\admin.py:20 .\authentification\admin.py:41
+msgid "Permissions"
+msgstr ""
+
+#: .\authentification\admin.py:29
+msgid "Important dates"
+msgstr ""
+
 #: .\authentification\apps.py:6
 msgid "authentication"
 msgstr ""
 
-#: .\authentification\forms.py:17
+#: .\authentification\forms.py:18
 msgid "Sign up"
 msgstr ""
 
-#: .\authentification\forms.py:30 .\authentification\forms.py:49
-#: .\authentification\forms.py:85
+#: .\authentification\forms.py:31 .\authentification\forms.py:54
+#: .\authentification\forms.py:91
 msgid "Save"
 msgstr ""
 
-#: .\authentification\forms.py:42 .\authentification\views.py:19
+#: .\authentification\forms.py:44
+msgid " or "
+msgstr ""
+
+#: .\authentification\forms.py:47 .\authentification\views.py:19
 msgid "Log in"
 msgstr ""
 
-#: .\authentification\forms.py:56
+#: .\authentification\forms.py:61
 msgid "Send confirmation"
 msgstr ""
 
@@ -97,6 +113,18 @@ msgstr ""
 #: .\authentification\templates\authentification\password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_password_reset_form.html:11
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: .\authentification\templates\authentification\player_password_reset_form.html:17
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
 msgstr ""
 
 #: .\authentification\views.py:17

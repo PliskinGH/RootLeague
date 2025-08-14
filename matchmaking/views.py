@@ -333,6 +333,11 @@ class EditMatchViewMixin(object):
                     for candidate in participants:
                         if (candidate is not None and candidate.turn_order == turn_coalitioned):
                             in_coalition = True
+                            original_vagabond = getattr(candidate, 'coalitioned_vagabond', None)
+                            if (original_vagabond is not None and
+                                original_vagabond != participant):
+                                original_vagabond.coalition = None
+                                original_vagabond.save()
                             participant.coalition = candidate
                             participant.save()
                             break

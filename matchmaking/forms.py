@@ -193,7 +193,36 @@ class ParticipantFormSet(BaseInlineFormSet):
                        and not f.cleaned_data.get('DELETE', False)]
             errors = []
 
+            is_closed = False   
+            coalition_allowed = None
+            three_coal_allowed = None
+            total_score_allowed = None
+            win_score = None
+            coal_mult = None
+
+            coals = []
+            turn_orders = set()
+            for f in forms:
+                if (f.data.get('closed', None) == 'on'):
+                    is_closed = True
+                coal = f.cleaned_data.get('coalitioned_player', None)
+                if (coal not in EMPTY_VALUES):
+                    coals.append(int(coal))
+                turn_order = f.cleaned_data.get('turn_order', None)
+                turn_orders.add(turn_order)
+
             nb_participants = len(forms)
+            legal_turn_orders = {i for i in range(1, nb_participants+1)}
+            if (is_closed and turn_orders != legal_turn_orders):
+                errors.append(
+                    ValidationError(
+                    _("Turn orders are wrong.\
+                       Please check again that they are consistent and\
+                       between %(min_nb_participants)d and %(nb_participants)d."),
+                    code="error_turn_order",
+                    params={'nb_participants' : nb_participants,
+                            'min_nb_participants' : 1}))
+
             if (self.instance.tournament is not None):
                 max_nb_participants = self.instance.tournament.max_players_per_game
                 if (max_nb_participants is not None):
@@ -211,137 +240,133 @@ class ParticipantFormSet(BaseInlineFormSet):
                             _("This tournament does not allow fewer than %(min_nb)d players per game."),
                             code="error_min_nb",
                             params={'min_nb' : min_nb_participants})) 
-
-                is_closed = False        
+     
                 coalition_allowed = self.instance.tournament.coalition_allowed
                 three_coal_allowed = self.instance.tournament.three_coalition_allowed
                 total_score_allowed = self.instance.tournament.total_score_per_game
                 win_score = self.instance.tournament.win_score
                 coal_mult = self.instance.tournament.coalition_score_multiplier
 
-                coals = []
-                for f in forms:
-                    if (f.data.get('closed', None) == 'on'):
-                        is_closed = True
-                    coal = f.cleaned_data.get('coalitioned_player', None)
-                    if (coal not in EMPTY_VALUES):
-                        coals.append(int(coal))
-
-                index_f = 0
-                total_score = 0
-                for f in forms:
-                    index_f += 1
-                    player = f.cleaned_data.get('player', None)
-                    score = f.cleaned_data.get('tournament_score', None)
-                    if (score not in EMPTY_VALUES):
-                        total_score += score
-                    game_score = f.cleaned_data.get('game_score', None)
-                    coal = f.cleaned_data.get('coalitioned_player', None)
-                    in_coal = index_f in coals or coal not in EMPTY_VALUES
-                    dominance = f.cleaned_data.get('dominance', None)
-                    faction = f.cleaned_data.get('faction', None)
-                    is_vagabond = faction not in EMPTY_VALUES and VAGABOND in faction
-                    if (player in EMPTY_VALUES and is_closed):
-                        # Required field if game closed
-                        errors.append(
-                            ValidationError(
-                            _("Player %(index_player)i must be defined, if the game is closed."),
-                            code="error_required_splayer",
-                            params={'index_player' : index_f}))
-                    if (score in EMPTY_VALUES and is_closed):
-                        # Required field if game closed
-                        errors.append(
-                            ValidationError(
-                            _("Player %(index_player)i must have a defined tournament score, if the game is closed."),
-                            code="error_required_score",
-                            params={'index_player' : index_f}))
-                    if (faction in EMPTY_VALUES and is_closed):
-                        # Required field if game closed
-                        errors.append(
-                            ValidationError(
-                            _("A faction must be defined for player %(index_player)i if the game is closed."),
-                            code="error_required_faction",
-                            params={'index_player' : index_f}))
-                    if (game_score in EMPTY_VALUES and
-                        dominance in EMPTY_VALUES and
-                        coal in EMPTY_VALUES and
-                        is_closed):
-                        errors.append(
-                            ValidationError(
-                            _("Player %(index_player)i must have a defined game score, coalition or dominance, if the game is closed."),
-                            code="error_score_coal_dom",
-                            params={'index_player' : index_f}))
-                    if (game_score not in EMPTY_VALUES):
-                        if (coal not in EMPTY_VALUES):
-                            errors.append(
-                                ValidationError(
-                                _("Player %(index_player)i cannot both have a game score and be in a coalition."),
-                                code="error_score_coal",
-                                params={'index_player' : index_f})) 
-                        if (dominance not in EMPTY_VALUES):
-                            errors.append(
-                                ValidationError(
-                                _("Player %(index_player)i cannot both play a dominance and have a game score."),
-                                code="error_score_dom",
-                                params={'index_player' : index_f})) 
-                    if (coal not in EMPTY_VALUES and not(is_vagabond)):
-                        errors.append(
-                            ValidationError(
-                            _("Player %(index_player)i is not a vagabond and cannot play a coalition."),
-                            code="error_vb_coal",
-                            params={'index_player' : index_f})) 
-                    if (dominance not in EMPTY_VALUES and is_vagabond):
-                        errors.append(
-                            ValidationError(
-                            _("Player %(index_player)i is a vagabond and cannot play a dominance."),
-                            code="error_vb_dom",
-                            params={'index_player' : index_f})) 
-                    actual_win_score = None
-                    if (win_score not in EMPTY_VALUES):
-                        actual_win_score = win_score
-                        if (coal_mult is not None and
-                            in_coal):
-                            actual_win_score *= coal_mult
-                    if (is_closed and
-                        win_score not in EMPTY_VALUES and
-                        ((game_score not in EMPTY_VALUES and
-                        game_score >= WIN_GAME_SCORE and score != actual_win_score) or
-                        (coal not in EMPTY_VALUES and score != actual_win_score and score != 0))):
-                        if (coal_mult is not None):
-                            coal_win = win_score*coal_mult
-                            errors.append(
-                                ValidationError(
-                                _("Player %(index_player)i does not have a correct tournament score.\
-                                Possible scores: 0 (for a loss), %(win_score)0.2f (for a win) and %(coal_win)0.2f (for a win in coalition)."),
-                                code="error_score",
-                                params={'index_player' : index_f, 'win_score' : win_score, 'coal_win': coal_win})) 
-                        else:
-                            errors.append(
-                                ValidationError(
-                                _("Player %(index_player)i does not have a correct tournament score.\
-                                Possible scores: 0 (for a loss) and %(win_score)0.2f (for a win)."),
-                                code="error_score",
-                                params={'index_player' : index_f, 'win_score' : win_score})) 
-
-                if (is_closed and
-                    total_score_allowed not in EMPTY_VALUES and
-                    total_score != total_score_allowed):
+            index_f = 0
+            total_score = 0
+            for f in forms:
+                index_f += 1
+                player = f.cleaned_data.get('player', None)
+                score = f.cleaned_data.get('tournament_score', None)
+                if (score not in EMPTY_VALUES):
+                    total_score += score
+                game_score = f.cleaned_data.get('game_score', None)
+                coal = f.cleaned_data.get('coalitioned_player', None)
+                in_coal = index_f in coals or coal not in EMPTY_VALUES
+                in_3way_coal = index_f in coals and coal not in EMPTY_VALUES
+                dominance = f.cleaned_data.get('dominance', None)
+                faction = f.cleaned_data.get('faction', None)
+                is_vagabond = faction not in EMPTY_VALUES and VAGABOND in faction
+                if (player in EMPTY_VALUES and is_closed):
+                    # Required field if game closed
                     errors.append(
                         ValidationError(
-                        _("The total score should be %(total)0.2f."),
-                        code="error_total_score",
-                        params={'total' : total_score_allowed})) 
-                if (coalition_allowed is False or three_coal_allowed is False):
-                    if (len(coals) >= 1 and coalition_allowed is False):
+                        _("Player %(index_player)i must be defined, if the game is closed."),
+                        code="error_required_splayer",
+                        params={'index_player' : index_f}))
+                if (score in EMPTY_VALUES and is_closed):
+                    # Required field if game closed
+                    errors.append(
+                        ValidationError(
+                        _("Player %(index_player)i must have a defined tournament score, if the game is closed."),
+                        code="error_required_score",
+                        params={'index_player' : index_f}))
+                if (faction in EMPTY_VALUES and is_closed):
+                    # Required field if game closed
+                    errors.append(
+                        ValidationError(
+                        _("A faction must be defined for player %(index_player)i if the game is closed."),
+                        code="error_required_faction",
+                        params={'index_player' : index_f}))
+                if (game_score in EMPTY_VALUES and
+                    dominance in EMPTY_VALUES and
+                    coal in EMPTY_VALUES and
+                    is_closed):
+                    errors.append(
+                        ValidationError(
+                        _("Player %(index_player)i must have a defined game score, coalition or dominance, if the game is closed."),
+                        code="error_score_coal_dom",
+                        params={'index_player' : index_f}))
+                if (game_score not in EMPTY_VALUES):
+                    if (coal not in EMPTY_VALUES):
                         errors.append(
                             ValidationError(
-                            _("This tournament does not allow coalitions."),
-                            code="error_coal")) 
-                    if (len(coals) >= 2 and three_coal_allowed is False):
+                            _("Player %(index_player)i cannot both have a game score and be in a coalition."),
+                            code="error_score_coal",
+                            params={'index_player' : index_f})) 
+                    if (dominance not in EMPTY_VALUES):
                         errors.append(
                             ValidationError(
-                            _("This tournament does not allow three-way coalitions."),
-                            code="error_three_coal")) 
+                            _("Player %(index_player)i cannot both play a dominance and have a game score."),
+                            code="error_score_dom",
+                            params={'index_player' : index_f})) 
+                if (coal not in EMPTY_VALUES and not(is_vagabond)):
+                    errors.append(
+                        ValidationError(
+                        _("Player %(index_player)i is not a vagabond and cannot play a coalition."),
+                        code="error_vb_coal",
+                        params={'index_player' : index_f})) 
+                if (dominance not in EMPTY_VALUES and is_vagabond):
+                    errors.append(
+                        ValidationError(
+                        _("Player %(index_player)i is a vagabond and cannot play a dominance."),
+                        code="error_vb_dom",
+                        params={'index_player' : index_f})) 
+                actual_win_score = None
+                if (win_score not in EMPTY_VALUES):
+                    actual_win_score = win_score
+                    if (coal_mult is not None and
+                        in_coal):
+                        actual_win_score *= coal_mult
+                if (is_closed and
+                    win_score not in EMPTY_VALUES and
+                    ((game_score not in EMPTY_VALUES and
+                    game_score >= WIN_GAME_SCORE and score != actual_win_score) or
+                    (coal not in EMPTY_VALUES and score != actual_win_score and score != 0))):
+                    if (coal_mult is not None):
+                        coal_win = win_score*coal_mult
+                        errors.append(
+                            ValidationError(
+                            _("Player %(index_player)i does not have a correct tournament score.\
+                            Possible scores: 0 (for a loss), %(win_score)0.2f (for a win) and %(coal_win)0.2f (for a win in coalition)."),
+                            code="error_score",
+                            params={'index_player' : index_f, 'win_score' : win_score, 'coal_win': coal_win})) 
+                    else:
+                        errors.append(
+                            ValidationError(
+                            _("Player %(index_player)i does not have a correct tournament score.\
+                            Possible scores: 0 (for a loss) and %(win_score)0.2f (for a win)."),
+                            code="error_score",
+                            params={'index_player' : index_f, 'win_score' : win_score})) 
+                if (is_closed and in_coal and coalition_allowed is False):
+                    errors.append(
+                        ValidationError(
+                        _("Player %(index_player)i is in a coalition\
+                          but this tournament does not allow coalitions."),
+                        code="error_coal",
+                        params={'index_player' : index_f}))
+                if (is_closed and in_3way_coal and three_coal_allowed is False):
+                    errors.append(
+                        ValidationError(
+                        _("Player %(index_player)i is in a three-way coalition\
+                          but this tournament does not allow three-way coalitions."),
+                        code="error_3way_coal",
+                        params={'index_player' : index_f}))
+
+            if (is_closed and
+                total_score_allowed not in EMPTY_VALUES and
+                total_score != total_score_allowed):
+                errors.append(
+                    ValidationError(
+                    _("The total score should be %(total)0.2f."),
+                    code="error_total_score",
+                    params={'total' : total_score_allowed})) 
+                    
             if (len(errors)):
                 raise ValidationError(errors)
         except AttributeError:
