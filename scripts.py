@@ -128,3 +128,26 @@ def fix_empty_factions(league_name="Legacy", faction=FACTION_OTTERS, test_run=Tr
         print(nbModifications, "participants factions were fixed out of", nbToModif, "possible.\n")
     if (errors):
         print(errors)
+
+def find_wrong_turn_orders():
+    print("#### Starting script ####\n")
+    matches = Match.objects.all()
+    wrong_matches = set()
+    for match in matches:
+        participants = match.participants.all()
+        turn_orders = set()
+        for participant in participants:
+            turn_orders.add(getattr(participant, "turn_order", None))
+        nbParticipants = participants.count()
+        legal_turn_orders = {i for i in range(1, nbParticipants+1)}
+        if (legal_turn_orders != turn_orders):
+            wrong_matches.add(match)
+    nbWrongMatches = len(wrong_matches)
+    if (nbWrongMatches):
+        print(nbWrongMatches, "matches have wrong turn orders:")
+        for match in wrong_matches:
+            print(getattr(match, "id", "Unknown"), " : ", getattr(match, "title", ""))
+    else:
+        print("No match with wrong turn orders was found. All good!")
+    print("\n#### Script ended ####")
+
