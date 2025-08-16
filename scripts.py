@@ -151,3 +151,45 @@ def find_wrong_turn_orders():
         print("No match with wrong turn orders was found. All good!")
     print("\n#### Script ended ####")
 
+def find_wrong_factions():
+    print("#### Starting script ####\n")
+    matches = Match.objects.all()
+    wrong_matches = set()
+    for match in matches:
+        participants = match.participants.all()
+        factions = set()
+        for participant in participants:
+            factions.add(getattr(participant, "faction", None))
+        nbParticipants = participants.count()
+        if (len(factions) != nbParticipants):
+            wrong_matches.add(match)
+    nbWrongMatches = len(wrong_matches)
+    if (nbWrongMatches):
+        print(nbWrongMatches, "matches have wrong factions:")
+        for match in wrong_matches:
+            print(getattr(match, "id", "Unknown"), " : ", getattr(match, "title", ""))
+    else:
+        print("No match with wrong factions was found. All good!")
+    print("\n#### Script ended ####")
+
+def find_wrong_players():
+    print("#### Starting script ####\n")
+    matches = Match.objects.all()
+    wrong_matches = set()
+    for match in matches:
+        participants = match.participants.all()
+        players = set()
+        for participant in participants:
+            players.add(getattr(participant, "player", None))
+        nbParticipants = participants.count()
+        if (len(players) != nbParticipants):
+            wrong_matches.add(match)
+    nbWrongMatches = len(wrong_matches)
+    if (nbWrongMatches):
+        print(nbWrongMatches, "matches have wrong players:")
+        for match in wrong_matches:
+            print(getattr(match, "id", "Unknown"), " : ", getattr(match, "title", ""))
+    else:
+        print("No match with wrong players was found. All good!")
+    print("\n#### Script ended ####")
+

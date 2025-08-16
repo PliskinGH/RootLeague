@@ -202,6 +202,8 @@ class ParticipantFormSet(BaseInlineFormSet):
 
             coals = []
             turn_orders = set()
+            factions = set()
+            players = set()
             for f in forms:
                 if (f.data.get('closed', None) == 'on'):
                     is_closed = True
@@ -210,6 +212,10 @@ class ParticipantFormSet(BaseInlineFormSet):
                     coals.append(int(coal))
                 turn_order = f.cleaned_data.get('turn_order', None)
                 turn_orders.add(turn_order)
+                faction = f.cleaned_data.get('faction', None)
+                factions.add(faction)
+                player = f.cleaned_data.get('player', None)
+                players.add(player)
 
             nb_participants = len(forms)
             legal_turn_orders = {i for i in range(1, nb_participants+1)}
@@ -222,6 +228,20 @@ class ParticipantFormSet(BaseInlineFormSet):
                     code="error_turn_order",
                     params={'nb_participants' : nb_participants,
                             'min_nb_participants' : 1}))
+            if (is_closed and len(factions) != nb_participants):
+                errors.append(
+                    ValidationError(
+                    _("Factions are wrong.\
+                       Please check again that all participants have a defined faction\
+                       with no duplicates."),
+                    code="error_factions"))
+            if (is_closed and len(players) != nb_participants):
+                errors.append(
+                    ValidationError(
+                    _("Something is wrong with the submitted players.\
+                       Please check again that they are all defined\
+                       with no duplicates."),
+                    code="error_players"))
 
             if (self.instance.tournament is not None):
                 max_nb_participants = self.instance.tournament.max_players_per_game

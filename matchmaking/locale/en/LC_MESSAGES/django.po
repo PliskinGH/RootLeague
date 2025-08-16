@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 18:52+0200\n"
+"POT-Creation-Date: 2025-08-16 12:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,7 +84,7 @@ msgstr ""
 msgid "Coalition with"
 msgstr ""
 
-#: .\matchmaking\forms.py:219
+#: .\matchmaking\forms.py:225
 #, python-format
 msgid ""
 "Turn orders are wrong.                       Please check again that they "
@@ -92,64 +92,77 @@ msgid ""
 "%(nb_participants)d."
 msgstr ""
 
-#: .\matchmaking\forms.py:232
+#: .\matchmaking\forms.py:234
+msgid ""
+"Factions are wrong.                       Please check again that all "
+"participants have a defined faction                       with no duplicates."
+msgstr ""
+
+#: .\matchmaking\forms.py:241
+msgid ""
+"Something is wrong with the submitted players.                       Please "
+"check again that they are all defined                       with no "
+"duplicates."
+msgstr ""
+
+#: .\matchmaking\forms.py:252
 #, python-format
 msgid "This tournament does not allow more than %(max_nb)d players per game."
 msgstr ""
 
-#: .\matchmaking\forms.py:240
+#: .\matchmaking\forms.py:260
 #, python-format
 msgid "This tournament does not allow fewer than %(min_nb)d players per game."
 msgstr ""
 
-#: .\matchmaking\forms.py:269
+#: .\matchmaking\forms.py:289
 #, python-format
 msgid "Player %(index_player)i must be defined, if the game is closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:276
+#: .\matchmaking\forms.py:296
 #, python-format
 msgid ""
 "Player %(index_player)i must have a defined tournament score, if the game is "
 "closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:283
+#: .\matchmaking\forms.py:303
 #, python-format
 msgid ""
 "A faction must be defined for player %(index_player)i if the game is closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:292
+#: .\matchmaking\forms.py:312
 #, python-format
 msgid ""
 "Player %(index_player)i must have a defined game score, coalition or "
 "dominance, if the game is closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:299
+#: .\matchmaking\forms.py:319
 #, python-format
 msgid ""
 "Player %(index_player)i cannot both have a game score and be in a coalition."
 msgstr ""
 
-#: .\matchmaking\forms.py:305
+#: .\matchmaking\forms.py:325
 #, python-format
 msgid ""
 "Player %(index_player)i cannot both play a dominance and have a game score."
 msgstr ""
 
-#: .\matchmaking\forms.py:311
+#: .\matchmaking\forms.py:331
 #, python-format
 msgid "Player %(index_player)i is not a vagabond and cannot play a coalition."
 msgstr ""
 
-#: .\matchmaking\forms.py:317
+#: .\matchmaking\forms.py:337
 #, python-format
 msgid "Player %(index_player)i is a vagabond and cannot play a dominance."
 msgstr ""
 
-#: .\matchmaking\forms.py:335
+#: .\matchmaking\forms.py:355
 #, python-format
 msgid ""
 "Player %(index_player)i does not have a correct tournament "
@@ -157,7 +170,7 @@ msgid ""
 "%(win_score)0.2f (for a win) and %(coal_win)0.2f (for a win in coalition)."
 msgstr ""
 
-#: .\matchmaking\forms.py:342
+#: .\matchmaking\forms.py:362
 #, python-format
 msgid ""
 "Player %(index_player)i does not have a correct tournament "
@@ -165,21 +178,21 @@ msgid ""
 "%(win_score)0.2f (for a win)."
 msgstr ""
 
-#: .\matchmaking\forms.py:349
+#: .\matchmaking\forms.py:369
 #, python-format
 msgid ""
 "Player %(index_player)i is in a coalition                          but this "
 "tournament does not allow coalitions."
 msgstr ""
 
-#: .\matchmaking\forms.py:356
+#: .\matchmaking\forms.py:376
 #, python-format
 msgid ""
 "Player %(index_player)i is in a three-way coalition                          "
 "but this tournament does not allow three-way coalitions."
 msgstr ""
 
-#: .\matchmaking\forms.py:366
+#: .\matchmaking\forms.py:386
 #, python-format
 msgid "The total score should be %(total)0.2f."
 msgstr ""
