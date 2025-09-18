@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
+from django.contrib.sitemaps import views as sitemap_views
 
 from matchmaking import views # import views so we can use them in urls.
+from .sitemaps import sitemaps
 
 urlpatterns = [
     path("select2/", include("django_select2.urls")),
@@ -29,6 +31,18 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path("pages/", include("django.contrib.flatpages.urls")),
+    path(
+        "sitemap.xml",
+        sitemap_views.index,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.index",
+    ),
+    path(
+        "sitemap-<section>.xml",
+        sitemap_views.sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
 ]
 
 if settings.DEBUG:
