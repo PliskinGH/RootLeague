@@ -9,6 +9,8 @@
 {% block upper_title %}{{_("Match details")}}{% endblock %}
 {% block lower_title %}{{ object.title }}{% endblock %}
 
+{% block title_page_prefix %}{{_("Match details")}} | {{ object.title }} | {% endblock %}
+
 {% block content %}
 
 {% if display_edit or user.is_staff  %}

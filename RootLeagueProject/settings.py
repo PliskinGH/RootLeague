@@ -210,7 +210,7 @@ TINYMCE_DEFAULT_CONFIG = {
     "menubar": "file edit view insert format tools table help",
     "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
     "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
-    "code,help,wordcount,pagebreak,emoticons",
+    "code,help,wordcount,pagebreak,emoticons,autoresize,powerpaste",
     "toolbar": "undo redo | styles | bold italic underline strikethrough removeformat | "
     "link image | alignleft aligncenter alignright alignjustify | "
     "bullist numlist outdent indent | print preview media fullscreen | "

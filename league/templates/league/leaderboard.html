@@ -5,6 +5,8 @@
 {% block upper_title %}{{_("Leaderboard")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
+{% block title_page_prefix %}{{_("Leaderboard")}} | {{ title }} | {% endblock %}
+
 {% block content %}
 
 {% include 'misc/dropdown_menu.html' with parent=league

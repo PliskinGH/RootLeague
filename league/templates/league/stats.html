@@ -11,6 +11,8 @@
 {% block upper_title %}{{ stats_title }}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
+{% block title_page_prefix %}{{ stats_title }} | {{ title }} | {% endblock %}
+
 {% block content %}
 
 {% include 'misc/dropdown_menu.html' with parent=league
