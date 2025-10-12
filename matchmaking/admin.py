@@ -491,8 +491,11 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
                      'participants__player__discord_name',
                      'participants__player__email']
     list_filter = ['date_registered', 'date_modified', 'date_closed',
-                   'tournament',
-                   'board_map', 'deck', 'random_suits']
+                   ('tournament', MultiSelectRelatedFilter),
+                   ('board_map', MultiSelectChoicesFilter),
+                   ('deck', MultiSelectChoicesFilter),
+                   'random_suits',
+                   ('turn_timing', MultiSelectChoicesFilter)]
     list_display = ['title', 'date_registered', 'date_closed',
                    'tournament',
                    'board_map', 'deck', 'random_suits']

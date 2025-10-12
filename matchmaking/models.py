@@ -55,9 +55,9 @@ class Match(models.Model):
                             blank=True, default=DECK_EP,
                             verbose_name=_('deck'))
     board_map = models.CharField(max_length=20, choices=MAPS,
-                                 blank=True, default=MAP_AUTUMN,
+                                 blank=True,
                                  verbose_name=_('map'))
-    random_suits = models.BooleanField(default=True, blank=True, null=True,
+    random_suits = models.BooleanField(blank=True, null=True,
                                        verbose_name=_('random suits'))
 
     class Meta:
