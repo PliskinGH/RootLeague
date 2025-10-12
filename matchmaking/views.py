@@ -11,8 +11,11 @@ from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
 from django.core.exceptions import PermissionDenied
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from django_filters import rest_framework as filters
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
+from .serializers import MatchSerializer
 from league.models import Tournament
 from league.views import get_league, get_tournament, get_dropdown_menu, get_title
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
@@ -423,3 +426,28 @@ class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMess
     pk_url_kwarg='match_id'
     success_message = _("Match successfully deleted!")
     success_url = reverse_lazy('match:submissions')
+
+class MatchFilter(filters.FilterSet):
+    tournament__name = filters.CharFilter(lookup_expr='icontains')
+
+    participants__coalition = filters.BooleanFilter(method='filter_coalition')
+
+    def filter_coalition(self, queryset, name, value):
+        lookup = '__'.join([name, 'isnull'])
+        return queryset.filter(**{lookup: False})
+
+    class Meta:
+        model = Match
+        fields = ['board_map', 'deck',
+                  'turn_timing', 'game_setup',
+                  'tournament',
+                  'participants__faction',
+                  'participants__dominance',
+                  'participants__coalition']
+
+class MatchViewset(ReadOnlyModelViewSet):
+    serializer_class = MatchSerializer
+    filterset_class = MatchFilter
+ 
+    def get_queryset(self):
+        return Match.objects.exclude(date_closed=None)

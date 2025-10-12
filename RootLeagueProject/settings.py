@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
+    'django_filters',
     'extra_views',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
     'django_admin_inline_paginator',
     "mailer",
     'tinymce',
+    'rest_framework',
     'authentification',
     'matchmaking',
     'league',
@@ -236,6 +238,13 @@ SELECT2_CACHE_BACKEND = 'select2'
 
 # IMPORT EXPORT
 IMPORT_EXPORT_SKIP_ADMIN_ACTION_EXPORT_UI = True
+
+# REST
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 50,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 
 # Static files (CSS, JavaScript, Images)

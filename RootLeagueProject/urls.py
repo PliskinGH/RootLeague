@@ -17,9 +17,14 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
 from django.contrib.sitemaps import views as sitemap_views
+from rest_framework import routers
 
 from matchmaking import views # import views so we can use them in urls.
 from .sitemaps import sitemaps
+
+# DRF rooter
+router = routers.SimpleRouter()
+router.register('match', views.MatchViewset, basename='match')
 
 urlpatterns = [
     path("select2/", include("django_select2.urls")),
@@ -43,6 +48,8 @@ urlpatterns = [
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
     ),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls)),
 ]
 
 if settings.DEBUG:
