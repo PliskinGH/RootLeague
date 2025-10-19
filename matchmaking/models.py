@@ -59,6 +59,23 @@ class Match(models.Model):
                                  verbose_name=_('map'))
     random_suits = models.BooleanField(blank=True, null=True,
                                        verbose_name=_('random suits'))
+    
+    hirelings_a = models.CharField(max_length=200, choices=HIRELINGS,
+                                 blank=True,
+                                 verbose_name=_('hirelings'))
+    hirelings_b = models.CharField(max_length=200, choices=HIRELINGS,
+                                 blank=True,
+                                 verbose_name=_('hirelings bis'))
+    hirelings_c = models.CharField(max_length=200, choices=HIRELINGS,
+                                 blank=True,
+                                 verbose_name=_('hirelings ter'))
+    
+    landmark_a = models.CharField(max_length=200, choices=LANDMARKS,
+                                  blank=True,
+                                  verbose_name=_('landmark'))
+    landmark_b = models.CharField(max_length=200, choices=LANDMARKS,
+                                  blank=True,
+                                  verbose_name=_('landmark bis'))
 
     class Meta:
         verbose_name = _("match")

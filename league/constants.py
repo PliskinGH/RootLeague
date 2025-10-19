@@ -51,44 +51,14 @@ FACTIONS = [
     (VAGABOND_HARRIER, _("Vagabond (Harrier)")),
     ]
 
-def invert_faction(full_name):
-    if (full_name == "Marquise de Cat"):
-        return FACTION_CATS
-    if (full_name == "Eyrie Dynasties"):
-        return FACTION_BIRDS
-    if (full_name == "Woodland Alliance"):
-        return FACTION_ALLIANCE
-    if (full_name == "Riverfolk Company"):
-        return FACTION_OTTERS
-    if (full_name == "Lizard Cult"):
-        return FACTION_LIZARDS
-    if (full_name == "Underground Duchy"):
-        return FACTION_MOLES
-    if (full_name == "Corvid Conspiracy"):
-        return FACTION_CROWS
-    if (full_name == "Lord of the Hundreds"):
-        return FACTION_RATS
-    if (full_name == "Keepers in Iron"):
-        return FACTION_BADGERS
-    if (full_name == "Vagabond (Ranger)"):
-        return VAGABOND_RANGER
-    if (full_name == "Vagabond (Thief)"):
-        return VAGABOND_THIEF
-    if (full_name == "Vagabond (Tinker)"):
-        return VAGABOND_TINKER
-    if (full_name == "Vagabond (Vagrant)"):
-        return VAGABOND_VAGRANT
-    if (full_name == "Vagabond (Arbiter)"):
-        return VAGABOND_ARBITER
-    if (full_name == "Vagabond (Scoundrel)"):
-        return VAGABOND_SCOUNDREL
-    if (full_name == "Vagabond (Adventurer)"):
-        return VAGABOND_ADVENTURER
-    if (full_name == "Vagabond (Ronin)"):
-        return VAGABOND_RONIN
-    if (full_name == "Vagabond (Harrier)"):
-        return VAGABOND_HARRIER
+def get_short_name(full_name, tuple_list=FACTIONS):
+    for (key, value) in tuple_list:
+        if (full_name == value):
+            return key
     return ""
+
+def invert_faction(full_name):
+    return get_short_name(full_name)
 
 FACTIONS_URLS = {}
 for (faction, value) in FACTIONS:
@@ -106,15 +76,7 @@ MAPS = [
     ]
 
 def invert_map(full_name):
-    if (full_name == "Autumn"):
-        return MAP_AUTUMN
-    if (full_name == "Winter"):
-        return MAP_WINTER
-    if (full_name == "Mountain"):
-        return MAP_MOUNTAIN
-    if (full_name == "Lake"):
-        return MAP_LAKE
-    return ""
+    return get_short_name(full_name, tuple_list=MAPS)
 
 MAPS_URLS = {}
 for (map, value) in MAPS:
@@ -170,3 +132,73 @@ SETUP_TYPES = [
     (SETUP_ADSET, _("Advanced")),
     (SETUP_STANDARD, _("Standard")),
     ]
+
+LANDMARK_BM = "lm_bm"
+LANDMARK_ET = "lm_et"
+LANDMARK_FERRY = "lm_ferry"
+LANDMARK_LF = "lm_lf"
+LANDMARK_LC = "lm_lc"
+LANDMARK_TOWER = "lm_tower"
+LANDMARKS = [
+    (LANDMARK_BM, _("Black Mark")),
+    (LANDMARK_ET, _("Elder Treetop")),
+    (LANDMARK_FERRY, _("The Ferry")),
+    (LANDMARK_LF, _("Legendary Forge")),
+    (LANDMARK_LC, _("Lost City")),
+    (LANDMARK_TOWER, _("The Tower")),
+]
+
+HIRELINGS_BADGERS_P = "h_badgers_p"
+HIRELINGS_BADGERS_D = "h_badgers_d"
+HIRELINGS_BAND_P = "h_band_p"
+HIRELINGS_BAND_D = "h_band_d"
+HIRELINGS_BANDITS_P = "h_bandits_p"
+HIRELINGS_BANDITS_D = "h_bandits_d"
+HIRELINGS_CROWS_P = "h_crows_p"
+HIRELINGS_CROWS_D = "h_crows_d"
+HIRELINGS_LIZARDS_P = "h_lizards_p"
+HIRELINGS_LIZARDS_D = "h_lizards_d"
+HIRELINGS_MOLES_P = "h_moles_p"
+HIRELINGS_MOLES_D = "h_moles_d"
+HIRELINGS_BIRDS_P = "h_birds_p"
+HIRELINGS_BIRDS_D = "h_birds_d"
+HIRELINGS_CATS_P = "h_cats_p"
+HIRELINGS_CATS_D = "h_cats_d"
+HIRELINGS_PROTECTOR_P = "h_protector_p"
+HIRELINGS_PROTECTOR_D = "h_protector_d"
+HIRELINGS_RATS_P = "h_rats_p"
+HIRELINGS_RATS_D = "h_rats_d"
+HIRELINGS_OTTERS_P = "h_otters_p"
+HIRELINGS_OTTERS_D = "h_otters_d"
+HIRELINGS_VAGABOND_P = "h_vb_p"
+HIRELINGS_VAGABOND_D = "h_vb_d"
+HIRELINGS_ALLIANCE_P = "h_alliance_p"
+HIRELINGS_ALLIANCE_D = "h_alliance_d"
+HIRELINGS = [
+    (HIRELINGS_BADGERS_P, _("Vault Keepers")),
+    (HIRELINGS_BADGERS_D, _("Badger Bodyguards")),
+    (HIRELINGS_BAND_P, _("Popular Band")),
+    (HIRELINGS_BAND_D, _("Street Band")),
+    (HIRELINGS_BANDITS_P, _("Highway Bandits")),
+    (HIRELINGS_BANDITS_D, _("Bandit Gangs")),
+    (HIRELINGS_CROWS_P, _("Corvid Spies")),
+    (HIRELINGS_CROWS_D, _("Raven Sentries")),
+    (HIRELINGS_LIZARDS_P, _("Warm Sun Prophets")),
+    (HIRELINGS_LIZARDS_D, _("Lizard Envoys")),
+    (HIRELINGS_MOLES_P, _("Warm Sun Prophets")),
+    (HIRELINGS_MOLES_D, _("Lizard Envoys")),
+    (HIRELINGS_BIRDS_P, _("Last Dynasty")),
+    (HIRELINGS_BIRDS_D, _("Bluebird Nobles")),
+    (HIRELINGS_CATS_P, _("Forest Patrol")),
+    (HIRELINGS_CATS_D, _("Feline Physicians")),
+    (HIRELINGS_PROTECTOR_P, _("Furious Protector")),
+    (HIRELINGS_PROTECTOR_D, _("Stoic Protector")),
+    (HIRELINGS_RATS_P, _("Flame Bearers")),
+    (HIRELINGS_RATS_D, _("Rat Smugglers")),
+    (HIRELINGS_OTTERS_P, _("Riverfolk Flotilla")),
+    (HIRELINGS_OTTERS_D, _("Otter Divers")),
+    (HIRELINGS_VAGABOND_P, _("The Exile")),
+    (HIRELINGS_VAGABOND_D, _("The Brigand")),
+    (HIRELINGS_ALLIANCE_P, _("Spring Uprising")),
+    (HIRELINGS_ALLIANCE_D, _("Rabbit Scouts")),
+]

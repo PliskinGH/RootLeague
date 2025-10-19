@@ -1,6 +1,6 @@
 
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Value
+from django.db.models import Value, Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, DeleteView
@@ -18,6 +18,7 @@ from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_
 from .serializers import MatchSerializer
 from league.models import Tournament
 from league.views import get_league, get_tournament, get_dropdown_menu, get_title
+from league.constants import LANDMARKS, HIRELINGS
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
 from misc.views import ImprovedListView
 
@@ -432,9 +433,18 @@ class MatchFilter(filters.FilterSet):
 
     participants__coalition = filters.BooleanFilter(method='filter_coalition')
 
+    landmark = filters.ChoiceFilter(label="Landmark", choices=LANDMARKS, method='filter_landmark')
+    hirelings = filters.ChoiceFilter(label="Hirelings", choices=HIRELINGS, method='filter_hirelings')
+
     def filter_coalition(self, queryset, name, value):
         lookup = '__'.join([name, 'isnull'])
         return queryset.filter(**{lookup: False})
+
+    def filter_landmark(self, queryset, name, value):
+        return queryset.filter(Q(landmark_a=value) | Q(landmark_b=value))
+
+    def filter_hirelings(self, queryset, name, value):
+        return queryset.filter(Q(hirelings_a=value) | Q(hirelings_b=value) | Q(hirelings_c=value))
 
     class Meta:
         model = Match

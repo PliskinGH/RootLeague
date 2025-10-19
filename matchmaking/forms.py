@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Column, Fieldset, Layout, Row, Field
+from crispy_forms.layout import Column, Fieldset, Layout, Row, Field, MultiField
 from crispy_forms.bootstrap import FormActions
 from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
@@ -26,12 +26,19 @@ class MatchForm(ModelForm):
         super().__init__(*args, **kwargs)
         if (self.instance and (self.fields['tournament'].queryset.count() >= 1)):
             self.fields['tournament'].queryset = Tournament.objects.exclude(Q(active_in_league = None) & ~Q(league = None))
+        self.fields['hirelings_a'].label = False
+        self.fields['hirelings_b'].label = False
+        self.fields['hirelings_c'].label = False
+        self.fields['landmark_a'].label = False
+        self.fields['landmark_b'].label = False
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(Column("title", css_class='col-md-8'), Column("tournament", css_class='col-md-4')),
             Row(Column("game_setup", css_class='col-md-6'), Column("undrafted_faction", css_class='col-md-6')),
             Row(Column("turn_timing", css_class='col-md-3'), Column("table_talk_url", css_class='col-md-9')),
             Row(Column("deck", css_class='col-md-4'), Column("board_map", css_class='col-md-4'), Column("random_suits", css_class='col-md-4')),
+            Fieldset("Hirelings", Row(Column("hirelings_a", css_class='col-md-4'), Column("hirelings_b", css_class='col-md-4'), Column("hirelings_c", css_class='col-md-4'))),
+            Fieldset("Landmarks", Row(Column("landmark_a", css_class='col-md-6'), Column("landmark_b", css_class='col-md-6'))),
             Fieldset(
                 "Participants",
                 ModalEditFormsetLayout(
@@ -104,6 +111,11 @@ class MatchForm(ModelForm):
                    'deck',
                    'board_map',
                    'random_suits',
+                   'hirelings_a',
+                   'hirelings_b',
+                   'hirelings_c',
+                   'landmark_a',
+                   'landmark_b',
                   ]
         # widgets = {
         #     'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
