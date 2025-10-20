@@ -429,31 +429,36 @@ class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMess
     success_url = reverse_lazy('match:submissions')
 
 class MatchFilter(filters.FilterSet):
-    tournament__name = filters.CharFilter(lookup_expr='icontains')
-
     participants__coalition = filters.BooleanFilter(method='filter_coalition')
+
+    tournament__name = filters.CharFilter(lookup_expr='icontains')
 
     landmark = filters.ChoiceFilter(label="Landmark", choices=LANDMARKS, method='filter_landmark')
     hirelings = filters.ChoiceFilter(label="Hirelings", choices=HIRELINGS, method='filter_hirelings')
 
     def filter_coalition(self, queryset, name, value):
         lookup = '__'.join([name, 'isnull'])
-        return queryset.filter(**{lookup: False})
+        method = queryset.filter if value else queryset.exclude
+        return method(**{lookup: False}).distinct()
 
     def filter_landmark(self, queryset, name, value):
-        return queryset.filter(Q(landmark_a=value) | Q(landmark_b=value))
+        return queryset.filter(Q(landmark_a=value) | Q(landmark_b=value)).distinct()
 
     def filter_hirelings(self, queryset, name, value):
-        return queryset.filter(Q(hirelings_a=value) | Q(hirelings_b=value) | Q(hirelings_c=value))
+        return queryset.filter(Q(hirelings_a=value) | Q(hirelings_b=value) | Q(hirelings_c=value)).distinct()
 
     class Meta:
         model = Match
-        fields = ['board_map', 'deck',
-                  'turn_timing', 'game_setup',
-                  'tournament',
-                  'participants__faction',
-                  'participants__dominance',
-                  'participants__coalition']
+        fields = {'date_closed' : ['gte', 'lte'],
+                  'date_modified' : ['gte', 'lte'],
+                  'board_map' : ['exact'],
+                  'deck' : ['exact'],
+                  'turn_timing' : ['exact'],
+                  'game_setup' : ['exact'],
+                  'tournament' : ['exact'],
+                  'participants__faction' : ['exact'],
+                  'participants__dominance' : ['exact'],
+                  }
 
 class MatchViewset(ReadOnlyModelViewSet):
     serializer_class = MatchSerializer
