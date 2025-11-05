@@ -7,19 +7,32 @@ from more_admin_filters.filters import MultiSelectMixin, flatten_used_parameters
 from django.contrib.admin.utils import reverse_field_path
 from django.utils.translation import gettext_lazy as _
 
+from .models import Announcement
+
 # Register your models here.
 
-class TinyMCEFlatPageAdmin(FlatPageAdmin):
-    def formfield_for_dbfield(self, db_field, **kwargs):
+class TinyMCEAdminMixin:
+    def formfield_for_dbfield(self, db_field, *args, **kwargs):
         if db_field.name == 'content':
             return db_field.formfield(widget=TinyMCE(
                 attrs={'cols': 80, 'rows': 30},
                 mce_attrs={'external_link_list_url': reverse('tinymce-linklist')},
             ))
-        return super().formfield_for_dbfield(db_field, **kwargs)
+        return super().formfield_for_dbfield(db_field, *args, **kwargs)
+
+class TinyMCEFlatPageAdmin(TinyMCEAdminMixin, FlatPageAdmin):
+    pass
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, TinyMCEFlatPageAdmin)
+
+@admin.register(Announcement)
+class AnnouncementAdmin(TinyMCEAdminMixin, admin.ModelAdmin):
+    search_fields = ['title']
+    list_filter = ['date_created', 'date_modified']
+    list_display = ['title', 'date_created', 'date_modified']
+    readonly_fields = ['date_created', 'date_modified']
+    prepopulated_fields = {"slug": ["title"]}
 
 class MultiSelectChoicesFilter(MultiSelectMixin, admin.ChoicesFieldListFilter):
     """
