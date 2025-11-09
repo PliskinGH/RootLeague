@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 from extra_views import SearchableListMixin, SortableListMixin
+
+from .models import Announcement
 
 # Create your views here.
 
@@ -58,8 +60,52 @@ class ImprovedListView(SortableListMixin, SearchableListMixin, ListView):
                 pass
         return queryset
 
+# TODO Move somewhere else
 def getattr_or_dictvalue(obj, attr, default=None):
     if (isinstance(obj, dict)):
         return obj.get(attr, default)
     else:
         return getattr(obj, attr, default)
+
+def news(request,
+         announcements = None,
+         title = _("All announcements"),
+         ordering = ['-date_created'],
+         total_number = None,
+         number_per_page = 5,
+         use_search = True,
+         current_url = 'misc:news',
+         current_url_arg = "",
+         search_placeholder = _("Find announcement"),
+         ):
+    announcements = filter_announcements(request, announcements)
+
+    return ImprovedListView.as_view(model=Announcement,
+                                    queryset=announcements,
+                                    paginate_by=number_per_page,
+                                    ordering=ordering,
+                                    search_use_q=use_search,
+                                    current_url=current_url,
+                                    current_url_arg=current_url_arg,
+                                    search_placeholder=search_placeholder,
+                                    search_fields = ['title', 'content'],
+                                    title=title,
+                                    )(request)
+
+def announcement(request,
+                 slug = None,
+                 announcements = None,):
+    announcements = filter_announcements(request, announcements)
+
+    return DetailView.as_view(model=Announcement,
+                              queryset=announcements,
+                             )(request, slug=slug)
+
+def filter_announcements(request, announcements):
+    if (announcements is None):
+        announcements = Announcement.objects.all()
+    announcements = announcements.filter(published=True)
+    user = request.user
+    if (not(user is not None and user.is_authenticated and user.pk is not None)):
+        announcements = announcements.exclude(registration_required=True)
+    return announcements

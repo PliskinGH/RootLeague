@@ -1,0 +1,70 @@
+{% extends 'misc/base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% load custom_tags %}
+
+{% block upper_title %}{{_("Community news")}}{% endblock %}
+{% block lower_title %}{{ title }}{% endblock %}
+
+{% block title_page_prefix %}{{_("Community news")}} | {{ title }} | {% endblock %}
+
+{% block content %}
+
+{% if display_search %}
+{% include 'misc/search_form.html' with url_search=url_search
+                                        url_search_arg=url_search_arg
+                                        search_placeholder=search_placeholder
+                                        search_query=search_query only %}
+{% endif %}
+
+<div class="table-responsive">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" style="width:30%">{{_("Title")}}</th>
+      <th scope="col">{{_("Announcement")}}</th>
+      <th scope="col" style="width:20%">{{_("Date")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% if page_obj.paginator.count > 0 %}
+    {% for announcement in page_obj %}
+    <tr>
+      <th scope="row">
+        <a href="{{ announcement.get_absolute_url }}">
+          {{ announcement.title }}
+        </a>
+      </th>
+      <td>
+        {% with content=announcement.content|striptags %}
+          {% if content|length > 200 %}
+            {{ content|truncatechars:187 }}
+            <a href="{{ announcement.get_absolute_url }}">
+              Read more.
+            </a>
+          {% else %}
+            {{ content }}
+          {% endif %}
+        {% endwith %}
+      </td>
+      <td>
+        <a href="{{ announcement.get_absolute_url }}">
+          {{ announcement.date_created }}
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <th scope="row" colspan="3" class="text-center">{{ _("No announcements found.") }}</th>
+    </tr>
+  {% endif%}
+  </tbody>
+</table>
+</div>
+
+{% include 'misc/pagination.html' %}
+{% endblock %}

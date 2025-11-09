@@ -34,19 +34,32 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'match:listing' %}">{{_("Match list")}}</a></li>
-                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase justify-text-center" href="{% url 'match:register' %}">{{_("Register match")}}</a></li>
+                    <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">
+                        <a class="nav-link mx-auto text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{_("Community")}}
+                        </a>
+                        <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'misc:news' %}">{{_("News")}}</a>
+                            {% comment %}<div class="dropdown-divider"></div>{% endcomment %}
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">
+                        <a class="nav-link mx-auto text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{_("Match")}}
+                        </a>
+                        <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'match:listing' %}">{{_("List")}}</a>
+                            <a class="dropdown-item" href="{% url 'match:register' %}">{{_("Submit")}}</a>
+                        </div>
+                    </li>
                     <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
                     <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">
                         <a class="nav-link mx-auto text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{_("Stats")}}
                         </a>
                         <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
-                        <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
-{% comment %}                             <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a> {% endcomment %}
+                            <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
+                            <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
                         </div>
                     </li>
                     {% get_flatpages '/about/' for request.user as about_pages  %}

@@ -1,0 +1,29 @@
+{% extends 'misc/base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block upper_title %}{{ object.date_created }}{% endblock %}
+{% block lower_title %}{{ object.title }}{% endblock %}
+
+{% block title_page_prefix %}{{_("Announcement")}} | {% endblock %}
+
+{% block content %}
+
+{% if user.is_staff  %}
+<div class="row row-cols-auto btn-group" role="group">
+  <div class="dropdown col mx-auto">
+    <a href="{% url 'admin:misc_announcement_change' object.id %}" class="btn btn-outline-info">
+      {{ _('Admin page') }}
+    </a>
+  </div>
+</div>
+
+<br />
+<br />
+{% endif %}
+
+{{ object.content | safe }}
+
+{% endblock %}

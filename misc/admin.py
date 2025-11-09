@@ -28,9 +28,9 @@ admin.site.register(FlatPage, TinyMCEFlatPageAdmin)
 
 @admin.register(Announcement)
 class AnnouncementAdmin(TinyMCEAdminMixin, admin.ModelAdmin):
-    search_fields = ['title']
-    list_filter = ['date_created', 'date_modified']
-    list_display = ['title', 'date_created', 'date_modified']
+    search_fields = ['title', 'content']
+    list_filter = ['date_created', 'date_modified', 'published', 'registration_required']
+    list_display = ['title', 'date_created', 'date_modified', 'published', 'registration_required']
     readonly_fields = ['date_created', 'date_modified']
     prepopulated_fields = {"slug": ["title"]}
 
