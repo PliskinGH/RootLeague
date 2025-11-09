@@ -7,7 +7,11 @@
 {% block upper_title %}{{ flatpage.title }}{% endblock %}
 {% block lower_title %}{{ _("Root Digital league") }}{% endblock %}
 
-{% block title_page_prefix %}{{ flatpage.title }} | {% endblock %}
+{% block title_wrapper %}
+  {% with prefix_title=flatpage.title|add:" | " %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock title_wrapper %} 
 
 {% block content %}
 

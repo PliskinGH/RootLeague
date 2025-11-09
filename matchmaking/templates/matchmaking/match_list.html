@@ -9,7 +9,11 @@
 {% block upper_title %}{{_("Match listing")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
-{% block title_page_prefix %}{{_("Match listing")}} | {{ title }} | {% endblock %}
+{% block title_wrapper %}
+  {% with prefix_title=_("Match listing")|add:" | "|add:title|add:" | " %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock title_wrapper %} 
 
 {% block content %}
 

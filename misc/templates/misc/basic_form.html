@@ -7,7 +7,11 @@
 {% block upper_title %}{{ upper_title }}{% endblock %}
 {% block lower_title %}{{ lower_title }}{% endblock %}
 
-{% block title_page_prefix %}{{ upper_title }} | {{ lower_title }} | {% endblock %}
+{% block title_wrapper %}
+  {% with prefix_title=upper_title|add:" | "|add:lower_title|add:" | " %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock title_wrapper %} 
 
 {% block content %}
 

@@ -11,7 +11,11 @@
 {% block upper_title %}{{ stats_title }}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
-{% block title_page_prefix %}{{ stats_title }} | {{ title }} | {% endblock %}
+{% block title_wrapper %}
+  {% with prefix_title=stats_title|add:" | "|add:title|add:" | " %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock title_wrapper %} 
 
 {% block content %}
 

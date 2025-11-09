@@ -9,7 +9,11 @@
 {% block upper_title %}{{_("Community news")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
-{% block title_page_prefix %}{{_("Community news")}} | {{ title }} | {% endblock %}
+{% block title_wrapper %}
+  {% with prefix_title=_("Community news")|add:" | "|add:title|add:" | " %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock title_wrapper %} 
 
 {% block content %}
 

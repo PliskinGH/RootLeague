@@ -5,7 +5,12 @@
 {% block upper_title %}{{_("Leaderboard")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
-{% block title_page_prefix %}{{_("Leaderboard")}} | {{ title }} | {% endblock %}
+
+{% block title_wrapper %}
+  {% with prefix_title=_("Leaderboard")|add:" | "|add:title|add:" | " %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock title_wrapper %} 
 
 {% block content %}
 
