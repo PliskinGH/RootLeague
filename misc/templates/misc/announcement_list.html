@@ -43,14 +43,14 @@
         </a>
       </th>
       <td>
-        {% with content=announcement.content|striptags %}
-          {% if content|length > 200 %}
-            {{ content|truncatechars:187 }}
+        {% with content=announcement.content %}
+          {% if content|wordcount > 30 %}
+            {{ content|truncatewords_html:29|safe }}
             <a href="{{ announcement.get_absolute_url }}">
-              Read more.
+              {{_("Read more.")}}
             </a>
           {% else %}
-            {{ content }}
+            {{ content|safe }}
           {% endif %}
         {% endwith %}
       </td>
