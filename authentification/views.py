@@ -31,7 +31,7 @@ class PlayerSignUpView(SuccessMessageMixin, CreateView):
 class PlayerProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = get_user_model()
     template_name='authentification/player_profile_edit_form.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('home')
     form_class = forms.PlayerProfileEditForm
     success_message = _("Your profile was successfully updated.")
     extra_context = {'upper_title' : _("Account"),
@@ -44,7 +44,7 @@ def profileEditView(request):
 class PlayerPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
     form_class = forms.PlayerPasswordChangeForm
     template_name='misc/basic_form.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('home')
     success_message = _("Password changed successfully!")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Change Password")}
@@ -53,7 +53,7 @@ class PlayerPasswordResetView(SuccessMessageMixin, PasswordResetView):
     form_class = forms.PlayerPasswordResetForm
     template_name='misc/basic_form.html'
     email_template_name='authentification/password_reset_email.html' 
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('home')
     success_message = _("Confirmation email sent! Please follow the confirmation link to reset your password.")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Reset Password")}
@@ -61,7 +61,7 @@ class PlayerPasswordResetView(SuccessMessageMixin, PasswordResetView):
 class PlayerPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmView):
     form_class = forms.PlayerPasswordResetConfirmForm
     template_name='authentification/player_password_reset_form.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('home')
     success_message = _("Password changed successfully!")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Reset Password")}

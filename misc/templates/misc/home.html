@@ -1,0 +1,19 @@
+{% extends 'misc/announcement_list.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% load custom_tags %}
+
+{% block content %}
+
+{% if flatpage %}
+{{ flatpage.content|safe }}
+{% endif %}
+
+<br />
+
+{{ block.super }}
+
+{% endblock %}

@@ -4,22 +4,31 @@ from django.contrib.flatpages.models import FlatPage
 
 from league.models import League, Tournament
 
-class StaticViewSitemap(Sitemap):
-    priority = 0.8
-    changefreq = "never"
+class ReverseItemSiteMapMixin(object):
+    def location(self, item):
+        return reverse(item)
+
+class MatchSitemap(ReverseItemSiteMapMixin, Sitemap):
+    priority = 0.7
+    changefreq = "monthly"
 
     def items(self):
         return ["match:listing", "match:register"]
 
-    def location(self, item):
-        return reverse(item)
-
-class FlatPageSitemap(Sitemap):
+class AboutSitemap(Sitemap):
     priority = 0.9
     changefreq = "yearly"
 
     def items(self):
-        return FlatPage.objects.all()
+        return FlatPage.objects.filter(url__istartswith="/about/") \
+                               .exclude(registration_required=True)
+
+class CommunitySitemap(ReverseItemSiteMapMixin, Sitemap):
+    priority = 0.8
+    changefreq = "weekly"
+
+    def items(self):
+        return ["home", "misc:news"]
     
 class LeagueSiteMap(Sitemap):
     changefreq = "weekly"
@@ -58,8 +67,9 @@ class TournamentTurnOrderStatsSiteMap(TournamentSiteMap):
         return reverse('league:tournament_turn_order_stats', args=(item.id,))
 
 sitemaps = {
-    "static" : StaticViewSitemap,
-    "flatpage": FlatPageSitemap,
+    "about": AboutSitemap,
+    "community": CommunitySitemap,
+    "match" : MatchSitemap,
     "league_leaderboard": LeagueLeaderboardSiteMap,
     "tournament_leaderboard": TournamentLeaderboardSiteMap,
     "league_faction_stats": LeagueFactionStatsSiteMap,

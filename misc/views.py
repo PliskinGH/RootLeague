@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 from extra_views import SearchableListMixin, SortableListMixin
+from django.core.validators import EMPTY_VALUES
+from django.contrib.flatpages.models import FlatPage
 
 from .models import Announcement
 
@@ -10,7 +12,7 @@ from .models import Announcement
 class ImprovedListView(SortableListMixin, SearchableListMixin, ListView):
     title = ""
     search_use_q = False
-    current_url = "index"
+    current_url = "home"
     current_url_arg = ""
     search_placeholder = ""
     
@@ -70,26 +72,38 @@ def getattr_or_dictvalue(obj, attr, default=None):
 def news(request,
          announcements = None,
          title = _("All announcements"),
-         ordering = ['-date_created'],
+         ordering = None,
          total_number = None,
          number_per_page = 5,
          use_search = True,
          current_url = 'misc:news',
          current_url_arg = "",
          search_placeholder = _("Find announcement"),
+         template_name = None,
+         extra_context = None,
          ):
+    if (announcements is None):
+        announcements = Announcement.objects.all()
     announcements = filter_announcements(request, announcements)
+
+    if (ordering in EMPTY_VALUES):
+        ordering = ['-date_created', '-date_modified']
+    announcements = announcements.order_by(*ordering)
+
+    if (total_number is not None):
+        announcements = announcements[:total_number]
 
     return ImprovedListView.as_view(model=Announcement,
                                     queryset=announcements,
+                                    template_name=template_name,
                                     paginate_by=number_per_page,
-                                    ordering=ordering,
                                     search_use_q=use_search,
                                     current_url=current_url,
                                     current_url_arg=current_url_arg,
                                     search_placeholder=search_placeholder,
                                     search_fields = ['title', 'content'],
                                     title=title,
+                                    extra_context=extra_context,
                                     )(request)
 
 def announcement(request,
@@ -109,3 +123,17 @@ def filter_announcements(request, announcements):
     if (not(user is not None and user.is_authenticated and user.pk is not None)):
         announcements = announcements.exclude(registration_required=True)
     return announcements
+
+def home(request):
+    extra_context = {}
+    home_pages = FlatPage.objects.filter(url__istartswith="/home/")
+    if (home_pages.count()):
+        extra_context['flatpage'] = home_pages.first()
+
+    return news(request,
+                title=_("Home"),
+                total_number=3, number_per_page=3,
+                use_search=False,
+                current_url='home',
+                template_name='misc/home.html',
+                extra_context=extra_context)

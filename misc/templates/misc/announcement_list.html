@@ -6,11 +6,11 @@
 
 {% load custom_tags %}
 
-{% block upper_title %}{{_("Community news")}}{% endblock %}
-{% block lower_title %}{{ title }}{% endblock %}
+{% block upper_title %}{{ title }}{% endblock %}
+{% block lower_title %}{{ _("Root Digital League") }}{% endblock %}
 
 {% block title_wrapper %}
-  {% with prefix_title=_("Community news")|add:" | "|add:title|add:" | " %}
+  {% with prefix_title=title|add:" | " %}
     {{ block.super }}
   {% endwith %}
 {% endblock title_wrapper %} 

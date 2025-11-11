@@ -19,16 +19,17 @@ from django.urls import include, path
 from django.contrib.sitemaps import views as sitemap_views
 from rest_framework import routers
 
-from matchmaking import views # import views so we can use them in urls.
+from matchmaking import views as match_views
+from misc import views as misc_views
 from .sitemaps import sitemaps
 
 # DRF rooter
 router = routers.SimpleRouter()
-router.register('match', views.MatchViewset, basename='match')
+router.register('match', match_views.MatchViewset, basename='match')
 
 urlpatterns = [
     path("select2/", include("django_select2.urls")),
-    path('', views.index, name='index'),
+    path('', misc_views.home, name='home'),
     path('match/', include('matchmaking.urls', namespace='match')),
     path('misc/', include('misc.urls', namespace='misc')),
     path('auth/', include('authentification.urls', namespace='auth')),

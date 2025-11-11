@@ -184,7 +184,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Auth and user management
 LOGIN_URL = '/auth/'
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'authentification.Player'
 AUTHENTICATION_BACKENDS = ['authentification.backends.EmailBackend']
 
