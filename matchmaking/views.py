@@ -246,10 +246,10 @@ class MatchDetailView(DetailView):
     pk_url_kwarg='match_id'
 
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
         match = self.object
-        context['display_edit'] = match.is_editable_by(self.request.user)
-        return context
+        if (match is not None):
+            kwargs['display_edit'] = match.is_editable_by(self.request.user)
+        return super().get_context_data(*args, **kwargs)
 
 class ParticipantInline(InlineFormSetFactory):
     model = Participant
@@ -427,6 +427,15 @@ class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMess
     pk_url_kwarg='match_id'
     success_message = _("Match successfully deleted!")
     success_url = reverse_lazy('match:submissions')
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs['upper_title'] = _("Delete match")
+        match = self.object
+        if (match is not None):
+            kwargs['lower_title'] = match.title
+        else:
+            kwargs['lower_title'] = _("Unknown match")
+        return super().get_context_data(*args, **kwargs)
 
 class MatchFilter(filters.FilterSet):
     participants__coalition = filters.BooleanFilter(method='filter_coalition')
