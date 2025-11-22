@@ -24,4 +24,5 @@ urlpatterns = [
     path('played/league/<int:league_id>/', views.league_played_games, name='league_played_games'),
     path('played/tournament/', views.tournament_played_games, name='default_tournament_played_games'),
     path('played/tournament/<int:tournament_id>/', views.tournament_played_games, name='tournament_played_games'),
+    path('filters/', views.filtered_listing, name='filtered_listing'),
 ]

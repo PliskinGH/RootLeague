@@ -1,7 +1,7 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 from extra_views import SearchableListMixin, SortableListMixin
+from django_filters.views import FilterView
 from django.core.validators import EMPTY_VALUES
 from django.contrib.flatpages.models import FlatPage
 
@@ -9,7 +9,7 @@ from .models import Announcement
 
 # Create your views here.
 
-class ImprovedListView(SortableListMixin, SearchableListMixin, ListView):
+class ImprovedListMixin(SortableListMixin, SearchableListMixin):
     title = ""
     search_use_q = False
     current_url = "home"
@@ -61,6 +61,12 @@ class ImprovedListView(SortableListMixin, SearchableListMixin, ListView):
             except:
                 pass
         return queryset
+
+class ImprovedListView(ImprovedListMixin, ListView):
+    pass
+
+class ImprovedFilterView(ImprovedListMixin, FilterView):
+    pass
 
 # TODO Move somewhere else
 def getattr_or_dictvalue(obj, attr, default=None):

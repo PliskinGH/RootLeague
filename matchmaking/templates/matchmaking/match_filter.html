@@ -1,0 +1,9 @@
+{% extends 'matchmaking/match_list.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content_header %}
+
+{% crispy filter.form %}
+
+{% endblock content_header %}

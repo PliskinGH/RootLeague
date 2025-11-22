@@ -1,6 +1,5 @@
 
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Value, Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, DeleteView
@@ -12,14 +11,12 @@ from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
 from django.core.exceptions import PermissionDenied
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from django_filters import rest_framework as filters
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
-from .serializers import MatchSerializer
-from league.models import Tournament
-from league.views import get_league, get_tournament, get_dropdown_menu, get_title
-from league.constants import LANDMARKS, HIRELINGS
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
+from .filters import MatchFilter, ParticipantFilter
+from .serializers import MatchSerializer
+from league.common import get_league, get_tournament, get_dropdown_menu, get_title
 from misc.views import ImprovedListView
 
 # Create your views here.
@@ -42,6 +39,7 @@ def listing(request,
             ordering = None,
             total_number = None,
             number_per_page = 10,
+            extra_context = None,
             use_search = True,
             use_league_menu = True,
             display_edit = False,
@@ -50,7 +48,8 @@ def listing(request,
             search_placeholder = _("Find a match"),
             global_url = 'match:listing',
             league_url = 'match:league_listing',
-            tournament_url = 'match:tournament_listing'):
+            tournament_url = 'match:tournament_listing',
+            template_name=None):
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
@@ -89,10 +88,11 @@ def listing(request,
         if (not(True in display_edit.values())):
             display_edit = False
     
-    extra_context = {}
+    if (extra_context in EMPTY_VALUES):
+        extra_context = {}
     if (use_league_menu):
-        extra_context = get_dropdown_menu(tournament=tournament,
-                                          league=league)
+        extra_context.update(get_dropdown_menu(tournament=tournament,
+                                               league=league))
         extra_context['global_url'] = global_url
         extra_context['league_url'] = league_url
         extra_context['tournament_url'] = tournament_url
@@ -112,6 +112,7 @@ def listing(request,
                                                      'participants__player__discord_name'],
                                     title=title,
                                     extra_context=extra_context,
+                                    template_name=template_name,
                                     )(request)
 
 def league_listing(request,
@@ -437,41 +438,22 @@ class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMess
             kwargs['lower_title'] = _("Unknown match")
         return super().get_context_data(*args, **kwargs)
 
-class MatchFilter(filters.FilterSet):
-    participants__coalition = filters.BooleanFilter(method='filter_coalition')
-
-    tournament__name = filters.CharFilter(lookup_expr='icontains')
-
-    landmark = filters.ChoiceFilter(label="Landmark", choices=LANDMARKS, method='filter_landmark')
-    hirelings = filters.ChoiceFilter(label="Hirelings", choices=HIRELINGS, method='filter_hirelings')
-
-    def filter_coalition(self, queryset, name, value):
-        lookup = '__'.join([name, 'isnull'])
-        method = queryset.filter if value else queryset.exclude
-        return method(**{lookup: False}).distinct()
-
-    def filter_landmark(self, queryset, name, value):
-        return queryset.filter(Q(landmark_a=value) | Q(landmark_b=value)).distinct()
-
-    def filter_hirelings(self, queryset, name, value):
-        return queryset.filter(Q(hirelings_a=value) | Q(hirelings_b=value) | Q(hirelings_c=value)).distinct()
-
-    class Meta:
-        model = Match
-        fields = {'date_closed' : ['gte', 'lte'],
-                  'date_modified' : ['gte', 'lte'],
-                  'board_map' : ['exact'],
-                  'deck' : ['exact'],
-                  'turn_timing' : ['exact'],
-                  'game_setup' : ['exact'],
-                  'tournament' : ['exact'],
-                  'participants__faction' : ['exact'],
-                  'participants__dominance' : ['exact'],
-                  }
-
 class MatchViewset(ReadOnlyModelViewSet):
     serializer_class = MatchSerializer
     filterset_class = MatchFilter
  
     def get_queryset(self):
         return Match.objects.exclude(date_closed=None)
+
+def filtered_listing(request):
+    filter = ParticipantFilter(request.GET, queryset=Participant.objects.all())
+    participants = filter.qs
+    matchs = Match.objects.filter(participants__in=participants).distinct()
+    return listing(request,
+                   title=_("Custom Filters"),
+                   matchs=matchs,
+                   extra_context={'filter': filter},
+                   use_league_menu=False,
+                   use_search=False,
+                   number_per_page=5,
+                   template_name='matchmaking/match_filter.html')
