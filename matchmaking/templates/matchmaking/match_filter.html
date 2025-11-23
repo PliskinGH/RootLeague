@@ -1,9 +1,131 @@
 {% extends 'matchmaking/match_list.html' %}
 
+{% load i18n %}
+
 {% load crispy_forms_tags %}
+
+{% block extra-css %}
+  {{filter.form.media.css}}
+{% endblock %}
 
 {% block content_header %}
 
-{% crispy filter.form %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
+  {{ _("Filters") }}
+</button>
+
+<!-- Modal -->
+<div class="modal" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="filtersModalLabel">{{ _("Filters") }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      {% crispy filter.form %}
+    </div>
+  </div>
+</div>
+
+<br />
+<br />
+
+<h1>{{ _("Summary") }}</h1>
+
+<div class="table-responsive">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">
+        {{_("Total")}}
+      </th>
+      <th scope="col">
+        {{_("Total Score")}}
+      </th>
+      <th scope="col">
+        {{_("Relative Score")}}
+      </th>
+      <th scope="col">
+        {{_("Total Dominances")}}
+      </th>
+      <th scope="col">
+        {{_("Total Dominance Score")}}
+      </th>
+      <th scope="col">
+        {{_("Relative Dominance Score")}}
+      </th>
+      <th scope="col">
+        {{_("Total Coalitions")}}
+      </th>
+      <th scope="col">
+        {{_("Total Coalition Score")}}
+      </th>
+      <th scope="col">
+        {{_("Relative Coalition Score")}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if stats.total %}
+    <tr>
+      <th scope="row">{{ stats.total }}</th>
+      <td>
+        {% if stats.total_score != None %}
+        {{ stats.total_score|floatformat:"-1" }}
+        {% endif %}
+      </td>
+      <td>
+        {% if stats.relative_score != None %}
+        {{ stats.relative_score|floatformat:"-2" }} %
+        {% endif %}
+      </td>
+      <td>{{ stats.total_dom }}</td>
+      <td>
+        {% if stats.dom_score != None %}
+        {{ stats.dom_score|floatformat:"-1" }}
+        {% endif %}
+      </td>
+      <td>
+        {% if stats.relative_dom_score != None %}
+        {{ stats.relative_dom_score|floatformat:"-2" }} %
+        {% endif %}
+      </td>
+      <td>{{ stats.total_coal }}</td>
+      <td>
+        {% if stats.coal_score != None %}
+        {{ stats.coal_score|floatformat:"-1" }}
+        {% endif %}
+      </td>
+      <td>
+        {% if stats.relative_coal_score != None %}
+        {{ stats.relative_coal_score|floatformat:"-2" }} %
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <th scope="row" colspan="9" class="text-center">{{ _("Nothing to display.") }}</th>
+    </tr>
+    {% endif %}
+  </tbody>
+</table>
+</div>
+
+<br />
+
+<h1>{{ _("Matches") }}</h1>
 
 {% endblock content_header %}
+
+{% block extra-js %}
+  {{filter.form.media.js}}
+
+<script type="text/javascript">
+    $('#filtersModal').on('show.bs.modal', function (e) {
+        $('.django-select2').djangoSelect2({
+        dropdownParent: $('#filtersModal')
+    })
+    });
+</script>
+{% endblock %}

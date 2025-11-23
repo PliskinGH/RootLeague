@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
 from django.core.exceptions import PermissionDenied
+from django.db.models import Sum, Q
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
@@ -447,12 +448,52 @@ class MatchViewset(ReadOnlyModelViewSet):
 
 def filtered_listing(request):
     filter = ParticipantFilter(request.GET, queryset=Participant.objects.all())
-    participants = filter.qs
-    matchs = Match.objects.filter(participants__in=participants).distinct()
+    participations = filter.qs
+    matchs = Match.objects.filter(participants__in=participations).distinct()
+
+    participations = participations.exclude(match__date_closed=None)
+    total = participations.count()
+    if (total < 1):
+        stats = dict(total=total,
+                     total_score=None,
+                     relative_score=None,
+                     total_dom=None,
+                     dom_score=None,
+                     relative_dom_score=None,
+                     total_coal=None,
+                     coal_score=None,
+                     relative_coal_score=None,)
+    else:
+        stats = participations.exclude(tournament_score=None) \
+                              .aggregate(total_score=Sum('tournament_score', default=0),
+                                         dom_score=Sum('tournament_score', filter=~Q(dominance=None) & ~Q(dominance=""), default=0),
+                                         coal_score=Sum('tournament_score', filter=~Q(coalition=None) | ~Q(coalitioned_vagabond=None), default=0)
+                                         )
+        stats['total'] = total
+        stats['relative_score'] = stats['total_score'] / total * 100
+        total_dom = participations.exclude(Q(dominance=None) | Q(dominance="")).count()
+        stats['total_dom'] = total_dom
+        if (total_dom < 1):
+            stats['dom_score'] = None
+            stats['relative_dom_score'] = None
+        else:
+            stats['relative_dom_score'] = stats['dom_score'] / total_dom * 100
+        total_coal = participations.exclude(Q(coalition=None) & Q(coalitioned_vagabond=None)).count()
+        stats['total_coal'] = total_coal
+        if (total_coal < 1):
+            stats['coal_score'] = None
+            stats['relative_coal_score'] = None
+        else:
+            stats['relative_coal_score'] = stats['coal_score'] / total_coal * 100
+
+    extra_context = {}
+    extra_context['filter'] = filter
+    extra_context['stats'] = stats
+
     return listing(request,
                    title=_("Custom Filters"),
                    matchs=matchs,
-                   extra_context={'filter': filter},
+                   extra_context=extra_context,
                    use_league_menu=False,
                    use_search=False,
                    number_per_page=5,
