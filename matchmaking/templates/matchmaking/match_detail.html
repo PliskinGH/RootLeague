@@ -100,7 +100,9 @@
       <td>
       {{ object.get_board_map_display }}
       {% if object.random_suits %}
-      ({{_("random suits")}})
+      ({{_("random suit distribution")}})
+      {% elif object.random_suits == False %}
+      ({{_("fixed suit distribution")}})
       {% endif %}
       </td>
     </tr>
