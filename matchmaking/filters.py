@@ -1,4 +1,6 @@
 
+from django import forms
+from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
@@ -46,6 +48,14 @@ class MatchFilter(MatchFilterMethodsMixin, filters.FilterSet):
                   'participants__faction' : ['exact'],
                   'participants__dominance' : ['exact'],
                   }
+        filter_overrides = {
+            models.DateTimeField: {
+                'filter_class': filters.DateTimeFilter,
+                'extra': lambda f: {
+                    'widget': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+                }
+            }
+        }
 
 class ParticipantFilter(MatchFilterMethodsMixin, filters.FilterSet):
     player = filters.ModelChoiceFilter(queryset=Player.objects.all().order_by('username'),
@@ -85,3 +95,11 @@ class ParticipantFilter(MatchFilterMethodsMixin, filters.FilterSet):
                   'faction' : ['exact'],
                   'dominance' : ['exact'],
                   }
+        filter_overrides = {
+            models.DateTimeField: {
+                'filter_class': filters.DateTimeFilter,
+                'extra': lambda f: {
+                    'widget': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+                }
+            }
+        }
