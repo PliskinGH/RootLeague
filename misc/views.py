@@ -9,7 +9,7 @@ from .models import Announcement
 
 # Create your views here.
 
-class ImprovedListMixin(SortableListMixin, SearchableListMixin):
+class ImprovedListMixin(SearchableListMixin, SortableListMixin):
     title = ""
     search_use_q = False
     current_url = "home"
