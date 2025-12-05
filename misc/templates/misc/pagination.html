@@ -3,7 +3,7 @@
 <div class="row row-cols-auto btn-group" role="group" aria-label="pagination">
     {% if page_obj.has_previous %}
     <div class="col g-0">
-        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+        <a href="{% querystring page=page_obj.previous_page_number %}" class="btn btn-outline-primary">&laquo;</a>
     </div>
     {% endif %}
 
@@ -15,7 +15,7 @@
             {% if page_number == page_obj.paginator.ELLIPSIS %}
             <span class="btn btn-outline-primary">{{page_number}}</span>
             {% else %}
-            <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_number }}" class="btn btn-outline-primary">
+            <a href="{% querystring page=page_number %}" class="btn btn-outline-primary">
                 {{ page_number }}
             </a>
             {% endif %}
@@ -25,7 +25,7 @@
 
     {% if page_obj.has_next %}
     <div class="col g-0">
-        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+        <a href="{% querystring page=page_obj.next_page_number %}" class="btn btn-outline-primary">&raquo;</a>
     </div>
     {% endif %}
 </div>

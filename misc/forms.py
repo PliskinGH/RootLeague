@@ -1,11 +1,11 @@
-from django.forms import Select
+from django import forms
 from crispy_forms.layout import Submit
 from django.core.validators import EMPTY_VALUES
 
 class NonPrimarySubmit(Submit):
     field_classes = "btn"
 
-class IconSelect(Select):
+class IconSelect(forms.Select):
     def __init__(self, *args, **kwargs):
         self.choices_urls = kwargs.pop('choices_urls', {})
         super().__init__(*args, **kwargs)
@@ -24,3 +24,6 @@ class IconSelect(Select):
         if (url not in EMPTY_VALUES):
             option['attrs']['data-image'] = url
         return option
+
+class DateTimeWidget(forms.DateTimeInput):
+    input_type = "datetime-local"
