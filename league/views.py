@@ -117,19 +117,19 @@ def get_stats(rows = None,
               field = None,
               tournament = None,
               league = None,
-              player = None,
+              participations = None,
               totals = [],
               with_game_score = False):
     stats = {}
     if (field in EMPTY_VALUES or rows in EMPTY_VALUES):
         return stats
     
-    participations_manager = None
-    if (player is not None):
-        participations_manager = player.participations
-    if (participations_manager is None):
-        participations_manager = Participant.objects
-    all_participations = participations_manager.exclude(match__date_closed=None)
+    all_participations = None
+    if (participations is not None):
+        all_participations = participations
+    if (all_participations is None):
+        all_participations = Participant.objects.all()
+    all_participations = all_participations.exclude(match__date_closed=None)
     if (tournament not in EMPTY_VALUES):
         all_participations = all_participations.filter(match__tournament=tournament)
     elif (league not in EMPTY_VALUES):
@@ -211,25 +211,23 @@ def stats(request,
           sort_fields = None,
           current_url = '',
           current_url_arg = ''):
+    match_filter = MatchFilter(request.GET, Match.objects.all())
+    matchs = match_filter.qs
+    participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
+    participations = participant_filter.qs
+
+    match_filter.append_hidden_fields(participant_filter)
+    participant_filter.append_hidden_fields(match_filter)
+
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
-        
-    player_id = request.GET.get('player', None)
-    players = None
-    if (player_id not in EMPTY_VALUES):
-        players = Player.objects.filter(id=int(player_id))
-    player = None
-    if (players not in EMPTY_VALUES and len(players) == 1):
-        player = players[0]
-    
-    player_form = PlayerInStatsForm(dict(player=player))
 
-    stats = get_stats(rows=rows,
+    stats = get_stats(participations=participations,
+                      rows=rows,
                       field=field,
                       tournament=tournament,
                       league=league,
-                      player=player,
                       totals=totals,
                       with_game_score=with_game_score)
     cleaned_stats = []
@@ -244,13 +242,7 @@ def stats(request,
         
     extra_context = get_dropdown_menu(tournament=tournament,
                                       league=league)
-    
-    extra_context['player'] = None
-    extra_context['player_get_param'] = ""
-    extra_context['player_form'] = player_form
-    if (player not in EMPTY_VALUES):
-        extra_context['player'] = player
-        extra_context['player_get_param'] = "?player=" + str(player.id)
+    extra_context['filters'] = [match_filter, participant_filter]
     
     if (stats_name in EMPTY_VALUES):
         extra_context['stats_title'] = _("Stats")

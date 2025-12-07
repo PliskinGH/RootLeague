@@ -2,11 +2,9 @@
 
 {% load i18n %}
 
-{% load crispy_forms_tags %}
+{% load static %}
 
-{% block extra-css %}
-  {{player_form.media.css}}
-{% endblock %}
+{% load crispy_forms_tags %}
 
 {% block upper_title %}{{ stats_title }}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
@@ -16,6 +14,12 @@
     {{ block.super }}
   {% endwith %}
 {% endblock title_wrapper %} 
+
+{% block extra-css %}
+{% for filter in filters %}
+  {{filter.form.media.css}}
+{% endfor %}
+{% endblock %}
 
 {% block content %}
 
@@ -32,7 +36,7 @@
                                           child_url=tournament_url
                                           url_get_param=player_get_param only %}
 
-{% crispy player_form %}
+{% include 'misc/filters.html' with filters=filters only %}
 
 <div class="table-responsive">
 <table class="table table-striped">
@@ -121,5 +125,9 @@
 {% endblock %}
 
 {% block extra-js %}
-  {{player_form.media.js}}
+{% for filter in filters %}
+  {{filter.form.media.js}}
+{% endfor %}
+
+  <script src="{% static 'misc/js/modal-select2.js' %}"></script>
 {% endblock %}
