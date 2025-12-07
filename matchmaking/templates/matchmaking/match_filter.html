@@ -2,31 +2,35 @@
 
 {% load i18n %}
 
+{% load static %}
+
 {% load crispy_forms_tags %}
 
 {% block extra-css %}
+{% for filter in filters %}
   {{filter.form.media.css}}
+{% endfor %}
 {% endblock %}
 
 {% block content_header %}
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filtersModal">
-  {{ _("Filters") }}
-</button>
-
-<!-- Modal -->
-<div class="modal" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title" id="filtersModalLabel">{{ _("Filters") }}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      {% crispy filter.form %}
-    </div>
+<div class="container d-flex align-items-center justify-content-center">
+<div class="row row-cols-auto btn-group" role="group">
+{% for filter in filters %}
+  <div class="col mx-auto">
+  <!-- Button trigger modal -->
+  <button type="button" class="btn {% if forloop.counter|divisibleby:"2" %} btn-primary {% else %} btn-secondary {% endif %}" data-bs-toggle="modal" data-bs-target="#{{ filter.html_id }}">
+    {{ filter.html_title }}
+  </button>
   </div>
+{% endfor %}
 </div>
+</div>
+
+{% for filter in filters %}
+  <!-- Modal form -->
+  {% crispy filter.form %}
+{% endfor %}
 
 <br />
 <br />
@@ -119,13 +123,9 @@
 {% endblock content_header %}
 
 {% block extra-js %}
+{% for filter in filters %}
   {{filter.form.media.js}}
+{% endfor %}
 
-<script type="text/javascript">
-    $('#filtersModal').on('show.bs.modal', function (e) {
-        $('.django-select2').djangoSelect2({
-        dropdownParent: $('#filtersModal')
-    })
-    });
-</script>
+  <script src="{% static 'misc/js/modal-select2.js' %}"></script>
 {% endblock %}

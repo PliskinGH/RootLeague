@@ -1,9 +1,11 @@
 
 from django.db import models
 from django.db.models import Q
+from django.core.validators import EMPTY_VALUES
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
-from crispy_forms.layout import Layout, Div, Button, Submit
+from crispy_forms.layout import Layout, Div, Button, Submit, Hidden
+from crispy_forms.bootstrap import Modal
 
 from .models import Match, Participant
 from league import constants
@@ -29,7 +31,46 @@ class MatchFilterMethodsMixin(object):
         lookup_c = '_'.join([name, 'c'])
         return queryset.filter(Q(**{lookup_a: value}) | Q(**{lookup_b: value}) | Q(**{lookup_c: value})).distinct()
 
-class MatchFilter(MatchFilterMethodsMixin, filters.FilterSet):
+class ModalFormFilterMixin(object):
+    html_title = _("Filters")
+    html_id = "filtersModal"
+    hidden_fields = None
+
+    def append_hidden_fields(self, linked_filter):
+        if (not(isinstance(self.hidden_fields, list))):
+            self.hidden_fields = []
+        if (linked_filter is not None):
+            self.hidden_fields += list(linked_filter.base_form.fields.keys())
+    
+    @property
+    def base_form(self):
+        Form = self.get_form_class()
+        return Form()
+
+    @property
+    def form(self):
+        form = super().form
+
+        layout_components = list(form.fields.keys())
+        hidden_components = []
+        if (self.hidden_fields not in EMPTY_VALUES):
+            for field in self.hidden_fields:
+                values = self.data.getlist(field, [])
+                for value in values:
+                    hidden_components.append(Hidden(name=field, value=value))
+        form.helper.layout = Layout(
+            Modal(*layout_components,
+                  *hidden_components,
+                  Div(Button("close", _("Close"), css_class="btn btn-secondary", data_bs_dismiss="modal"),
+                      Submit("confirm", _("Confirm"), css_class="btn-default"),
+                      css_class="modal-footer"),
+                  css_id=self.html_id, title=self.html_title, title_id=self.html_id, )
+        )
+
+        return form
+
+
+class MatchDRFFilter(MatchFilterMethodsMixin, filters.FilterSet):
     participants__player = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
                                                              widget=PlayerMultipleWidget,)
     tournament = filters.ModelMultipleChoiceFilter(queryset=Tournament.objects.all().order_by('start_date', 'name'))
@@ -68,49 +109,35 @@ class MatchFilter(MatchFilterMethodsMixin, filters.FilterSet):
             }
         }
 
-class ParticipantFilter(MatchFilterMethodsMixin, filters.FilterSet):
-    player = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
-                                               widget=PlayerMultipleWidget,)
-    match__tournament = filters.ModelMultipleChoiceFilter(queryset=Tournament.objects.all().order_by('start_date', 'name'))
-    match__board_map = filters.MultipleChoiceFilter(choices=constants.MAPS)
-    match__deck = filters.MultipleChoiceFilter(choices=constants.DECKS)
-    match__turn_timing = filters.MultipleChoiceFilter(choices=constants.TURN_TIMING_TYPES)
-    match__game_setup = filters.MultipleChoiceFilter(choices=constants.SETUP_TYPES)
-    faction = filters.MultipleChoiceFilter(choices=constants.FACTIONS)
-    dominance = filters.MultipleChoiceFilter(choices=constants.DOMINANCE_SUITS)
-    coalition = filters.BooleanFilter(method='filter_isnotnull')
-    closed = filters.BooleanFilter(field_name='match__date_closed',
+class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterSet):
+    html_title = _("Match filters")
+    html_id = "matchFiltersModal"
+
+    tournament = filters.ModelMultipleChoiceFilter(queryset=Tournament.objects.all().order_by('start_date', 'name'))
+    factions = filters.MultipleChoiceFilter(choices=constants.FACTIONS,
+                                            conjoined=True,
+                                            field_name="participants__faction",
+                                            label=_("Factions"),
+                                            help_text=_("This filter uses AND logic."))
+    board_map = filters.MultipleChoiceFilter(choices=constants.MAPS)
+    deck = filters.MultipleChoiceFilter(choices=constants.DECKS)
+    turn_timing = filters.MultipleChoiceFilter(choices=constants.TURN_TIMING_TYPES)
+    game_setup = filters.MultipleChoiceFilter(choices=constants.SETUP_TYPES)
+    closed = filters.BooleanFilter(field_name='date_closed',
                                    label='Match closed',
                                    method='filter_isnotnull')
-
-    @property
-    def form(self):
-        form = super().form
-
-        layout_components = list(form.fields.keys())
-        form.helper.layout = Layout(
-            Div(*layout_components, css_class="modal-body"),
-            Div(Button("close", _("Close"), css_class="btn btn-secondary", data_bs_dismiss="modal"),
-                Submit("confirm", _("Confirm"), css_class="btn-default"),
-                css_class="modal-footer")
-        )
-
-        return form
 
     # landmark = filters.ChoiceFilter(label="Landmark", choices=LANDMARKS, method='filter_landmark')
     # hirelings = filters.ChoiceFilter(label="Hirelings", choices=HIRELINGS, method='filter_hirelings')
 
     class Meta:
-        model = Participant
-        fields = {'player' : ['exact'],
-                  'match__tournament' : ['exact'],
-                  'match__date_modified' : ['gte', 'lte'],
-                  'match__board_map' : ['exact'],
-                  'match__deck' : ['exact'],
-                  'match__turn_timing' : ['exact'],
-                  'match__game_setup' : ['exact'],
-                  'faction' : ['exact'],
-                  'dominance' : ['exact'],
+        model = Match
+        fields = {'tournament' : ['exact'],
+                  'date_modified' : ['gte', 'lte'],
+                  'board_map' : ['exact'],
+                  'deck' : ['exact'],
+                  'turn_timing' : ['exact'],
+                  'game_setup' : ['exact'],
                   }
         filter_overrides = {
             models.DateTimeField: {
@@ -120,3 +147,20 @@ class ParticipantFilter(MatchFilterMethodsMixin, filters.FilterSet):
                 }
             }
         }
+
+class ParticipantFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterSet):
+    html_title = _("Participant filters")
+    html_id = "participantFiltersModal"
+
+    player = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
+                                               widget=PlayerMultipleWidget,)
+    faction = filters.MultipleChoiceFilter(choices=constants.FACTIONS)
+    dominance = filters.MultipleChoiceFilter(choices=constants.DOMINANCE_SUITS)
+    coalition = filters.BooleanFilter(method='filter_isnotnull')
+
+    class Meta:
+        model = Participant
+        fields = {'player' : ['exact'],
+                  'faction' : ['exact'],
+                  'dominance' : ['exact'],
+                  }

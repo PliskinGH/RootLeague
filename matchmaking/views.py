@@ -15,7 +15,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
-from .filters import MatchFilter, ParticipantFilter
+from .filters import MatchDRFFilter, ParticipantFilter, MatchFilter
 from .serializers import MatchSerializer
 from league.common import get_league, get_tournament, get_dropdown_menu, get_title
 from misc.views import ImprovedListView
@@ -441,15 +441,20 @@ class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMess
 
 class MatchViewset(ReadOnlyModelViewSet):
     serializer_class = MatchSerializer
-    filterset_class = MatchFilter
+    filterset_class = MatchDRFFilter
  
     def get_queryset(self):
         return Match.objects.exclude(date_closed=None)
 
 def filtered_listing(request):
-    filter = ParticipantFilter(request.GET, queryset=Participant.objects.all())
-    participations = filter.qs
-    matchs = Match.objects.filter(participants__in=participations).distinct()
+    match_filter = MatchFilter(request.GET, Match.objects.all())
+    matchs = match_filter.qs
+    participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
+    participations = participant_filter.qs
+    matchs = matchs.filter(participants__in=participations).distinct()
+
+    match_filter.append_hidden_fields(participant_filter)
+    participant_filter.append_hidden_fields(match_filter)
 
     participations = participations.exclude(match__date_closed=None)
     total = participations.count()
@@ -487,7 +492,7 @@ def filtered_listing(request):
             stats['relative_coal_score'] = stats['coal_score'] / total_coal * 100
 
     extra_context = {}
-    extra_context['filter'] = filter
+    extra_context['filters'] = [match_filter, participant_filter]
     extra_context['stats'] = stats
 
     return listing(request,

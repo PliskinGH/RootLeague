@@ -49,20 +49,6 @@
 <!-- Include Django Crispy Formset Modal's JS -->
 <script src="{% static 'crispy_formset_modal/js/crispy-formset-modal.min.js' %}"></script>
 
-<script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", function () {
-    if (typeof window.crispyFormsetModal !== "undefined") {
-
-      window.crispyFormsetModal.onFormAdded = function (event) {
-        $('.django-select2').djangoSelect2()
-      };
-
-      window.crispyFormsetModal.onModalFormOpened = function (modalForm) {
-        $('.django-select2').djangoSelect2()
-      };
-
-    }
-  });
-</script>
+<script src="{% static 'misc/js/modal-select2.js' %}"></script>
 {% endblock %}
 
