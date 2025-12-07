@@ -8,7 +8,8 @@ from decimal import Decimal
 from .forms import PlayerInStatsForm
 from .common import get_league, get_tournament, get_dropdown_menu, get_title
 from authentification.models import Player
-from matchmaking.models import Participant
+from matchmaking.models import Match, Participant
+from matchmaking.filters import MatchFilter, ParticipantFilter
 from misc.views import ImprovedListView
 from .constants import FACTIONS, TURN_ORDERS, VAGABOND
 
@@ -21,6 +22,16 @@ def leaderboard(request,
                 title = None,
                 ordering = None,
                 number_per_page = 15):
+    match_filter = MatchFilter(request.GET, Match.objects.all())
+    matchs = match_filter.qs
+    participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
+    participations = participant_filter.qs
+
+    match_filter.append_hidden_fields(participant_filter)
+    participant_filter.append_hidden_fields(match_filter)
+
+    query_filter = ~Q(participations__match__date_closed=None) & Q(participations__in=participations)
+
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
@@ -30,33 +41,33 @@ def leaderboard(request,
         players = Player.objects.filter(is_active=True)
     if (tournament not in EMPTY_VALUES):
         players = players.annotate(total=Count('participations', distinct=True,
-                                               filter=~Q(participations__match__date_closed=None) &
-                                                       Q(participations__match__tournament=tournament)))
+                                               filter=query_filter &
+                                                      Q(participations__match__tournament=tournament)))
         if (tournament.min_games not in EMPTY_VALUES):
             min_games = max(tournament.min_games, min_games)
     elif (league not in EMPTY_VALUES):
         players = players.annotate(total=Count('participations', distinct=True, 
-                                               filter=~Q(participations__match__date_closed=None) &
-                                                       Q(participations__match__tournament__league=league)))
+                                               filter=query_filter &
+                                                      Q(participations__match__tournament__league=league)))
         if (league.min_games not in EMPTY_VALUES):
             min_games = max(league.min_games, min_games)
     else:
         players = players.annotate(total=Count('participations', distinct=True,
-                                               filter=~Q(participations__match__date_closed=None)))
+                                               filter=query_filter))
         min_games = max(10, min_games) # TODO user choice
     players = players.exclude(Q(total=None) | Q(total__lt=min_games))
 
     if (tournament not in EMPTY_VALUES):
         players = players.annotate(score=Sum('participations__tournament_score',
-                                             filter=~Q(participations__match__date_closed=None) &
-                                                     Q(participations__match__tournament=tournament)))
+                                             filter=query_filter &
+                                                    Q(participations__match__tournament=tournament)))
     elif (league not in EMPTY_VALUES):
         players = players.annotate(score=Sum('participations__tournament_score',
-                                             filter=~Q(participations__match__date_closed=None) &
-                                                     Q(participations__match__tournament__league=league)))
+                                             filter=query_filter &
+                                                    Q(participations__match__tournament__league=league)))
     else:
         players = players.annotate(score=Sum('participations__tournament_score',
-                                             filter=~Q(participations__match__date_closed=None)))
+                                             filter=query_filter))
     players = players.exclude(Q(score=None) | Q(score__lt=1))
 
     players = players.annotate(relative_score=F('score')/F('total')*100)
@@ -69,6 +80,7 @@ def leaderboard(request,
                                       league=league)
     extra_context['min_games'] = min_games
     extra_context['global_url'] = 'league:global_leaderboard'
+    extra_context['filters'] = [match_filter, participant_filter]
 
     if (ordering is None):
         ordering = ['-relative_score', '-score', '-total']

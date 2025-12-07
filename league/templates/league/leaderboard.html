@@ -2,15 +2,22 @@
 
 {% load i18n %}
 
+{% load static %}
+
 {% block upper_title %}{{_("Leaderboard")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
-
 
 {% block title_wrapper %}
   {% with prefix_title=_("Leaderboard")|add:" | "|add:title|add:" | " %}
     {{ block.super }}
   {% endwith %}
 {% endblock title_wrapper %} 
+
+{% block extra-css %}
+{% for filter in filters %}
+  {{filter.form.media.css}}
+{% endfor %}
+{% endblock %}
 
 {% block content %}
 
@@ -26,6 +33,8 @@
                                           all_children=_('All Seasons')
                                           child_url='league:tournament_leaderboard'
                                           url_get_param='' only %}
+
+{% include 'misc/filters.html' with filters=filters only %}
 
 <div class="table-responsive">
 <table class="table table-striped">
@@ -68,4 +77,12 @@
 </table>
 
 {% include 'misc/pagination.html' %}
+{% endblock %}
+
+{% block extra-js %}
+{% for filter in filters %}
+  {{filter.form.media.js}}
+{% endfor %}
+
+  <script src="{% static 'misc/js/modal-select2.js' %}"></script>
 {% endblock %}

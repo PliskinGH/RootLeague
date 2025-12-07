@@ -1,0 +1,22 @@
+
+{% load crispy_forms_tags %}
+
+<div class="container d-flex align-items-center justify-content-center">
+<div class="row row-cols-auto btn-group" role="group">
+{% for filter in filters %}
+  <div class="col mx-auto">
+  <!-- Button trigger modal -->
+  <button type="button" class="btn {% if forloop.counter|divisibleby:"2" %} btn-primary {% else %} btn-secondary {% endif %}" data-bs-toggle="modal" data-bs-target="#{{ filter.html_id }}">
+    {{ filter.html_title }}
+  </button>
+  </div>
+{% endfor %}
+</div>
+</div>
+
+{% for filter in filters %}
+  <!-- Modal form -->
+  {% crispy filter.form %}
+{% endfor %}
+
+<br />
