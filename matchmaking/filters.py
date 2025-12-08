@@ -14,6 +14,8 @@ from authentification.models import Player
 from authentification.forms import PlayerMultipleWidget
 from misc.forms import DateTimeWidget
 
+AND_FILTER_HELP_TEXT = _("This filter uses AND logic.")
+
 class MatchFilterMethodsMixin(object):
     def filter_isnotnull(self, queryset, name, value):
         lookup = '__'.join([name, 'isnull'])
@@ -114,11 +116,17 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
     html_id = "matchFiltersModal"
 
     tournament = filters.ModelMultipleChoiceFilter(queryset=Tournament.objects.all().order_by('start_date', 'name'))
+    players = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
+                                                widget=PlayerMultipleWidget,
+                                                conjoined=True,
+                                                field_name="participants__player",
+                                                label=_("Players"),
+                                                help_text=AND_FILTER_HELP_TEXT)
     factions = filters.MultipleChoiceFilter(choices=constants.FACTIONS,
                                             conjoined=True,
                                             field_name="participants__faction",
                                             label=_("Factions"),
-                                            help_text=_("This filter uses AND logic."))
+                                            help_text=AND_FILTER_HELP_TEXT)
     board_map = filters.MultipleChoiceFilter(choices=constants.MAPS)
     deck = filters.MultipleChoiceFilter(choices=constants.DECKS)
     turn_timing = filters.MultipleChoiceFilter(choices=constants.TURN_TIMING_TYPES)
@@ -132,13 +140,7 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
 
     class Meta:
         model = Match
-        fields = {'tournament' : ['exact'],
-                  'date_modified' : ['gte', 'lte'],
-                  'board_map' : ['exact'],
-                  'deck' : ['exact'],
-                  'turn_timing' : ['exact'],
-                  'game_setup' : ['exact'],
-                  }
+        fields = {'date_modified' : ['gte', 'lte']}
         filter_overrides = {
             models.DateTimeField: {
                 'filter_class': filters.DateTimeFilter,
