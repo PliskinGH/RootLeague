@@ -6,6 +6,7 @@ from django.core.exceptions import FieldDoesNotExist
 from decimal import Decimal
 
 from .forms import PlayerInStatsForm
+from .filters import LeaderboardFilter
 from .common import get_league, get_tournament, get_dropdown_menu, get_title
 from authentification.models import Player
 from matchmaking.models import Match, Participant
@@ -54,8 +55,23 @@ def leaderboard(request,
     else:
         players = players.annotate(total=Count('participations', distinct=True,
                                                filter=query_filter))
-        min_games = max(10, min_games) # TODO user choice
-    players = players.exclude(Q(total=None) | Q(total__lt=min_games))
+        min_games = max(10, min_games)
+    players = players.exclude(Q(total=None))
+
+    query_params = request.GET.copy()
+    if not(('total_min' in query_params)) or not(query_params['total_min'].isdigit()):
+        query_params['total_min'] = min_games
+    else:
+        min_games = int(query_params['total_min'])
+    if ('total_max' in query_params and not(query_params['total_max'].isdigit())):
+        query_params['total_max'] = ""
+    leaderboard_filter = LeaderboardFilter(query_params, players)
+    players = leaderboard_filter.qs
+    
+    match_filter.append_hidden_fields(leaderboard_filter)
+    leaderboard_filter.append_hidden_fields(match_filter)
+    participant_filter.append_hidden_fields(leaderboard_filter)
+    leaderboard_filter.append_hidden_fields(participant_filter)
 
     if (tournament not in EMPTY_VALUES):
         players = players.annotate(score=Sum('participations__tournament_score',
@@ -79,8 +95,10 @@ def leaderboard(request,
     extra_context = get_dropdown_menu(tournament=tournament,
                                       league=league)
     extra_context['min_games'] = min_games
+    if ('total_max' in query_params and query_params['total_max'].isdigit()):
+        extra_context['max_games'] = query_params['total_max']
     extra_context['global_url'] = 'league:global_leaderboard'
-    extra_context['filters'] = [match_filter, participant_filter]
+    extra_context['filters'] = [match_filter, participant_filter, leaderboard_filter]
 
     if (ordering is None):
         ordering = ['-relative_score', '-score', '-total']

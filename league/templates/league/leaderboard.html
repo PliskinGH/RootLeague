@@ -67,14 +67,24 @@
 </table>
 </div>
 
-<table class="table table-striped">
+<br />
+
+<table class="table table-borderless">
   <tbody>
-    <tr>
+    <tr class="table-active">
       <th scope="row">{{_("Minimum threshold")}}</th>
       <td>{{ min_games }} {{_("game(s)")}}</td>
     </tr>
+    {% if max_games %}
+    <tr class="table-active">
+      <th scope="row">{{_("Maximum threshold")}}</th>
+      <td>{{ max_games }} {{_("game(s)")}}</td>
+    </tr>
+    {% endif %}
   </tbody>
 </table>
+
+<br />
 
 {% include 'misc/pagination.html' %}
 {% endblock %}
