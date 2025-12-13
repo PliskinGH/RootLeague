@@ -35,7 +35,7 @@ class Match(models.Model):
                                    verbose_name=_('tournament'))
     
     turn_timing = models.CharField(max_length=20,
-                                   blank=True, default=TURN_TIMING_ASYNC,
+                                   blank=True,
                                    choices=TURN_TIMING_TYPES,
                                    verbose_name=_('turn timing'))
     table_talk_url = models.URLField(blank=True, null=True, max_length=1000,
@@ -52,7 +52,7 @@ class Match(models.Model):
                                          verbose_name=_('undrafted faction'))
     
     deck = models.CharField(max_length=200, choices=DECKS,
-                            blank=True, default=DECK_EP,
+                            blank=True,
                             verbose_name=_('deck'))
     board_map = models.CharField(max_length=20, choices=MAPS,
                                  blank=True,

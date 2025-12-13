@@ -9,13 +9,17 @@ from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
 from .models import Match, Participant
-from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
+from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, MAP_WINTER, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
 from league.models import Tournament
 from authentification.forms import PlayerWidget
 from misc.forms import NonPrimarySubmit, IconSelect
 
 PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
+
+REQUIRED_FIELD_ERROR = _("This field is required for closed games.")
+REQUIRED_TOURNAMENT_FIELD_ERROR = _("The %(field_name)s chosen is different from \
+                                  the one of the tournament (%(field_value)s).")
 
 class MatchForm(ModelForm):
     closed = BooleanField(required=False, initial=True, label=_("Final Results"))
@@ -68,9 +72,15 @@ class MatchForm(ModelForm):
         is_closed = self.cleaned_data.get('closed', False)
         game_setup = self.cleaned_data.get('game_setup', '')
         board_map = self.cleaned_data.get('board_map', '')
+        random_suits = self.cleaned_data.get('random_suits', None)
         deck = self.cleaned_data.get('deck', '')
+        turn_timing = self.cleaned_data.get('turn_timing', '')
+        table_talk_url = self.cleaned_data.get('table_talk_url', '')
         if (is_closed):
             # Required fields for closed games
+            if (game_setup in EMPTY_VALUES):
+                self.add_error('random_suits',
+                               ValidationError(REQUIRED_FIELD_ERROR))
             if (board_map in EMPTY_VALUES):
                 self.add_error('board_map',
                                ValidationError(
@@ -79,31 +89,53 @@ class MatchForm(ModelForm):
                 self.add_error('deck',
                                ValidationError(
                                 _("A deck is required for closed games.")))
+            if (turn_timing in EMPTY_VALUES):
+                self.add_error('turn_timing',
+                               ValidationError(REQUIRED_FIELD_ERROR))
+            if (random_suits in EMPTY_VALUES):
+                self.add_error('random_suits',
+                               ValidationError(REQUIRED_FIELD_ERROR))
+            if (table_talk_url in EMPTY_VALUES):
+                self.add_error('table_talk_url',
+                               ValidationError(REQUIRED_FIELD_ERROR))
         if (tournament is not None):
             tournament_setup = getattr(tournament, 'game_setup', '')
             tournament_map = getattr(tournament, 'board_map', '')
             tournament_deck = getattr(tournament, 'deck', '')
+            tournament_suits = getattr(tournament, 'random_suits', '')
             if (tournament_setup not in EMPTY_VALUES and
                 game_setup != tournament_setup):
                 self.add_error('game_setup',
                                ValidationError(
-                                _("The setup chosen is different from \
-                                  the one of the tournament (%(setup)s)."),
-                                  params={'setup' : tournament.get_game_setup_display()}))
+                                REQUIRED_TOURNAMENT_FIELD_ERROR,
+                                  params={'field_value' : tournament.get_game_setup_display(),
+                                          'field_name' : 'setup'}))
             if (tournament_map not in EMPTY_VALUES and
                 board_map != tournament_map):
                 self.add_error('board_map',
                                ValidationError(
-                                _("The chosen map is different from \
-                                  the one of the tournament (%(map)s)."),
-                                  params={'map' : tournament.get_board_map_display()}))
+                                REQUIRED_TOURNAMENT_FIELD_ERROR,
+                                params={'field_value' : tournament.get_board_map_display(),
+                                        'field_name' : 'map'}))
+            if (tournament_suits not in EMPTY_VALUES and
+                random_suits != tournament_suits):
+                self.add_error('random_suits',
+                               ValidationError(
+                                REQUIRED_TOURNAMENT_FIELD_ERROR,
+                                  params={'field_value' : tournament.get_random_suits_display(),
+                                          'field_name' : 'setting'}))
             if (tournament_deck not in EMPTY_VALUES and
                 deck != tournament_deck):
                 self.add_error('deck',
                                ValidationError(
-                                _("The chosen deck is different from \
-                                  the one of the tournament (%(deck)s)."),
-                                  params={'deck' : tournament.get_deck_display()}))
+                                REQUIRED_TOURNAMENT_FIELD_ERROR,
+                                  params={'field_value' : tournament.get_deck_display(),
+                                          'field_name' : 'deck'}))
+        # Extra validation
+        if (board_map == MAP_WINTER and (random_suits in EMPTY_VALUES or not(random_suits))):
+            self.add_error('random_suits',
+                            ValidationError(_("The distribution must be random for this map.")))
+            
     
     class Meta:
         model = Match
