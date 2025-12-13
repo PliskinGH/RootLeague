@@ -116,13 +116,17 @@ class ParticipantFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.F
 
     player = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
                                                widget=PlayerMultipleWidget,)
+    turn_order = filters.MultipleChoiceFilter(choices=constants.TURN_ORDERS)
     faction = filters.MultipleChoiceFilter(choices=constants.FACTIONS)
+    tournament_score = filters.AllValuesMultipleFilter()
     dominance = filters.MultipleChoiceFilter(choices=constants.DOMINANCE_SUITS)
     coalition = filters.BooleanFilter(method='filter_isnotnull')
 
     class Meta:
         model = Participant
         fields = {'player' : ['exact'],
+                  'turn_order' : ['exact'],
                   'faction' : ['exact'],
+                  'tournament_score' : ['exact'],
                   'dominance' : ['exact'],
                   }
