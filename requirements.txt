@@ -3,6 +3,7 @@ crispy-bootstrap5==2024.2
 diff-match-patch==20230430
 dj-database-url==2.2.0
 Django==5.2.7
+django-admin-autocomplete-filter==0.7.1
 django-admin-inline-paginator==0.4.0
 django-appconf==1.0.6
 django-crispy-forms==2.3
