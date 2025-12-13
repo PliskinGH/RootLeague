@@ -140,7 +140,7 @@ LANDMARK_LF = "lm_lf"
 LANDMARK_LC = "lm_lc"
 LANDMARK_TOWER = "lm_tower"
 LANDMARKS = [
-    (LANDMARK_BM, _("Black Mark")),
+    (LANDMARK_BM, _("Black Market")),
     (LANDMARK_ET, _("Elder Treetop")),
     (LANDMARK_FERRY, _("The Ferry")),
     (LANDMARK_LF, _("Legendary Forge")),

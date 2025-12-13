@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 18:52+0200\n"
+"POT-Creation-Date: 2025-12-13 17:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\authentification\admin.py:18 .\authentification\admin.py:39
+#: .\authentification\admin.py:21 .\authentification\admin.py:42
 msgid "Personal info"
 msgstr ""
 
-#: .\authentification\admin.py:20 .\authentification\admin.py:41
+#: .\authentification\admin.py:23 .\authentification\admin.py:44
 msgid "Permissions"
 msgstr ""
 
-#: .\authentification\admin.py:29
+#: .\authentification\admin.py:32
 msgid "Important dates"
 msgstr ""
 
