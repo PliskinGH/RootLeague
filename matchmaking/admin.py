@@ -71,18 +71,19 @@ class ParticipantAdmin(ExportActionMixin, admin.ModelAdmin):
     fields = ['player', 'match', 'turn_order', 'faction',
               'game_score', 'dominance', 'coalition',
               'tournament_score']
-    list_filter = ['match__date_registered', 'match__date_closed',
-                   PlayerFilter,
-                   ('match__tournament', MultiSelectRelatedFilter),
-                   ('match__board_map', MultiSelectChoicesFilter),
-                   ('match__deck', MultiSelectChoicesFilter),
-                   'match__random_suits',
-                   ('match__turn_timing', MultiSelectChoicesFilter),
+    list_filter = [PlayerFilter,
                    ('faction', MultiSelectChoicesFilter),
                    ('tournament_score', MultiSelectFilter),
                    ('turn_order', MultiSelectChoicesFilter),
                    ('dominance', MultiSelectChoicesFilter),
-                   CoalitionListFilter]
+                   CoalitionListFilter,
+                   ('match__tournament', MultiSelectRelatedFilter),
+                   ('match__turn_timing', MultiSelectChoicesFilter),
+                   ('match__deck', MultiSelectChoicesFilter),
+                   ('match__board_map', MultiSelectChoicesFilter),
+                   ('match__random_suits', MultiSelectFilter),
+                   'match__date_registered', 'match__date_closed',
+                   ]
     list_display = ['player', 'match', 'match__date_closed',
                     'faction', 'game_score', 'tournament_score', 'turn_order']
     autocomplete_fields = ['player']
@@ -108,7 +109,7 @@ class ParticipationInline(ParticipantInline):
     verbose_name_plural = "Participations"
 
 class ParticipantPlayerFilter(AutocompleteFilter):
-    title = 'Player'
+    title = 'player'
     field_name = 'player'
     rel_model = Participant
     parameter_name = 'participants__player'
@@ -118,13 +119,14 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
     inlines = [ParticipantInline,] # list of participants in the match
     search_fields = ['title']
     search_help_text = MATCH_SEARCH_HELP_TEXT
-    list_filter = ['date_registered', 'date_modified', 'date_closed',
-                   ParticipantPlayerFilter,
+    list_filter = [ParticipantPlayerFilter,
                    ('tournament', MultiSelectRelatedFilter),
-                   ('board_map', MultiSelectChoicesFilter),
+                   ('turn_timing', MultiSelectChoicesFilter),
                    ('deck', MultiSelectChoicesFilter),
-                   'random_suits',
-                   ('turn_timing', MultiSelectChoicesFilter)]
+                   ('board_map', MultiSelectChoicesFilter),
+                   ('random_suits', MultiSelectFilter),
+                   'date_registered', 'date_modified', 'date_closed',
+                   ]
     list_display = ['title', 'date_registered', 'date_closed',
                    'tournament',
                    'turn_timing',

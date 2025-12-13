@@ -6,10 +6,11 @@ from django.utils.encoding import force_str
 
 from authentification.models import Player
 from league.models import League, Tournament
-from league.constants import FACTION_OTTERS
+from league.constants import FACTION_OTTERS, MAP_WINTER
 from matchmaking.models import Match, Participant
 
 def import_users(csv_file_name, test_run = True, ignore_failures=False):
+    print("#### Starting script ####\n")
     players = []
     errors = {}
     with open(csv_file_name, newline='') as csvfile:
@@ -64,8 +65,10 @@ def import_users(csv_file_name, test_run = True, ignore_failures=False):
             print(nbImported, "players imported.", "\n")
         if (errors):
             print("Errors:\n", errors)
+    print("\n#### Script ended ####")
 
 def increment_turn_order(league_name="Legacy", test_run = True):
+    print("#### Starting script ####\n")
     leagues = League.objects.filter(name__icontains=league_name)
     if (len(leagues) != 1):
         raise ValidationError("League not found!", code="invalid")
@@ -95,8 +98,10 @@ def increment_turn_order(league_name="Legacy", test_run = True):
         print(nbModifications, "participants turn orders were fixed out of", nbToModif, "possible.\n")
     if (errors):
         print(errors)
+    print("\n#### Script ended ####")
 
 def fix_empty_factions(league_name="Legacy", faction=FACTION_OTTERS, test_run=True):
+    print("#### Starting script ####\n")
     leagues = League.objects.filter(name__icontains=league_name)
     if (len(leagues) != 1):
         raise ValidationError("League not found!", code="invalid")
@@ -128,6 +133,7 @@ def fix_empty_factions(league_name="Legacy", faction=FACTION_OTTERS, test_run=Tr
         print(nbModifications, "participants factions were fixed out of", nbToModif, "possible.\n")
     if (errors):
         print(errors)
+    print("\n#### Script ended ####")
 
 def find_wrong_turn_orders():
     print("#### Starting script ####\n")
@@ -193,3 +199,29 @@ def find_wrong_players():
         print("No match with wrong players was found. All good!")
     print("\n#### Script ended ####")
 
+def fix_wrong_distribution(map=MAP_WINTER, correct_random_suits=True, test_run=True):
+    print("#### Starting script ####\n")
+    nbModifications = 0
+    nbToModif = 0
+    errors = {}
+    matches = Match.objects.all()
+    for match in matches:
+        if (match.board_map != map):
+            continue
+        if (match.random_suits == correct_random_suits):
+            continue
+        if (not(test_run)):
+            try:
+                match.random_suits = correct_random_suits
+                match.save()
+                nbModifications += 1
+            except Exception as e:
+                errors[str(match.title)] = ValidationError(force_str(e), code="invalid")
+        nbToModif += 1
+    if (test_run):
+        print(nbToModif, "suit distributions could be fixed.\n")
+    else:
+        print(nbModifications, "suit distributions were fixed out of", nbToModif, "possible.\n")
+    if (errors):
+        print(errors)
+    print("\n#### Script ended ####")
