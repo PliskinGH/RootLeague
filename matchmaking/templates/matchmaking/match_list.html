@@ -15,6 +15,12 @@
   {% endwith %}
 {% endblock title_wrapper %} 
 
+{% block extra-css %}
+{% for filter in filters %}
+  {{filter.form.media.css}}
+{% endfor %}
+{% endblock %}
+
 {% block content %}
 
 {% if display_league_menu %}
@@ -31,6 +37,8 @@
                                           child_url=tournament_url
                                           url_get_param='' only %}
 {% endif %}
+
+{% include 'misc/filters.html' with filters=filters only %}
 
 {% if display_search %}
 {% include 'misc/search_form.html' with url_search=url_search
@@ -123,4 +131,12 @@
 </div>
 
 {% include 'misc/pagination.html' %}
+{% endblock %}
+
+{% block extra-js %}
+{% for filter in filters %}
+  {{filter.form.media.js}}
+{% endfor %}
+
+  <script src="{% static 'misc/js/modal-select2.js' %}"></script>
 {% endblock %}

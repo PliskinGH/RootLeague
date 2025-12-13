@@ -2,19 +2,7 @@
 
 {% load i18n %}
 
-{% load static %}
-
-{% load crispy_forms_tags %}
-
-{% block extra-css %}
-{% for filter in filters %}
-  {{filter.form.media.css}}
-{% endfor %}
-{% endblock %}
-
 {% block content_header %}
-
-{% include 'misc/filters.html' with filters=filters only %}
 
 <h1>{{ _("Summary") }}</h1>
 
@@ -52,7 +40,7 @@
     </tr>
   </thead>
   <tbody>
-    {% if stats.total %}
+    {% if stats and stats.total %}
     <tr>
       <th scope="row">{{ stats.total }}</th>
       <td>
@@ -102,11 +90,3 @@
 <h1>{{ _("Matches") }}</h1>
 
 {% endblock content_header %}
-
-{% block extra-js %}
-{% for filter in filters %}
-  {{filter.form.media.js}}
-{% endfor %}
-
-  <script src="{% static 'misc/js/modal-select2.js' %}"></script>
-{% endblock %}

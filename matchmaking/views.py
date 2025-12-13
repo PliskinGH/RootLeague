@@ -41,7 +41,8 @@ def listing(request,
             total_number = None,
             number_per_page = 10,
             extra_context = None,
-            use_search = True,
+            use_stats = False,
+            use_search = False,
             use_league_menu = True,
             display_edit = False,
             current_url = 'match:listing',
@@ -51,12 +52,12 @@ def listing(request,
             league_url = 'match:league_listing',
             tournament_url = 'match:tournament_listing',
             template_name=None):
+    if (matchs is None):
+        matchs = Match.objects.all()
+
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
         league = tournament.league
-    
-    if (matchs is None):
-        matchs = Match.objects.all()
     
     if (player not in EMPTY_VALUES):
         matchs = matchs.filter(participants__player=player)
@@ -68,6 +69,15 @@ def listing(request,
         matchs = matchs.filter(tournament=tournament)
     elif (league not in EMPTY_VALUES):
         matchs = matchs.filter(tournament__league=league)
+    
+    match_filter = MatchFilter(request.GET, matchs)
+    matchs = match_filter.qs
+    participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
+    participations = participant_filter.qs
+    matchs = matchs.filter(participants__in=participations).distinct()
+
+    match_filter.append_hidden_fields(participant_filter)
+    participant_filter.append_hidden_fields(match_filter)
 
     if (ordering is None):
         ordering = ['-date_closed', '-date_modified', '-date_registered']
@@ -99,6 +109,44 @@ def listing(request,
         extra_context['tournament_url'] = tournament_url
     extra_context['display_league_menu'] = use_league_menu
     extra_context['display_edit'] = display_edit
+    extra_context['filters'] = [match_filter, participant_filter]
+
+    if (use_stats):
+        participations = participations.exclude(match__date_closed=None)
+        total = participations.count()
+        if (total < 1):
+            stats = dict(total=total,
+                        total_score=None,
+                        relative_score=None,
+                        total_dom=None,
+                        dom_score=None,
+                        relative_dom_score=None,
+                        total_coal=None,
+                        coal_score=None,
+                        relative_coal_score=None,)
+        else:
+            stats = participations.exclude(tournament_score=None) \
+                                .aggregate(total_score=Sum('tournament_score', default=0),
+                                            dom_score=Sum('tournament_score', filter=~Q(dominance=None) & ~Q(dominance=""), default=0),
+                                            coal_score=Sum('tournament_score', filter=~Q(coalition=None) | ~Q(coalitioned_vagabond=None), default=0)
+                                            )
+            stats['total'] = total
+            stats['relative_score'] = stats['total_score'] / total * 100
+            total_dom = participations.exclude(Q(dominance=None) | Q(dominance="")).count()
+            stats['total_dom'] = total_dom
+            if (total_dom < 1):
+                stats['dom_score'] = None
+                stats['relative_dom_score'] = None
+            else:
+                stats['relative_dom_score'] = stats['dom_score'] / total_dom * 100
+            total_coal = participations.exclude(Q(coalition=None) & Q(coalitioned_vagabond=None)).count()
+            stats['total_coal'] = total_coal
+            if (total_coal < 1):
+                stats['coal_score'] = None
+                stats['relative_coal_score'] = None
+            else:
+                stats['relative_coal_score'] = stats['coal_score'] / total_coal * 100
+        extra_context['stats'] = stats
     
     return ImprovedListView.as_view(model=Match,
                                     queryset=matchs,
@@ -446,60 +494,42 @@ class MatchViewset(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Match.objects.exclude(date_closed=None)
 
-def filtered_listing(request):
-    match_filter = MatchFilter(request.GET, Match.objects.all())
-    matchs = match_filter.qs
-    participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
-    participations = participant_filter.qs
-    matchs = matchs.filter(participants__in=participations).distinct()
-
-    match_filter.append_hidden_fields(participant_filter)
-    participant_filter.append_hidden_fields(match_filter)
-
-    participations = participations.exclude(match__date_closed=None)
-    total = participations.count()
-    if (total < 1):
-        stats = dict(total=total,
-                     total_score=None,
-                     relative_score=None,
-                     total_dom=None,
-                     dom_score=None,
-                     relative_dom_score=None,
-                     total_coal=None,
-                     coal_score=None,
-                     relative_coal_score=None,)
-    else:
-        stats = participations.exclude(tournament_score=None) \
-                              .aggregate(total_score=Sum('tournament_score', default=0),
-                                         dom_score=Sum('tournament_score', filter=~Q(dominance=None) & ~Q(dominance=""), default=0),
-                                         coal_score=Sum('tournament_score', filter=~Q(coalition=None) | ~Q(coalitioned_vagabond=None), default=0)
-                                         )
-        stats['total'] = total
-        stats['relative_score'] = stats['total_score'] / total * 100
-        total_dom = participations.exclude(Q(dominance=None) | Q(dominance="")).count()
-        stats['total_dom'] = total_dom
-        if (total_dom < 1):
-            stats['dom_score'] = None
-            stats['relative_dom_score'] = None
-        else:
-            stats['relative_dom_score'] = stats['dom_score'] / total_dom * 100
-        total_coal = participations.exclude(Q(coalition=None) & Q(coalitioned_vagabond=None)).count()
-        stats['total_coal'] = total_coal
-        if (total_coal < 1):
-            stats['coal_score'] = None
-            stats['relative_coal_score'] = None
-        else:
-            stats['relative_coal_score'] = stats['coal_score'] / total_coal * 100
-
-    extra_context = {}
-    extra_context['filters'] = [match_filter, participant_filter]
-    extra_context['stats'] = stats
-
+def summary(request,
+            league = None,
+            tournament = None,
+            current_url = 'match:summary',
+            current_url_arg = ""):
     return listing(request,
-                   title=_("Custom Filters"),
-                   matchs=matchs,
-                   extra_context=extra_context,
-                   use_league_menu=False,
-                   use_search=False,
+                   title=_("Stats summary"),
+                   use_stats=True,
+                   use_league_menu=True,
+                   league=league, tournament=tournament,
+                   current_url=current_url,
+                   current_url_arg=current_url_arg,
+                   global_url='match:summary',
+                   league_url='match:league_summary',
+                   tournament_url='match:tournament_summary',
                    number_per_page=5,
-                   template_name='matchmaking/match_filter.html')
+                   template_name='matchmaking/match_summary.html')
+
+def league_summary(request,
+                   league_id = None):
+    league = get_league(league_id)
+    current_url_arg = ""
+    if (league):
+        current_url_arg = league.id
+    return summary(request,
+                   league=league,
+                   current_url = 'match:league_summary',
+                   current_url_arg = current_url_arg)
+
+def tournament_summary(request,
+                       tournament_id = None):
+    tournament = get_tournament(tournament_id)
+    current_url_arg = ""
+    if (tournament):
+        current_url_arg = tournament.id
+    return summary(request,
+                       tournament=tournament,
+                       current_url = 'match:tournament_summary',
+                       current_url_arg = current_url_arg)

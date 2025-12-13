@@ -24,5 +24,10 @@ urlpatterns = [
     path('played/league/<int:league_id>/', views.league_played_games, name='league_played_games'),
     path('played/tournament/', views.tournament_played_games, name='default_tournament_played_games'),
     path('played/tournament/<int:tournament_id>/', views.tournament_played_games, name='tournament_played_games'),
-    path('filters/', views.filtered_listing, name='filters'),
+    path('filters/', views.summary, name='filters'), # kept for legacy url compatibility... TODO Remove at some point
+    path('summary/', views.summary, name='summary'),
+    path('summary/league/', views.league_summary, name='default_league_summary'),
+    path('summary/league/<int:league_id>/', views.league_summary, name='league_summary'),
+    path('summary/tournament/', views.tournament_summary, name='default_tournament_summary'),
+    path('summary/tournament/<int:tournament_id>/', views.tournament_summary, name='tournament_summary'),
 ]

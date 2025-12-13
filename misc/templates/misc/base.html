@@ -74,7 +74,6 @@
                         <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'match:listing' %}">{{_("List")}}</a>
                             <a class="dropdown-item" href="{% url 'match:register' %}">{{_("Submit")}}</a>
-                            <a class="dropdown-item" href="{% url 'match:filters' %}">{{_("Custom Filters")}}</a>
                         </div>
                     </li>
                     <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
@@ -83,6 +82,7 @@
                             {{_("Stats")}}
                         </a>
                         <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'match:summary' %}">{{_("Summary")}}</a>
                             <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
                             <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
                         </div>

@@ -75,6 +75,7 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
     html_title = _("Match filters")
     html_id = "matchFiltersModal"
 
+    title__icontains = filters.CharFilter(field_name='title', lookup_expr='icontains')
     tournament = filters.ModelMultipleChoiceFilter(queryset=Tournament.objects.all().order_by('start_date', 'name'))
     players = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
                                                 widget=PlayerMultipleWidget,
@@ -94,21 +95,17 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
     closed = filters.BooleanFilter(field_name='date_closed',
                                    label='Match closed',
                                    method='filter_isnotnull')
+    date_closed__gte = filters.DateTimeFilter(field_name='date_closed', lookup_expr='gte', widget=DateTimeWidget)
+    date_closed__lte = filters.DateTimeFilter(field_name='date_closed', lookup_expr='lte', widget=DateTimeWidget)
+    date_modified__gte = filters.DateTimeFilter(field_name='date_modified', lookup_expr='gte', widget=DateTimeWidget)
+    date_modified__lte = filters.DateTimeFilter(field_name='date_modified', lookup_expr='lte', widget=DateTimeWidget)
 
     # landmark = filters.ChoiceFilter(label="Landmark", choices=LANDMARKS, method='filter_landmark')
     # hirelings = filters.ChoiceFilter(label="Hirelings", choices=HIRELINGS, method='filter_hirelings')
 
     class Meta:
         model = Match
-        fields = {'date_modified' : ['gte', 'lte']}
-        filter_overrides = {
-            models.DateTimeField: {
-                'filter_class': filters.DateTimeFilter,
-                'extra': lambda f: {
-                    'widget': DateTimeWidget(),
-                }
-            }
-        }
+        fields = {}
 
 class ParticipantFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterSet):
     html_title = _("Participant filters")
