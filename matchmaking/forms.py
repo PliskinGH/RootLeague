@@ -20,6 +20,8 @@ PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 REQUIRED_FIELD_ERROR = _("This field is required for closed games.")
 REQUIRED_TOURNAMENT_FIELD_ERROR = _("The %(field_name)s chosen is different from \
                                   the one of the tournament (%(field_value)s).")
+HIRELINGS_ERROR = _("The hirelings must all be different.")
+LANDMARK_ERROR = _("The landmarks must all be different.")
 
 class MatchForm(ModelForm):
     closed = BooleanField(required=False, initial=True, label=_("Final Results"))
@@ -76,6 +78,11 @@ class MatchForm(ModelForm):
         deck = self.cleaned_data.get('deck', '')
         turn_timing = self.cleaned_data.get('turn_timing', '')
         table_talk_url = self.cleaned_data.get('table_talk_url', '')
+        hirelings_a = self.cleaned_data.get('hirelings_a', '')
+        hirelings_b = self.cleaned_data.get('hirelings_b', '')
+        hirelings_c = self.cleaned_data.get('hirelings_c', '')
+        landmark_a = self.cleaned_data.get('landmark_a', '')
+        landmark_b = self.cleaned_data.get('landmark_b', '')
         if (is_closed):
             # Required fields for closed games
             if (game_setup in EMPTY_VALUES):
@@ -131,6 +138,17 @@ class MatchForm(ModelForm):
                                 REQUIRED_TOURNAMENT_FIELD_ERROR,
                                   params={'field_value' : tournament.get_deck_display(),
                                           'field_name' : 'deck'}))
+        # Hirelings/landmarks validation
+        if (hirelings_a not in EMPTY_VALUES and (hirelings_a == hirelings_b or hirelings_a == hirelings_c)):
+            self.add_error('hirelings_a', ValidationError(HIRELINGS_ERROR))
+        if (hirelings_b not in EMPTY_VALUES and (hirelings_b == hirelings_a or hirelings_b == hirelings_c)):
+            self.add_error('hirelings_b', ValidationError(HIRELINGS_ERROR))
+        if (hirelings_c not in EMPTY_VALUES and (hirelings_c == hirelings_a or hirelings_c == hirelings_b)):
+            self.add_error('hirelings_a', ValidationError(HIRELINGS_ERROR))
+        if (landmark_a not in EMPTY_VALUES and (landmark_a == landmark_b)):
+            self.add_error('landmark_a', ValidationError(LANDMARK_ERROR))
+        if (landmark_b not in EMPTY_VALUES and (landmark_a == landmark_b)):
+            self.add_error('landmark_b', ValidationError(LANDMARK_ERROR))
         # Extra validation
         if (board_map == MAP_WINTER and (random_suits in EMPTY_VALUES or not(random_suits))):
             self.add_error('random_suits',
