@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'more_admin_filters',
     'import_export',
     'django_admin_inline_paginator',
+    'admin_auto_filters',
     "mailer",
     'tinymce',
     'rest_framework',
