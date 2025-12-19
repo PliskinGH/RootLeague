@@ -15,5 +15,7 @@ class LeaderboardFilter(ModalFormFilterMixin, filters.FilterSet):
     html_title = _("Leaderboard filters")
     html_id = "leaderboardFiltersModal"
 
-    total = filters.RangeFilter(label=_("Threshold of games"),
-                                widget=NumberRangeWidget())
+    total_min = filters.NumberFilter(label=_("Minimum threshold of games"), lookup_expr="gte", field_name="total")
+    total_max = filters.NumberFilter(label=_("Maximum threshold of games"), lookup_expr="lte", field_name="total")
+    # total = filters.RangeFilter(label=_("Threshold of games"),
+    #                             widget=NumberRangeWidget())
