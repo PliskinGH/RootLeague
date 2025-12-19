@@ -13,6 +13,7 @@ from misc.filters import ModalFormFilterMixin
 from misc.forms import DateTimeWidget
 
 AND_FILTER_HELP_TEXT = _("This filter uses AND logic.")
+FACTIONS_FILTER_CHOICES = constants.FACTIONS + [(constants.VAGABOND, _("Any Vagabond"))]
 
 class MatchFilterMethodsMixin(object):
     def filter_isnotnull(self, queryset, name, value):
@@ -83,7 +84,7 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
                                                 field_name="participants__player",
                                                 label=_("Players"),
                                                 help_text=AND_FILTER_HELP_TEXT)
-    factions = filters.MultipleChoiceFilter(choices=constants.FACTIONS,
+    factions = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="icontains",
                                             conjoined=True,
                                             field_name="participants__faction",
                                             label=_("Factions"),
@@ -114,16 +115,11 @@ class ParticipantFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.F
     player = filters.ModelMultipleChoiceFilter(queryset=Player.objects.all().order_by('username'),
                                                widget=PlayerMultipleWidget,)
     turn_order = filters.MultipleChoiceFilter(choices=constants.TURN_ORDERS)
-    faction = filters.MultipleChoiceFilter(choices=constants.FACTIONS)
+    faction = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="icontains")
     tournament_score = filters.AllValuesMultipleFilter()
     dominance = filters.MultipleChoiceFilter(choices=constants.DOMINANCE_SUITS)
     coalition = filters.BooleanFilter(method='filter_isnotnull')
 
     class Meta:
         model = Participant
-        fields = {'player' : ['exact'],
-                  'turn_order' : ['exact'],
-                  'faction' : ['exact'],
-                  'tournament_score' : ['exact'],
-                  'dominance' : ['exact'],
-                  }
+        fields = {}
