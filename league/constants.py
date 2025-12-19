@@ -147,6 +147,8 @@ LANDMARKS = [
     (LANDMARK_LC, _("Lost City")),
     (LANDMARK_TOWER, _("The Tower")),
 ]
+MAX_NUMBER_OF_LANDMARKS = 2
+LANDMARKS_NUMBERS = [(i,i) for i in range(0, MAX_NUMBER_OF_LANDMARKS + 1)]
 
 HIRELINGS_BADGERS_P = "h_badgers_p"
 HIRELINGS_BADGERS_D = "h_badgers_d"
@@ -202,3 +204,4 @@ HIRELINGS = [
     (HIRELINGS_ALLIANCE_P, _("Spring Uprising")),
     (HIRELINGS_ALLIANCE_D, _("Rabbit Scouts")),
 ]
+HIRELINGS_NUMBER = 3

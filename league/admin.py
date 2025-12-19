@@ -32,6 +32,8 @@ class TournamentAdmin(admin.ModelAdmin):
             initial_data['min_players_per_game'] = league.min_players_per_game
             initial_data['coalition_allowed'] = league.coalition_allowed
             initial_data['three_coalition_allowed'] = league.three_coalition_allowed
+            initial_data['hirelings_allowed'] = league.hirelings_allowed
+            initial_data['landmarks_allowed'] = league.landmarks_allowed
             initial_data['win_score'] = league.win_score
             initial_data['coalition_score_multiplier'] = league.coalition_score_multiplier
             initial_data['total_score_per_game'] = league.total_score_per_game
@@ -39,4 +41,5 @@ class TournamentAdmin(admin.ModelAdmin):
             initial_data['deck'] = league.deck
             initial_data['board_map'] = league.board_map
             initial_data['random_suits'] = league.random_suits
+            initial_data['stats_display'] = league.stats_display
         return initial_data

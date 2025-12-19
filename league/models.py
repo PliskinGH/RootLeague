@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import Q, UniqueConstraint, Deferrable
 from django.core.validators import EMPTY_VALUES
 
-from .constants import SETUP_TYPES, DECKS, MAPS
+from .constants import SETUP_TYPES, DECKS, MAPS, LANDMARKS_NUMBERS
 
 # Create your models here.
 
@@ -29,6 +29,10 @@ class AbstractTournament(models.Model):
                                             verbose_name=_('coalition allowed'))
     three_coalition_allowed = models.BooleanField(blank=True, null=True,
                                                   verbose_name=_('three way coalition allowed'))
+    
+    hirelings = models.BooleanField(blank=True, null=True)
+    landmarks_required = models.IntegerField(blank=True, null=True,
+                                             choices=LANDMARKS_NUMBERS)
     
     min_games = models.IntegerField(blank=True, null=True,
                                     verbose_name=_("minimum number of games"),

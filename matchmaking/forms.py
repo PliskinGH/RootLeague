@@ -9,7 +9,7 @@ from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 
 from .models import Match, Participant
-from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, MAP_WINTER, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
+from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, MAP_WINTER, HIRELINGS_NUMBER, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
 from league.models import Tournament
 from authentification.forms import PlayerWidget
 from misc.forms import NonPrimarySubmit, IconSelect
@@ -20,8 +20,9 @@ PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
 REQUIRED_FIELD_ERROR = _("This field is required for closed games.")
 REQUIRED_TOURNAMENT_FIELD_ERROR = _("The %(field_name)s chosen is different from \
                                   the one of the tournament (%(field_value)s).")
-HIRELINGS_ERROR = _("The hirelings must all be different.")
-LANDMARK_ERROR = _("The landmarks must all be different.")
+REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR = _("The number of %(field_name)s is different from \
+                                            the one of the tournament (%(field_value)s).")
+DIFFERENT_FIELDS_ERROR = _("The %(field_name)s must all be different.")
 
 class MatchForm(ModelForm):
     closed = BooleanField(required=False, initial=True, label=_("Final Results"))
@@ -139,16 +140,47 @@ class MatchForm(ModelForm):
                                   params={'field_value' : tournament.get_deck_display(),
                                           'field_name' : 'deck'}))
         # Hirelings/landmarks validation
-        if (hirelings_a not in EMPTY_VALUES and (hirelings_a == hirelings_b or hirelings_a == hirelings_c)):
-            self.add_error('hirelings_a', ValidationError(HIRELINGS_ERROR))
-        if (hirelings_b not in EMPTY_VALUES and (hirelings_b == hirelings_a or hirelings_b == hirelings_c)):
-            self.add_error('hirelings_b', ValidationError(HIRELINGS_ERROR))
-        if (hirelings_c not in EMPTY_VALUES and (hirelings_c == hirelings_a or hirelings_c == hirelings_b)):
-            self.add_error('hirelings_a', ValidationError(HIRELINGS_ERROR))
-        if (landmark_a not in EMPTY_VALUES and (landmark_a == landmark_b)):
-            self.add_error('landmark_a', ValidationError(LANDMARK_ERROR))
-        if (landmark_b not in EMPTY_VALUES and (landmark_a == landmark_b)):
-            self.add_error('landmark_b', ValidationError(LANDMARK_ERROR))
+        hirelings_defined = [hirelings_a not in EMPTY_VALUES, hirelings_b not in EMPTY_VALUES, hirelings_c not in EMPTY_VALUES]
+        landmarks_defined = [landmark_a not in EMPTY_VALUES, landmark_b not in EMPTY_VALUES]
+        if (hirelings_defined[0] and (hirelings_a == hirelings_b or hirelings_a == hirelings_c)):
+            self.add_error('hirelings_a', ValidationError(DIFFERENT_FIELDS_ERROR,
+                                                          params={'field_name' : 'hirelings'}))
+        if (hirelings_defined[1] and (hirelings_b == hirelings_a or hirelings_b == hirelings_c)):
+            self.add_error('hirelings_b', ValidationError(DIFFERENT_FIELDS_ERROR,
+                                                          params={'field_name' : 'hirelings'}))
+        if (hirelings_defined[2] and (hirelings_c == hirelings_a or hirelings_c == hirelings_b)):
+            self.add_error('hirelings_a', ValidationError(DIFFERENT_FIELDS_ERROR,
+                                                          params={'field_name' : 'hirelings'}))
+        if (landmarks_defined[0] and (landmark_a == landmark_b)):
+            self.add_error('landmark_a', ValidationError(DIFFERENT_FIELDS_ERROR,
+                                                         params={'field_name' : 'landmarks'}))
+        if (landmarks_defined[1] and (landmark_a == landmark_b)):
+            self.add_error('landmark_b', ValidationError(DIFFERENT_FIELDS_ERROR,
+                                                         params={'field_name' : 'landmarks'}))
+        if (tournament is not None and is_closed):
+            tournament_hirelings = getattr(tournament, 'hirelings', None)
+            if (tournament_hirelings not in EMPTY_VALUES and tournament_hirelings):
+                tournament_hirelings = HIRELINGS_NUMBER
+            tournament_landmarks = getattr(tournament, 'landmarks_required', None)
+            if (tournament_hirelings not in EMPTY_VALUES and
+                hirelings_defined[0] + hirelings_defined[1] + hirelings_defined[2] != tournament_hirelings):
+                self.add_error('hirelings_a', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                                              params={'field_value' : tournament_hirelings,
+                                                                      'field_name' : 'hirelings'}))
+                self.add_error('hirelings_b', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                                              params={'field_value' : tournament_hirelings,
+                                                                      'field_name' : 'hirelings'}))
+                self.add_error('hirelings_c', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                                              params={'field_value' : tournament_hirelings,
+                                                                      'field_name' : 'hirelings'}))
+            if (tournament_landmarks not in EMPTY_VALUES and
+                landmarks_defined[0] + landmarks_defined[1] != tournament_landmarks):
+                self.add_error('landmark_a', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                                             params={'field_value' : tournament_landmarks,
+                                                                     'field_name' : 'landmarks'}))
+                self.add_error('landmark_b', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                                             params={'field_value' : tournament_landmarks,
+                                                                     'field_name' : 'landmarks'}))
         # Extra validation
         if (board_map == MAP_WINTER and (random_suits in EMPTY_VALUES or not(random_suits))):
             self.add_error('random_suits',
