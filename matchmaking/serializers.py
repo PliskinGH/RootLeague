@@ -1,7 +1,8 @@
 from django.core.validators import EMPTY_VALUES
-from rest_framework.serializers import ModelSerializer, StringRelatedField
+from rest_framework.serializers import ModelSerializer, StringRelatedField, MultipleChoiceField
 
 from .models import Match, Participant
+from league.constants import HIRELINGS, LANDMARKS
 
 class CoalitionedPlayerField(StringRelatedField):
     def to_representation(self, value):
@@ -22,6 +23,8 @@ class ParticipantSerializer(ModelSerializer):
 class MatchSerializer(ModelSerializer):
     participants = ParticipantSerializer(many=True, read_only=True)
     tournament = StringRelatedField()
+    hirelings = MultipleChoiceField(choices=HIRELINGS)
+    landmarks = MultipleChoiceField(choices=LANDMARKS)
 
     class Meta:
         model = Match

@@ -89,20 +89,4 @@ class PlayerPasswordResetConfirmForm(SetPasswordForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(NonPrimarySubmit("submit", _("Save"), css_class="btn-outline-secondary"))
-
-class PlayerWidgetMixin(object):
-    model = get_user_model()
-    search_fields = ['username__icontains',
-                     'in_game_name__icontains',
-                     'discord_name__icontains']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.attrs['style'] = 'width : 100%'
-
-class PlayerWidget(PlayerWidgetMixin, s2forms.ModelSelect2Widget):
-    pass
-
-class PlayerMultipleWidget(PlayerWidgetMixin, s2forms.ModelSelect2MultipleWidget):
-    pass
     

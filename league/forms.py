@@ -7,7 +7,7 @@ from crispy_forms.layout import Layout, Row, Column
 
 from .models import League, Tournament
 from authentification.models import Player
-from authentification.forms import PlayerWidget
+from authentification.widgets import PlayerWidget
 from misc.forms import NonPrimarySubmit
 
 class TournamentFieldWidgetWrapper(RelatedFieldWidgetWrapper):

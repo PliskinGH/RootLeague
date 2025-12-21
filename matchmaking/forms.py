@@ -1,4 +1,4 @@
-from django.forms import Form, ModelForm, ChoiceField, BooleanField, BaseInlineFormSet, NumberInput
+from django.forms import Form, ModelForm, ChoiceField, BooleanField, BaseInlineFormSet, NumberInput, MultipleChoiceField
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import EMPTY_VALUES
@@ -7,11 +7,12 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Column, Fieldset, Layout, Row, HTML
 from crispy_formset_modal.helper import ModalEditFormHelper
 from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
+from django_select2 import forms as s2forms
 
 from .models import Match, Participant
-from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, MAP_WINTER, HIRELINGS_NUMBER, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
+from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, MAP_WINTER, HIRELINGS_NUMBER, LANDMARKS, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
 from league.models import Tournament
-from authentification.forms import PlayerWidget
+from authentification.widgets import PlayerWidget
 from misc.forms import NonPrimarySubmit, IconSelect
 
 PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
@@ -28,30 +29,44 @@ class MatchForm(ModelForm):
     closed = BooleanField(required=False, initial=True, label=_("Final Results"))
     submit_text = _("Register match")
     
+    class Meta:
+        model = Match
+        fields = [
+                   'title',
+                   'tournament',
+                   'turn_timing',
+                   'table_talk_url',
+                   'game_setup',
+                   'undrafted_faction',
+                   'deck',
+                   'board_map',
+                   'random_suits',
+                #    'hirelings',
+                #    'landmarks',
+                ]
+        widgets = {
+            'hirelings' : s2forms.Select2MultipleWidget(),
+            'landmarks' : s2forms.Select2MultipleWidget(),
+        #     'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
+        #     'deck' : IconSelect(choices_urls=DECKS_URLS),
+        #     'board_map' : IconSelect(choices_urls=MAPS_URLS)
+            }
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if (self.instance and (self.fields['tournament'].queryset.count() >= 1)):
             self.fields['tournament'].queryset = Tournament.objects.exclude(Q(active_in_league = None) & ~Q(league = None))
-        if ('hirelings_a' in self.fields):
-            self.fields['hirelings_a'].label = False
-        if ('hirelings_b' in self.fields):
-            self.fields['hirelings_b'].label = False
-        if ('hirelings_c' in self.fields):
-            self.fields['hirelings_c'].label = False
-        if ('landmark_a' in self.fields):
-            self.fields['landmark_a'].label = False
-        if ('landmark_b' in self.fields):
-            self.fields['landmark_b'].label = False
+        self.hirelings_displayed = ('hirelings' in self.fields)
+        self.landmarks_displayed = ('landmarks' in self.fields)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(Column("title", css_class='col-md-8'), Column("tournament", css_class='col-md-4')),
             Row(Column("game_setup", css_class='col-md-6'), Column("undrafted_faction", css_class='col-md-6')),
             Row(Column("turn_timing", css_class='col-md-3'), Column("table_talk_url", css_class='col-md-9')),
             Row(Column("deck", css_class='col-md-4'), Column("board_map", css_class='col-md-4'), Column("random_suits", css_class='col-md-4')),
-            Fieldset("Hirelings", Row(Column("hirelings_a", css_class='col-md-4'), Column("hirelings_b", css_class='col-md-4'), Column("hirelings_c", css_class='col-md-4')))
-            if ('hirelings_a' in self.fields or 'hirelings_b' in self.fields or 'hirelings_c' in self.fields) else HTML(""),
-            Fieldset("Landmarks", Row(Column("landmark_a", css_class='col-md-6'), Column("landmark_b", css_class='col-md-6')))
-            if ('landmark_a' in self.fields or 'landmark_b' in self.fields) else HTML(""),
+            Row(Column("hirelings", css_class='col-md-6') if (self.hirelings_displayed) else HTML(""),
+                Column("landmarks", css_class='col-md-6') if (self.landmarks_displayed) else HTML(""),) \
+                    if (self.hirelings_displayed or self.landmarks_displayed) else HTML(""),
             Fieldset(
                 "Participants",
                 ModalEditFormsetLayout(
@@ -79,11 +94,8 @@ class MatchForm(ModelForm):
         deck = self.cleaned_data.get('deck', '')
         turn_timing = self.cleaned_data.get('turn_timing', '')
         table_talk_url = self.cleaned_data.get('table_talk_url', '')
-        hirelings_a = self.cleaned_data.get('hirelings_a', '')
-        hirelings_b = self.cleaned_data.get('hirelings_b', '')
-        hirelings_c = self.cleaned_data.get('hirelings_c', '')
-        landmark_a = self.cleaned_data.get('landmark_a', '')
-        landmark_b = self.cleaned_data.get('landmark_b', '')
+        hirelings = self.cleaned_data.get('hirelings', None)
+        landmarks = self.cleaned_data.get('landmarks', None)
         if (is_closed):
             # Required fields for closed games
             if (game_setup in EMPTY_VALUES):
@@ -106,6 +118,7 @@ class MatchForm(ModelForm):
             if (table_talk_url in EMPTY_VALUES):
                 self.add_error('table_talk_url',
                                ValidationError(REQUIRED_FIELD_ERROR))
+        # Tournament settings
         if (tournament is not None):
             tournament_setup = getattr(tournament, 'game_setup', '')
             tournament_map = getattr(tournament, 'board_map', '')
@@ -140,76 +153,47 @@ class MatchForm(ModelForm):
                                   params={'field_value' : tournament.get_deck_display(),
                                           'field_name' : 'deck'}))
         # Hirelings/landmarks validation
-        hirelings_defined = [hirelings_a not in EMPTY_VALUES, hirelings_b not in EMPTY_VALUES, hirelings_c not in EMPTY_VALUES]
-        landmarks_defined = [landmark_a not in EMPTY_VALUES, landmark_b not in EMPTY_VALUES]
-        if (hirelings_defined[0] and (hirelings_a == hirelings_b or hirelings_a == hirelings_c)):
-            self.add_error('hirelings_a', ValidationError(DIFFERENT_FIELDS_ERROR,
-                                                          params={'field_name' : 'hirelings'}))
-        if (hirelings_defined[1] and (hirelings_b == hirelings_a or hirelings_b == hirelings_c)):
-            self.add_error('hirelings_b', ValidationError(DIFFERENT_FIELDS_ERROR,
-                                                          params={'field_name' : 'hirelings'}))
-        if (hirelings_defined[2] and (hirelings_c == hirelings_a or hirelings_c == hirelings_b)):
-            self.add_error('hirelings_a', ValidationError(DIFFERENT_FIELDS_ERROR,
-                                                          params={'field_name' : 'hirelings'}))
-        if (landmarks_defined[0] and (landmark_a == landmark_b)):
-            self.add_error('landmark_a', ValidationError(DIFFERENT_FIELDS_ERROR,
-                                                         params={'field_name' : 'landmarks'}))
-        if (landmarks_defined[1] and (landmark_a == landmark_b)):
-            self.add_error('landmark_b', ValidationError(DIFFERENT_FIELDS_ERROR,
-                                                         params={'field_name' : 'landmarks'}))
+        if (hirelings in EMPTY_VALUES):
+            hirelings = []
+        hirelings = [h for h in hirelings if h not in EMPTY_VALUES]
+        hirelings_set = set(hirelings)
+        hirelings_size = len(hirelings_set)
+        if (self.hirelings_displayed and hirelings_size != len(hirelings)):
+            self.add_error('hirelings',
+                           ValidationError(DIFFERENT_FIELDS_ERROR,
+                                           params={'field_name' : 'hirelings'}))
+        if (landmarks in EMPTY_VALUES):
+            landmarks = []
+        landmarks = [lm for lm in landmarks if lm not in EMPTY_VALUES]
+        landmarks_set = set(landmarks)
+        landmarks_size = len(landmarks_set)
+        if (self.landmarks_displayed and landmarks_size != len(landmarks)):
+            self.add_error('landmarks',
+                           ValidationError(DIFFERENT_FIELDS_ERROR,
+                                           params={'field_name' : 'landmarks'}))
         if (tournament is not None and is_closed):
             tournament_hirelings = getattr(tournament, 'hirelings', None)
             if (tournament_hirelings not in EMPTY_VALUES and tournament_hirelings):
                 tournament_hirelings = HIRELINGS_NUMBER
             tournament_landmarks = getattr(tournament, 'landmarks_required', None)
-            if (tournament_hirelings not in EMPTY_VALUES and
-                hirelings_defined[0] + hirelings_defined[1] + hirelings_defined[2] != tournament_hirelings):
-                self.add_error('hirelings_a', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
-                                                              params={'field_value' : tournament_hirelings,
-                                                                      'field_name' : 'hirelings'}))
-                self.add_error('hirelings_b', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
-                                                              params={'field_value' : tournament_hirelings,
-                                                                      'field_name' : 'hirelings'}))
-                self.add_error('hirelings_c', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
-                                                              params={'field_value' : tournament_hirelings,
-                                                                      'field_name' : 'hirelings'}))
-            if (tournament_landmarks not in EMPTY_VALUES and
-                landmarks_defined[0] + landmarks_defined[1] != tournament_landmarks):
-                self.add_error('landmark_a', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
-                                                             params={'field_value' : tournament_landmarks,
-                                                                     'field_name' : 'landmarks'}))
-                self.add_error('landmark_b', ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
-                                                             params={'field_value' : tournament_landmarks,
-                                                                     'field_name' : 'landmarks'}))
+            if (self.hirelings_displayed and
+                tournament_hirelings not in EMPTY_VALUES and
+                hirelings_size != tournament_hirelings):
+                self.add_error('hirelings',
+                               ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                               params={'field_value' : tournament_hirelings,
+                                                       'field_name' : 'hirelings'}))
+            if (self.landmarks_displayed and
+                tournament_landmarks not in EMPTY_VALUES and
+                landmarks_size != tournament_landmarks):
+                self.add_error('landmarks',
+                               ValidationError(REQUIRED_TOURNAMENT_FIELD_NUMBER_ERROR,
+                                               params={'field_value' : tournament_landmarks,
+                                                       'field_name' : 'landmarks'}))
         # Extra validation
         if (board_map == MAP_WINTER and (random_suits in EMPTY_VALUES or not(random_suits))):
             self.add_error('random_suits',
                             ValidationError(_("The distribution must be random for this map.")))
-            
-    
-    class Meta:
-        model = Match
-        fields = [
-                   'title',
-                   'tournament',
-                   'turn_timing',
-                   'table_talk_url',
-                   'game_setup',
-                   'undrafted_faction',
-                   'deck',
-                   'board_map',
-                   'random_suits',
-                #    'hirelings_a',
-                #    'hirelings_b',
-                #    'hirelings_c',
-                #    'landmark_a',
-                #    'landmark_b',
-                  ]
-        # widgets = {
-        #     'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
-        #     'deck' : IconSelect(choices_urls=DECKS_URLS),
-        #     'board_map' : IconSelect(choices_urls=MAPS_URLS)
-        #     }
 
 class UpdateMatchForm(MatchForm):
     submit_text = _("Update match")
@@ -509,9 +493,15 @@ class ParticipantAdminForm(ModelForm):
         self.fields['coalition'].widget.can_delete_related = False
 
 class MatchAdminForm(ModelForm):
+    # landmarks = MultipleChoiceField(choices=LANDMARKS, widget=s2forms.Select2MultipleWidget)
+
     class Meta:
         model = Match
         fields = '__all__'
+        widgets = {
+            'hirelings' : s2forms.Select2MultipleWidget(),
+            'landmarks' : s2forms.Select2MultipleWidget(),
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

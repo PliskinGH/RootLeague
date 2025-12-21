@@ -24,6 +24,3 @@ class IconSelect(forms.Select):
         if (url not in EMPTY_VALUES):
             option['attrs']['data-image'] = url
         return option
-
-class DateTimeWidget(forms.DateTimeInput):
-    input_type = "datetime-local"

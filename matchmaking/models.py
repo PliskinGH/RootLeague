@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.core.validators import EMPTY_VALUES
 from django.urls import reverse_lazy
+from multiselectfield import MultiSelectField
 
 from authentification.models import Player
 from league.models import Tournament
@@ -60,22 +61,15 @@ class Match(models.Model):
     random_suits = models.BooleanField(blank=True, null=True,
                                        verbose_name=_('random suits'))
     
-    hirelings_a = models.CharField(max_length=200, choices=HIRELINGS,
+    hirelings = MultiSelectField(max_length=200, choices=HIRELINGS,
                                  blank=True,
-                                 verbose_name=_('hirelings'))
-    hirelings_b = models.CharField(max_length=200, choices=HIRELINGS,
-                                 blank=True,
-                                 verbose_name=_('hirelings bis'))
-    hirelings_c = models.CharField(max_length=200, choices=HIRELINGS,
-                                 blank=True,
-                                 verbose_name=_('hirelings ter'))
+                                 min_choices=0, max_choices=HIRELINGS_NUMBER,
+                                 )
     
-    landmark_a = models.CharField(max_length=200, choices=LANDMARKS,
-                                  blank=True,
-                                  verbose_name=_('landmark'))
-    landmark_b = models.CharField(max_length=200, choices=LANDMARKS,
-                                  blank=True,
-                                  verbose_name=_('landmark bis'))
+    landmarks = MultiSelectField(max_length=200, choices=LANDMARKS,
+                                 blank=True,
+                                 min_choices=0, max_choices=MAX_NUMBER_OF_LANDMARKS,
+                                 )
 
     class Meta:
         verbose_name = _("match")

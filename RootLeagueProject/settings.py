@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_select2',
+    'multiselectfield',
     'crispy_formset_modal',
     'more_admin_filters',
     'import_export',

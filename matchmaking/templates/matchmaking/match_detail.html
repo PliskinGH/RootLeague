@@ -110,41 +110,19 @@
       <th scope="row">{{_("Undrafted faction")}}</th>
       <td>{{ object.get_undrafted_faction_display }}</td>
     </tr>
-    {% if object.hirelings_a or object.hirelings_b or object.hirelings_c %}
-    <tr>
-      <th scope="row">{{_("Hirelings")}}</th>
-      <td>
-        {% if object.hirelings_a %}
-        {{ object.get_hirelings_a_display }}
-          {% if object.hirelings_b or object.hirelings_c %}
-          -
-          {% endif %}
-        {% endif %}
-        {% if object.hirelings_b %}
-        {{ object.get_hirelings_b_display }}
-          {% if object.hirelings_c %}
-          -
-          {% endif %}
-        {% endif %}
-        {% if object.hirelings_c %}
-        {{ object.get_hirelings_c_display }}
-        {% endif %}
-      </td>
-    </tr>
-    {% endif %}
-    {% if object.landmark_a or object.landmark_b %}
+    {% if object.hirelings %}
     <tr>
       <th scope="row">{{_("Landmarks")}}</th>
       <td>
-        {% if object.landmark_a %}
-        {{ object.get_landmark_a_display }}
-          {% if object.landmark_b %}
-          -
-          {% endif %}
-        {% endif %}
-        {% if object.landmark_b %}
-        {{ object.get_landmark_b_display }}
-        {% endif %}
+        {{ object.get_hirelings_display }}
+      </td>
+    </tr>
+    {% endif %}
+    {% if object.landmarks %}
+    <tr>
+      <th scope="row">{{_("Landmarks")}}</th>
+      <td>
+        {{ object.get_landmarks_display }}
       </td>
     </tr>
     {% endif %}
