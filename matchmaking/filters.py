@@ -13,7 +13,7 @@ from misc.filters import ModalFormFilterMixin
 from misc.widgets import DateTimeWidget, FullWidthSelect2MultipleWidget
 
 AND_FILTER_HELP_TEXT = _("This filter uses AND logic.")
-FACTIONS_FILTER_CHOICES = constants.FACTIONS + [(constants.VAGABOND, _("Any Vagabond"))]
+FACTIONS_FILTER_CHOICES = constants.FACTIONS + [(constants.VAGABOND_PREFIX, _("Any Vagabond"))]
 
 class MatchFilterMethodsMixin(object):
     def filter_isnotnull(self, queryset, name, value):

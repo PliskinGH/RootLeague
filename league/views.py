@@ -12,7 +12,7 @@ from authentification.models import Player
 from matchmaking.models import Match, Participant
 from matchmaking.filters import MatchFilter, ParticipantFilter
 from misc.views import ImprovedListView
-from .constants import FACTIONS, TURN_ORDERS, VAGABOND
+from .constants import FACTIONS, TURN_ORDERS, VAGABOND_PREFIX
 
 # Create your views here.
 
@@ -291,7 +291,7 @@ def faction_stats(request,
                   title = None,
                   current_url = 'league:global_faction_stats',
                   current_url_arg = ''):
-    all_vagabonds = [key for (key, _) in FACTIONS if VAGABOND in key]
+    all_vagabonds = [key for (key, _) in FACTIONS if VAGABOND_PREFIX in key]
     all_factions = [key for (key, _) in FACTIONS]
     totals = []
     totals.append(('vb_total', _('All Vagabonds'), all_vagabonds))

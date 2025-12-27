@@ -10,10 +10,14 @@ from crispy_formset_modal.layout import ModalEditLayout, ModalEditFormsetLayout
 from django_select2 import forms as s2forms
 
 from .models import Match, Participant
-from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND, WIN_GAME_SCORE, MAP_WINTER, HIRELINGS_NUMBER, LANDMARKS, TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
+from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND_PREFIX, WIN_GAME_SCORE, MAP_WINTER
+from league.constants import HIRELINGS_NUMBER, HIRELING_SUFFIX_SIZE, HIRELING_PROMOTED_SUFFIX, HIRELING_DEMOTED_SUFFIX
+# from league.constants import TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
 from league.models import Tournament
 from authentification.widgets import PlayerWidget
-from misc.forms import NonPrimarySubmit, IconSelect
+from misc.forms import NonPrimarySubmit
+# from misc.forms import IconSelect
+from misc.widgets import FullWidthSelect2MultipleWidget
 
 PLAYERS_SEATS = [(i,i) for i in range(1, MAX_NUMBER_OF_PLAYERS_IN_MATCH + 1)]
 PLAYERS_SEATS = [(None, '------')] + PLAYERS_SEATS
@@ -41,12 +45,12 @@ class MatchForm(ModelForm):
                    'deck',
                    'board_map',
                    'random_suits',
-                #    'hirelings',
-                #    'landmarks',
+                   'hirelings',
+                   'landmarks',
                 ]
         widgets = {
-            'hirelings' : s2forms.Select2MultipleWidget(),
-            'landmarks' : s2forms.Select2MultipleWidget(),
+            'hirelings' : FullWidthSelect2MultipleWidget,
+            'landmarks' : FullWidthSelect2MultipleWidget,
         #     'turn_timing' : IconSelect(choices_urls=TURN_TIMING_URLS),
         #     'deck' : IconSelect(choices_urls=DECKS_URLS),
         #     'board_map' : IconSelect(choices_urls=MAPS_URLS)
@@ -162,6 +166,11 @@ class MatchForm(ModelForm):
             self.add_error('hirelings',
                            ValidationError(DIFFERENT_FIELDS_ERROR,
                                            params={'field_name' : 'hirelings'}))
+        hirelings_cards = [h[:-HIRELING_SUFFIX_SIZE] for h in hirelings]
+        hirelings_cards_set = set(hirelings_cards)
+        if (self.hirelings_displayed and len(hirelings_cards_set) != hirelings_size):
+            self.add_error('hirelings',
+                           ValidationError("Promoted and demoted versions of the same hirelings cannot be in play together."))
         if (landmarks in EMPTY_VALUES):
             landmarks = []
         landmarks = [lm for lm in landmarks if lm not in EMPTY_VALUES]
@@ -327,9 +336,27 @@ class ParticipantFormSet(BaseInlineFormSet):
                        with no duplicates."),
                     code="error_players"))
 
-            if (self.instance.tournament is not None):
+            hirelings = self.instance.hirelings
+            if (is_closed and nb_participants >= 2 and self.instance.hirelings not in EMPTY_VALUES):
+                nb_promoted = len([h for h in hirelings if h[-HIRELING_SUFFIX_SIZE:] == HIRELING_PROMOTED_SUFFIX])
+                nb_demoted = len([h for h in hirelings if h[-HIRELING_SUFFIX_SIZE:] == HIRELING_DEMOTED_SUFFIX])
+                nb_promoted_theo = 0
+                nb_demoted_theo = 3
+                if (nb_participants < 5):
+                    diff_hirelings = 5-nb_participants
+                    nb_promoted_theo += diff_hirelings
+                    nb_demoted_theo -= diff_hirelings
+                if (nb_promoted != nb_promoted_theo or nb_demoted != nb_demoted_theo):
+                    errors.append(ValidationError(
+                    _("The number of promoted hirelings (%(nb_p)i) and demoted hirelings (%(nb_d)i) \
+                       for %(nb_players)i players must be %(nb_p_theo)i and %(nb_d_theo)i."),
+                        params={'nb_p' : nb_promoted, 'nb_d' : nb_demoted,
+                                'nb_players' : nb_participants,
+                                'nb_p_theo' : nb_promoted_theo, 'nb_d_theo' : nb_demoted_theo}),
+                        )
+            if (self.instance.tournament not in EMPTY_VALUES):
                 max_nb_participants = self.instance.tournament.max_players_per_game
-                if (max_nb_participants is not None):
+                if (max_nb_participants not in EMPTY_VALUES):
                     if (nb_participants > max_nb_participants):
                         errors.append(
                             ValidationError(
@@ -337,7 +364,7 @@ class ParticipantFormSet(BaseInlineFormSet):
                             code="error_max_nb",
                             params={'max_nb' : max_nb_participants}))
                 min_nb_participants = self.instance.tournament.min_players_per_game
-                if (min_nb_participants is not None):
+                if (min_nb_participants not in EMPTY_VALUES):
                     if (nb_participants < min_nb_participants):
                         errors.append(
                             ValidationError(
@@ -365,7 +392,7 @@ class ParticipantFormSet(BaseInlineFormSet):
                 in_3way_coal = index_f in coals and coal not in EMPTY_VALUES
                 dominance = f.cleaned_data.get('dominance', None)
                 faction = f.cleaned_data.get('faction', None)
-                is_vagabond = faction not in EMPTY_VALUES and VAGABOND in faction
+                is_vagabond = faction not in EMPTY_VALUES and VAGABOND_PREFIX in faction
                 if (player in EMPTY_VALUES and is_closed):
                     # Required field if game closed
                     errors.append(
@@ -493,8 +520,6 @@ class ParticipantAdminForm(ModelForm):
         self.fields['coalition'].widget.can_delete_related = False
 
 class MatchAdminForm(ModelForm):
-    # landmarks = MultipleChoiceField(choices=LANDMARKS, widget=s2forms.Select2MultipleWidget)
-
     class Meta:
         model = Match
         fields = '__all__'
