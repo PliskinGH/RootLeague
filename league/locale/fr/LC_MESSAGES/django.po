@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 17:51+0100\n"
+"POT-Creation-Date: 2025-12-27 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:85 .\league\models.py:130
+#: .\league\apps.py:7 .\league\models.py:89 .\league\models.py:134
 msgid "league"
 msgstr "ligue"
 
@@ -151,7 +151,7 @@ msgid "Advanced"
 msgstr "Avancée"
 
 #: .\league\constants.py:143
-msgid "Black Mark"
+msgid "Black Market"
 msgstr ""
 
 #: .\league\constants.py:144
@@ -174,103 +174,103 @@ msgstr ""
 msgid "The Tower"
 msgstr ""
 
-#: .\league\constants.py:178
+#: .\league\constants.py:184
 msgid "Vault Keepers"
 msgstr ""
 
-#: .\league\constants.py:179
+#: .\league\constants.py:185
 msgid "Badger Bodyguards"
 msgstr ""
 
-#: .\league\constants.py:180
+#: .\league\constants.py:186
 msgid "Popular Band"
 msgstr ""
 
-#: .\league\constants.py:181
+#: .\league\constants.py:187
 msgid "Street Band"
 msgstr ""
 
-#: .\league\constants.py:182
+#: .\league\constants.py:188
 msgid "Highway Bandits"
 msgstr ""
 
-#: .\league\constants.py:183
+#: .\league\constants.py:189
 msgid "Bandit Gangs"
 msgstr ""
 
-#: .\league\constants.py:184
+#: .\league\constants.py:190
 #, fuzzy
 #| msgid "Corvid Conspiracy"
 msgid "Corvid Spies"
 msgstr "Conspiration des corvidés"
 
-#: .\league\constants.py:185
+#: .\league\constants.py:191
 msgid "Raven Sentries"
 msgstr ""
 
-#: .\league\constants.py:186 .\league\constants.py:188
+#: .\league\constants.py:192 .\league\constants.py:194
 msgid "Warm Sun Prophets"
 msgstr ""
 
-#: .\league\constants.py:187 .\league\constants.py:189
+#: .\league\constants.py:193 .\league\constants.py:195
 msgid "Lizard Envoys"
 msgstr ""
 
-#: .\league\constants.py:190
+#: .\league\constants.py:196
 msgid "Last Dynasty"
 msgstr ""
 
-#: .\league\constants.py:191
+#: .\league\constants.py:197
 msgid "Bluebird Nobles"
 msgstr ""
 
-#: .\league\constants.py:192
+#: .\league\constants.py:198
 msgid "Forest Patrol"
 msgstr ""
 
-#: .\league\constants.py:193
+#: .\league\constants.py:199
 msgid "Feline Physicians"
 msgstr ""
 
-#: .\league\constants.py:194
+#: .\league\constants.py:200
 msgid "Furious Protector"
 msgstr ""
 
-#: .\league\constants.py:195
+#: .\league\constants.py:201
 msgid "Stoic Protector"
 msgstr ""
 
-#: .\league\constants.py:196
+#: .\league\constants.py:202
 msgid "Flame Bearers"
 msgstr ""
 
-#: .\league\constants.py:197
+#: .\league\constants.py:203
 msgid "Rat Smugglers"
 msgstr ""
 
-#: .\league\constants.py:198
+#: .\league\constants.py:204
 #, fuzzy
 #| msgid "Riverfolk Company"
 msgid "Riverfolk Flotilla"
 msgstr "Compagnie de la rivière"
 
-#: .\league\constants.py:199
+#: .\league\constants.py:205
 msgid "Otter Divers"
 msgstr ""
 
-#: .\league\constants.py:200
+#: .\league\constants.py:206
 msgid "The Exile"
 msgstr ""
 
-#: .\league\constants.py:201
+#: .\league\constants.py:207
 msgid "The Brigand"
 msgstr ""
 
-#: .\league\constants.py:202
+#: .\league\constants.py:208
 msgid "Spring Uprising"
 msgstr ""
 
-#: .\league\constants.py:203
+#: .\league\constants.py:209
 msgid "Rabbit Scouts"
 msgstr ""
 
@@ -282,9 +282,15 @@ msgstr "Classement"
 
 #: .\league\filters.py:18
 #, fuzzy
-#| msgid "Threshold for leaderboards."
-msgid "Threshold of games"
-msgstr "Seuil pour le classement de joueurs."
+#| msgid "Minimum threshold"
+msgid "Minimum threshold of games"
+msgstr "Seuil minimal"
+
+#: .\league\filters.py:19
+#, fuzzy
+#| msgid "Minimum threshold"
+msgid "Maximum threshold of games"
+msgstr "Seuil minimal"
 
 #: .\league\forms.py:64
 msgid "Subset of players"
@@ -326,47 +332,47 @@ msgstr "coalition autorisée"
 msgid "three way coalition allowed"
 msgstr "coalition à trois autorisée"
 
-#: .\league\models.py:34
+#: .\league\models.py:38
 msgid "minimum number of games"
 msgstr "nombre minimum de parties"
 
-#: .\league\models.py:35
+#: .\league\models.py:39
 msgid "Threshold for leaderboards."
 msgstr "Seuil pour le classement de joueurs."
 
-#: .\league\models.py:39
+#: .\league\models.py:43
 msgid "win score"
 msgstr "score de victoire"
 
-#: .\league\models.py:42
+#: .\league\models.py:46
 msgid "coalition score multiplier"
 msgstr "multiplicateur de score de coalition"
 
-#: .\league\models.py:45
+#: .\league\models.py:49
 msgid "total score per game"
 msgstr "score total par partie"
 
-#: .\league\models.py:50
+#: .\league\models.py:54
 msgid "setup"
 msgstr "mise en place"
 
-#: .\league\models.py:53
+#: .\league\models.py:57
 msgid "deck"
 msgstr ""
 
-#: .\league\models.py:56
+#: .\league\models.py:60
 msgid "map"
 msgstr "plateau"
 
-#: .\league\models.py:58
+#: .\league\models.py:62
 msgid "random suits"
 msgstr "distribution aléatoire"
 
-#: .\league\models.py:88
+#: .\league\models.py:92
 msgid "tournament"
 msgstr "tournoi"
 
-#: .\league\models.py:125
+#: .\league\models.py:129
 msgid "active season"
 msgstr "saison active"
 
@@ -484,3 +490,8 @@ msgstr ""
 #: .\league\views.py:356
 msgid "Turn order"
 msgstr "Tour de jeu"
+
+#, fuzzy
+#~| msgid "Threshold for leaderboards."
+#~ msgid "Threshold of games"
+#~ msgstr "Seuil pour le classement de joueurs."

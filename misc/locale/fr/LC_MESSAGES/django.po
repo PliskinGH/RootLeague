@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 17:51+0100\n"
+"POT-Creation-Date: 2025-12-27 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,17 +146,17 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:76
-msgid "Custom Filters"
-msgstr ""
-
-#: .\misc\templates\misc\base.html:79
+#: .\misc\templates\misc\base.html:78
 msgid "Leaderboard"
 msgstr "Classement"
 
-#: .\misc\templates\misc\base.html:82
+#: .\misc\templates\misc\base.html:81
 msgid "Stats"
 msgstr "Statistiques"
+
+#: .\misc\templates\misc\base.html:84
+msgid "Summary"
+msgstr ""
 
 #: .\misc\templates\misc\base.html:85
 msgid "Faction stats"
