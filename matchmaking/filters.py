@@ -112,6 +112,7 @@ class ParticipantFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.F
     turn_order = filters.MultipleChoiceFilter(choices=constants.TURN_ORDERS,
                                               widget=FullWidthSelect2MultipleWidget,)
     faction = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="icontains",
+                                           label=_("Faction"),
                                            widget=FullWidthSelect2MultipleWidget,)
     tournament_score = filters.AllValuesMultipleFilter(widget=FullWidthSelect2MultipleWidget,)
     dominance = filters.MultipleChoiceFilter(choices=constants.DOMINANCE_SUITS,
