@@ -1,0 +1,23 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block content_header %}
+<div class="card text-bg-light border-primary">
+  <a class="card-header text-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    {{ _("Table of contents") }}
+  </a>
+  <div class="collapse" id="collapseExample">
+    <div class="card-body" id="toc">
+    </div>
+  </div>
+</div>
+
+<br />
+{% endblock content_header %}
+
+{% block extra-js %}
+<script src="{% static 'misc/js/toc.js' %}"></script>
+{% endblock %}
