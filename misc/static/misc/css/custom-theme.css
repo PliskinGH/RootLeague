@@ -1,0 +1,511 @@
+@charset "UTF-8";
+
+/*!
+* Start Bootstrap - Business Casual v7.0.6 (https://startbootstrap.com/theme/business-casual)
+* Custom Theme Extracted for use with Bootstrap 5.1.3 CDN
+*/
+
+/* =========================================
+   1. VARIABLE OVERRIDES
+   Redefining colors and fonts to match the theme
+   ========================================= */
+:root {
+  --bs-primary: #e6a756;
+  --bs-secondary: #2F170F;
+  --bs-primary-rgb: 230, 167, 86;
+  --bs-secondary-rgb: 47, 23, 15;
+  --bs-body-font-family: Lora, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* =========================================
+   2. COMPONENT COLOR OVERRIDES
+   Overwriting compiled Bootstrap defaults (Blue/Grey)
+   with Theme defaults (Gold/Brown)
+   ========================================= */
+
+/* Links */
+a {
+  color: #e6a756;
+}
+a:hover {
+  color: #b88645;
+}
+
+/* Forms & Inputs */
+.form-control:focus {
+  border-color: #f3d3ab;
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+
+.form-select:focus {
+  border-color: #f3d3ab;
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+
+.form-check-input:focus {
+  border-color: #f3d3ab;
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+.form-check-input:checked {
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+.form-check-input[type=checkbox]:indeterminate {
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+
+.form-switch .form-check-input:focus {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23f3d3ab'/%3e%3c/svg%3e");
+}
+
+.form-range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+.form-range:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+.form-range::-webkit-slider-thumb {
+  background-color: #e6a756;
+}
+.form-range::-webkit-slider-thumb:active {
+  background-color: #f8e5cc;
+}
+.form-range::-moz-range-thumb {
+  background-color: #e6a756;
+}
+.form-range::-moz-range-thumb:active {
+  background-color: #f8e5cc;
+}
+
+/* Buttons - Primary (Gold) */
+.btn-primary {
+  color: #000;
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+.btn-primary:hover {
+  color: #000;
+  background-color: #eab46f;
+  border-color: #e9b067;
+}
+.btn-check:focus + .btn-primary, .btn-primary:focus {
+  color: #000;
+  background-color: #eab46f;
+  border-color: #e9b067;
+  box-shadow: 0 0 0 0.25rem rgba(196, 142, 73, 0.5);
+}
+.btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
+  color: #000;
+  background-color: #ebb978;
+  border-color: #e9b067;
+}
+.btn-check:checked + .btn-primary:focus, .btn-check:active + .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus, .show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.25rem rgba(196, 142, 73, 0.5);
+}
+.btn-primary:disabled, .btn-primary.disabled {
+  color: #000;
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+
+.btn-outline-primary {
+  color: #e6a756;
+  border-color: #e6a756;
+}
+.btn-outline-primary:hover {
+  color: #000;
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+.btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.5);
+}
+.btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+  color: #000;
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+.btn-check:checked + .btn-outline-primary:focus, .btn-check:active + .btn-outline-primary:focus, .btn-outline-primary:active:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus {
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.5);
+}
+.btn-outline-primary:disabled, .btn-outline-primary.disabled {
+  color: #e6a756;
+  background-color: transparent;
+}
+
+/* Buttons - Secondary (Dark Brown) */
+.btn-secondary {
+  color: #fff;
+  background-color: #2F170F;
+  border-color: #2F170F;
+}
+.btn-secondary:hover {
+  color: #fff;
+  background-color: #28140d;
+  border-color: #26120c;
+}
+.btn-check:focus + .btn-secondary, .btn-secondary:focus {
+  color: #fff;
+  background-color: #28140d;
+  border-color: #26120c;
+  box-shadow: 0 0 0 0.25rem rgba(78, 58, 51, 0.5);
+}
+.btn-check:checked + .btn-secondary, .btn-check:active + .btn-secondary, .btn-secondary:active, .btn-secondary.active, .show > .btn-secondary.dropdown-toggle {
+  color: #fff;
+  background-color: #26120c;
+  border-color: #23110b;
+}
+.btn-check:checked + .btn-secondary:focus, .btn-check:active + .btn-secondary:focus, .btn-secondary:active:focus, .btn-secondary.active:focus, .show > .btn-secondary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.25rem rgba(78, 58, 51, 0.5);
+}
+.btn-secondary:disabled, .btn-secondary.disabled {
+  color: #fff;
+  background-color: #2F170F;
+  border-color: #2F170F;
+}
+
+.btn-outline-secondary {
+  color: #2F170F;
+  border-color: #2F170F;
+}
+.btn-outline-secondary:hover {
+  color: #fff;
+  background-color: #2F170F;
+  border-color: #2F170F;
+}
+.btn-check:focus + .btn-outline-secondary, .btn-outline-secondary:focus {
+  box-shadow: 0 0 0 0.25rem rgba(47, 23, 15, 0.5);
+}
+.btn-check:checked + .btn-outline-secondary, .btn-check:active + .btn-outline-secondary, .btn-outline-secondary:active, .btn-outline-secondary.active, .btn-outline-secondary.dropdown-toggle.show {
+  color: #fff;
+  background-color: #2F170F;
+  border-color: #2F170F;
+}
+.btn-check:checked + .btn-outline-secondary:focus, .btn-check:active + .btn-outline-secondary:focus, .btn-outline-secondary:active:focus, .btn-outline-secondary.active:focus, .btn-outline-secondary.dropdown-toggle.show:focus {
+  box-shadow: 0 0 0 0.25rem rgba(47, 23, 15, 0.5);
+}
+.btn-outline-secondary:disabled, .btn-outline-secondary.disabled {
+  color: #2F170F;
+  background-color: transparent;
+}
+
+/* Button & Link Misc */
+.btn-link {
+  color: #e6a756;
+}
+.btn-link:hover {
+  color: #b88645;
+}
+
+.btn-check:focus + .btn, .btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+
+/* Dropdowns & Navs */
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  background-color: #e6a756;
+}
+
+.nav-link {
+  color: #e6a756;
+}
+.nav-link:hover, .nav-link:focus {
+  color: #b88645;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #e6a756;
+}
+
+/* Pagination */
+.page-link {
+  color: #e6a756;
+}
+.page-link:hover {
+  color: #b88645;
+}
+.page-link:focus {
+  color: #b88645;
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+.page-item.active .page-link {
+  color: #fff;
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+
+/* Progress Bars */
+.progress-bar {
+  background-color: #e6a756;
+}
+
+/* List Groups */
+.list-group-item.active {
+  color: #fff;
+  background-color: #e6a756;
+  border-color: #e6a756;
+}
+
+/* Close Buttons */
+.btn-close:focus {
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+
+/* Accordion */
+.accordion-button:not(.collapsed) {
+  color: #cf964d;
+  background-color: #fdf6ee;
+}
+.accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23cf964d'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+.accordion-button:focus {
+  border-color: #f3d3ab;
+  box-shadow: 0 0 0 0.25rem rgba(230, 167, 86, 0.25);
+}
+
+/* Links Utilities */
+.link-primary {
+  color: #e6a756;
+}
+.link-primary:hover, .link-primary:focus {
+  color: #ebb978;
+}
+
+.link-secondary {
+  color: #2F170F;
+}
+.link-secondary:hover, .link-secondary:focus {
+  color: #26120c;
+}
+
+/* Borders */
+.border-primary {
+  border-color: #e6a756 !important;
+}
+
+.border-secondary {
+  border-color: #2F170F !important;
+}
+
+
+/* =========================================
+   3. THEME SPECIFIC STYLES
+   The unique Business Casual layout
+   ========================================= */
+
+body {
+  background-image: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url("../assets/img/bg.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+p {
+  line-height: 1.75;
+}
+
+.text-faded {
+  color: #f6e1c5;
+}
+
+.site-heading {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  text-transform: uppercase;
+  line-height: 1;
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.site-heading .site-heading-upper {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+}
+.site-heading .site-heading-lower {
+  font-size: 5rem;
+  font-weight: 100;
+  line-height: 4rem;
+}
+
+.page-section {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.section-heading {
+  text-transform: uppercase;
+}
+.section-heading .section-heading-upper {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+}
+.section-heading .section-heading-lower {
+  display: block;
+  font-size: 3rem;
+  font-weight: 100;
+}
+
+.bg-faded {
+  background-color: #f6e1c5;
+}
+
+.bg-medium {
+    background-image: url("../assets/img/Medium_Box.png");
+}
+
+.btn-xl {
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+#mainNav {
+  background-color: rgba(47, 23, 15, 0.9);
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+#mainNav .navbar-brand {
+  color: #e6a756;
+}
+#mainNav .navbar-nav .nav-item .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+}
+#mainNav .navbar-nav .nav-item.active .nav-link {
+  color: #e6a756;
+}
+@media (min-width: 992px) {
+  #mainNav .navbar-nav .nav-item .nav-link {
+    font-size: 0.9rem;
+  }
+  #mainNav .navbar-nav .nav-item .nav-link:hover {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  #mainNav .navbar-nav .nav-item.active .nav-link:hover {
+    color: #e6a756;
+  }
+}
+
+.btn {
+  box-shadow: 0px 3px 3px 0px rgba(33, 37, 41, 0.1);
+}
+
+@media (min-width: 992px) {
+  .about-heading .about-heading-img {
+    position: relative;
+    z-index: 0;
+  }
+  .about-heading .about-heading-content {
+    margin-top: -5rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.cta {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: rgba(230, 167, 86, 0.9);
+}
+.cta .cta-inner {
+  position: relative;
+  padding: 3rem;
+  margin: 0.5rem;
+}
+.cta .cta-inner:before {
+  border-radius: 0.5rem;
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  bottom: -0.5rem;
+  left: -0.5rem;
+  right: -0.5rem;
+  border: 0.25rem solid rgba(255, 255, 255, 0.85);
+  z-index: -1;
+}
+
+.footer {
+  background-color: rgba(47, 23, 15, 0.9);
+}
+
+.intro {
+  position: relative;
+}
+@media (min-width: 992px) {
+  .intro .intro-img {
+    width: 75%;
+    float: right;
+  }
+  .intro .intro-text {
+    left: 0;
+    width: 60%;
+    margin-top: 3rem;
+    position: absolute;
+  }
+  .intro .intro-text .intro-button {
+    width: 100%;
+    left: 0;
+    position: absolute;
+    bottom: -2rem;
+  }
+}
+@media (min-width: 1200px) {
+  .intro .intro-text {
+    width: 45%;
+  }
+}
+
+@media (min-width: 992px) {
+  .product-item .product-item-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: -3rem;
+  }
+  .product-item .product-item-img {
+    position: relative;
+    z-index: 0;
+    max-width: 60vw;
+  }
+  .product-item .product-item-description {
+    position: relative;
+    z-index: 1;
+    margin-top: -3rem;
+    max-width: 50vw;
+  }
+}
+
+.list-hours {
+  font-size: 0.9rem;
+}
+.list-hours .list-hours-item {
+  border-bottom: 1px solid rgba(230, 167, 86, 0.5);
+  padding-bottom: 0.25rem;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+.list-hours .list-hours-item.today {
+  font-weight: bold;
+  color: #e6a756;
+}
+@media (min-width: 992px) {
+  .list-hours {
+    width: 50%;
+    font-size: 1.1rem;
+  }
+}
+
+.address strong {
+  font-size: 1.2rem;
+}
