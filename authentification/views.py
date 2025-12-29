@@ -20,7 +20,7 @@ class PlayerLoginView(SuccessMessageMixin, LoginView):
 
 class PlayerSignUpView(SuccessMessageMixin, CreateView):
     model = get_user_model()
-    template_name='misc/basic_form.html'
+    template_name='authentification/player_register_form.html'
     success_url = reverse_lazy('auth:login')
     form_class = forms.PlayerRegisterForm
     success_message = _("Your player account was successfully created. \

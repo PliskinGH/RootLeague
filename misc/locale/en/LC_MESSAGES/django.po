@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 15:51+0100\n"
+"POT-Creation-Date: 2025-12-29 04:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,10 @@ msgstr ""
 msgid "Admin page"
 msgstr ""
 
+#: .\misc\templates\flatpages\with_toc.html:10
+msgid "Table of contents"
+msgstr ""
+
 #: .\misc\templates\misc\announcement_detail.html:11
 #: .\misc\templates\misc\announcement_list.html:32
 msgid "Announcement"
@@ -103,7 +107,7 @@ msgstr ""
 msgid "No announcements found."
 msgstr ""
 
-#: .\misc\templates\misc\base.html:16 .\misc\templates\misc\base.html:50
+#: .\misc\templates\misc\base.html:16 .\misc\templates\misc\base.html:51
 msgid "ROOT Digital League"
 msgstr ""
 
@@ -114,91 +118,91 @@ msgid ""
 "the length of an established season, and results are reported and tracked."
 msgstr ""
 
-#: .\misc\templates\misc\base.html:49
+#: .\misc\templates\misc\base.html:50
 msgid "An unofficial game tracking and ranking"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:60
+#: .\misc\templates\misc\base.html:61
 msgid "Community"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:63 .\misc\views.py:140
+#: .\misc\templates\misc\base.html:64 .\misc\views.py:140
 msgid "Home"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:64
+#: .\misc\templates\misc\base.html:65
 msgid "News"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:71
+#: .\misc\templates\misc\base.html:72
 msgid "Match"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:74
+#: .\misc\templates\misc\base.html:75
 msgid "List"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:75
+#: .\misc\templates\misc\base.html:76
 msgid "Submit"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:78
+#: .\misc\templates\misc\base.html:79
 msgid "Leaderboard"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:81
+#: .\misc\templates\misc\base.html:82
 msgid "Stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:84
+#: .\misc\templates\misc\base.html:85
 msgid "Summary"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:85
+#: .\misc\templates\misc\base.html:86
 msgid "Faction stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:86
+#: .\misc\templates\misc\base.html:87
 msgid "Turn order stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:93 .\misc\templates\misc\base.html:102
+#: .\misc\templates\misc\base.html:94 .\misc\templates\misc\base.html:103
 msgid "About"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:107
+#: .\misc\templates\misc\base.html:108
 msgid "Account"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:110
+#: .\misc\templates\misc\base.html:111
 msgid "Submitted games"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:111
+#: .\misc\templates\misc\base.html:112
 msgid "Played games"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:112
+#: .\misc\templates\misc\base.html:113
 msgid "Profile"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:114
+#: .\misc\templates\misc\base.html:115
 msgid "Admin"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:121
+#: .\misc\templates\misc\base.html:122
 msgid "Log out"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:126
+#: .\misc\templates\misc\base.html:127
 msgid "Log in"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:129
+#: .\misc\templates\misc\base.html:130
 msgid "Sign up"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:160
+#: .\misc\templates\misc\base.html:161
 msgid ""
 "\n"
 "                    Contributions and bug reports are welcome on <a "
@@ -206,7 +210,7 @@ msgid ""
 "                    "
 msgstr ""
 
-#: .\misc\templates\misc\base.html:165
+#: .\misc\templates\misc\base.html:166
 msgid ""
 "\n"
 "                    To join league games, visit the official Root <a "

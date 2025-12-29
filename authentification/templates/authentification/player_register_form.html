@@ -5,9 +5,9 @@
 {% load crispy_forms_tags %}
 
 {% block form_footer %}
-{% blocktranslate %}Forgot your password, or need to recover an existing account?{% endblocktranslate %}
-<a href="{% url 'auth:password_reset' %}" class="btn btn-outline-primary">
-    {% blocktranslate %}Reset your password{% endblocktranslate %}
+{% blocktranslate %}You only need to register once! You already have an account?{% endblocktranslate %}
+<a href="{% url 'auth:login' %}" class="btn btn-outline-primary">
+    {% blocktranslate %}Log in{% endblocktranslate %}
 </a>
 {% endblock form_footer %}
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 17:51+0100\n"
+"POT-Creation-Date: 2025-12-29 04:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,9 @@ msgstr "Enregistrer"
 msgid " or "
 msgstr ""
 
-#: .\authentification\forms.py:47 .\authentification\views.py:19
+#: .\authentification\forms.py:47
+#: .\authentification\templates\authentification\player_register_form.html:10
+#: .\authentification\views.py:19
 msgid "Log in"
 msgstr "Se connecter"
 
@@ -115,6 +117,16 @@ msgstr ""
 msgid "The %(site_name)s team"
 msgstr ""
 
+#: .\authentification\templates\authentification\player_login_form.html:8
+msgid "Forgot your password, or need to recover an existing account?"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_login_form.html:10
+#, fuzzy
+#| msgid "Change Password"
+msgid "Reset your password"
+msgstr "Changer de mot de passe"
+
 #: .\authentification\templates\authentification\player_password_reset_form.html:11
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
@@ -125,6 +137,16 @@ msgstr ""
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:9
+#, fuzzy
+#| msgid "Change Password"
+msgid "Change password"
+msgstr "Changer de mot de passe"
+
+#: .\authentification\templates\authentification\player_register_form.html:8
+msgid "You only need to register once! You already have an account?"
 msgstr ""
 
 #: .\authentification\views.py:17

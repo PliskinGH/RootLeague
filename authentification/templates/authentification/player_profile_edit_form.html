@@ -6,6 +6,6 @@
 
 {% block form_footer %}
 <a href="{% url 'auth:password_change' %}" class="btn btn-outline-secondary">
-    Change password
+    {% blocktranslate %}Change password{% endblocktranslate %}
 </a>
 {% endblock form_footer %}
