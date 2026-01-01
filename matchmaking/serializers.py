@@ -1,5 +1,5 @@
 from django.core.validators import EMPTY_VALUES
-from rest_framework.serializers import ModelSerializer, StringRelatedField, MultipleChoiceField
+from rest_framework.serializers import ModelSerializer, StringRelatedField, MultipleChoiceField, PrimaryKeyRelatedField
 
 from .models import Match, Participant
 from league.constants import HIRELINGS, LANDMARKS
@@ -14,6 +14,7 @@ class CoalitionedPlayerField(StringRelatedField):
 
 class ParticipantSerializer(ModelSerializer):
     player = StringRelatedField()
+    player_id = PrimaryKeyRelatedField(source="player", read_only=True)
     coalition = CoalitionedPlayerField()
 
     class Meta:
