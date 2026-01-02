@@ -93,6 +93,7 @@ class MatchForm(ModelForm):
         tournament = self.cleaned_data.get('tournament', None)
         is_closed = self.cleaned_data.get('closed', False)
         game_setup = self.cleaned_data.get('game_setup', '')
+        undrafted_faction = self.cleaned_data.get('undrafted_faction', '')
         board_map = self.cleaned_data.get('board_map', '')
         random_suits = self.cleaned_data.get('random_suits', None)
         deck = self.cleaned_data.get('deck', '')
@@ -103,7 +104,7 @@ class MatchForm(ModelForm):
         if (is_closed):
             # Required fields for closed games
             if (game_setup in EMPTY_VALUES):
-                self.add_error('random_suits',
+                self.add_error('game_setup',
                                ValidationError(REQUIRED_FIELD_ERROR))
             if (board_map in EMPTY_VALUES):
                 self.add_error('board_map',
@@ -121,6 +122,9 @@ class MatchForm(ModelForm):
                                ValidationError(REQUIRED_FIELD_ERROR))
             if (table_talk_url in EMPTY_VALUES):
                 self.add_error('table_talk_url',
+                               ValidationError(REQUIRED_FIELD_ERROR))
+            if (undrafted_faction in EMPTY_VALUES):
+                self.add_error('undrafted_faction',
                                ValidationError(REQUIRED_FIELD_ERROR))
         # Tournament settings
         if (tournament is not None):
