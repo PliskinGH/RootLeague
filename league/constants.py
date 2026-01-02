@@ -133,12 +133,13 @@ SETUP_TYPES = [
     (SETUP_STANDARD, _("Standard")),
     ]
 
-LANDMARK_BM = "lm_bm"
-LANDMARK_ET = "lm_et"
-LANDMARK_FERRY = "lm_ferry"
-LANDMARK_LF = "lm_lf"
-LANDMARK_LC = "lm_lc"
-LANDMARK_TOWER = "lm_tower"
+LANDMARK_PREFIX = "lm_"
+LANDMARK_BM = LANDMARK_PREFIX + "bm"
+LANDMARK_ET = LANDMARK_PREFIX + "et"
+LANDMARK_FERRY = LANDMARK_PREFIX + "ferry"
+LANDMARK_LF = LANDMARK_PREFIX + "lf"
+LANDMARK_LC = LANDMARK_PREFIX + "lc"
+LANDMARK_TOWER = LANDMARK_PREFIX + "tower"
 LANDMARKS = [
     (LANDMARK_BM, _("Black Market")),
     (LANDMARK_ET, _("Elder Treetop")),

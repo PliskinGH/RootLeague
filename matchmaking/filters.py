@@ -14,6 +14,14 @@ from misc.widgets import DateTimeWidget, FullWidthSelect2MultipleWidget
 
 AND_FILTER_HELP_TEXT = _("This filter uses AND logic.")
 FACTIONS_FILTER_CHOICES = constants.FACTIONS + [(constants.VAGABOND_PREFIX, _("Any Vagabond"))]
+REGEX_PROMOTED_HIRELING = r'{}[a-z]+{}'.format(constants.HIRELING_PREFIX, constants.HIRELING_PROMOTED_SUFFIX)
+REGEX_DEMOTED_HIRELING = r'{}[a-z]+{}'.format(constants.HIRELING_PREFIX, constants.HIRELING_DEMOTED_SUFFIX)
+HIRELINGS_FILTER_CHOICES = constants.HIRELINGS +\
+                           [(constants.HIRELING_PREFIX, _("Any Hireling")),
+                            (REGEX_PROMOTED_HIRELING, _("Any Promoted Hireling")),
+                            (REGEX_DEMOTED_HIRELING, _("Any Demoted Hireling"))]
+LANDMARKS_FILTER_CHOICES = constants.LANDMARKS +\
+                           [(constants.LANDMARK_PREFIX, _("Any Landmark"))]
 
 class MatchFilterMethodsMixin(object):
     def filter_isnotnull(self, queryset, name, value):
@@ -36,7 +44,7 @@ class MatchDRFFilter(MatchFilterMethodsMixin, filters.FilterSet):
     tournament__name = filters.CharFilter(lookup_expr='icontains')
 
     landmarks = filters.MultipleChoiceFilter(choices=constants.LANDMARKS, lookup_expr="contains", label=_("Landmarks"))
-    hirelings = filters.MultipleChoiceFilter(choices=constants.HIRELINGS, lookup_expr="contains", label=_("Hirelings"))
+    hirelings = filters.MultipleChoiceFilter(choices=HIRELINGS_FILTER_CHOICES, lookup_expr="regex", label=_("Hirelings"))
 
     class Meta:
         model = Match
@@ -75,7 +83,7 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
                                                 field_name="participants__player",
                                                 label=_("Players"),
                                                 help_text=AND_FILTER_HELP_TEXT)
-    factions = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="icontains",
+    factions = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="contains",
                                             conjoined=True,
                                             widget=FullWidthSelect2MultipleWidget,
                                             field_name="participants__faction",
@@ -89,8 +97,20 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
                                                widget=FullWidthSelect2MultipleWidget,)
     game_setup = filters.MultipleChoiceFilter(choices=constants.SETUP_TYPES,
                                               widget=FullWidthSelect2MultipleWidget,)
-    # landmarks = filters.MultipleChoiceFilter(choices=constants.LANDMARKS, lookup_expr="contains", label=_("Landmarks"))
-    # hirelings = filters.MultipleChoiceFilter(choices=constants.HIRELINGS, lookup_expr="contains", label=_("Hirelings"))
+    hirelings = filters.MultipleChoiceFilter(choices=HIRELINGS_FILTER_CHOICES, lookup_expr="regex", label=_("Hirelings"),
+                                             widget=FullWidthSelect2MultipleWidget,)
+    hirelings_and = filters.MultipleChoiceFilter(choices=HIRELINGS_FILTER_CHOICES, lookup_expr="regex", label=_("Hirelings"),
+                                                 widget=FullWidthSelect2MultipleWidget,
+                                                 field_name="hirelings",
+                                                 conjoined=True,
+                                                 help_text=AND_FILTER_HELP_TEXT)
+    landmarks = filters.MultipleChoiceFilter(choices=LANDMARKS_FILTER_CHOICES, lookup_expr="contains", label=_("Landmarks"),
+                                             widget=FullWidthSelect2MultipleWidget,)
+    landmarks_and = filters.MultipleChoiceFilter(choices=constants.LANDMARKS, lookup_expr="contains", label=_("Landmarks"),
+                                                 widget=FullWidthSelect2MultipleWidget,
+                                                 field_name="landmarks",
+                                                 conjoined=True,
+                                                 help_text=AND_FILTER_HELP_TEXT)
     closed = filters.BooleanFilter(field_name='date_closed',
                                    label='Match closed',
                                    method='filter_isnotnull')
@@ -111,7 +131,7 @@ class ParticipantFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.F
                                                widget=PlayerMultipleWidget,)
     turn_order = filters.MultipleChoiceFilter(choices=constants.TURN_ORDERS,
                                               widget=FullWidthSelect2MultipleWidget,)
-    faction = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="icontains",
+    faction = filters.MultipleChoiceFilter(choices=FACTIONS_FILTER_CHOICES, lookup_expr="contains",
                                            label=_("Faction"),
                                            widget=FullWidthSelect2MultipleWidget,)
     tournament_score = filters.AllValuesMultipleFilter(widget=FullWidthSelect2MultipleWidget,)
