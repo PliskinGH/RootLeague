@@ -24,8 +24,9 @@ def leaderboard(request,
                 title = None,
                 ordering = None,
                 number_per_page = 15):
+    matchs = Match.objects.exclude(date_closed=None).filter(tournament__visibility=True)
     match_filter = MatchFilter(request.GET,
-                               Match.objects.filter(tournament__visibility=True),
+                               matchs,
                                tournament_qs=Tournament.objects.filter(visibility=True))
     matchs = match_filter.qs
     participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
@@ -34,7 +35,7 @@ def leaderboard(request,
     match_filter.append_hidden_fields(participant_filter)
     participant_filter.append_hidden_fields(match_filter)
 
-    query_filter = ~Q(participations__match__date_closed=None) & Q(participations__in=participations)
+    query_filter = Q(participations__in=participations)
 
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
@@ -149,8 +150,7 @@ def get_stats(rows = None,
     if (participations is not None):
         all_participations = participations
     if (all_participations is None):
-        all_participations = Participant.objects.all()
-    all_participations = all_participations.exclude(match__date_closed=None)
+        all_participations = Participant.objects.exclude(match__date_closed=None)
     if (tournament not in EMPTY_VALUES):
         all_participations = all_participations.filter(match__tournament=tournament)
     elif (league not in EMPTY_VALUES):
@@ -232,8 +232,9 @@ def stats(request,
           sort_fields = None,
           current_url = '',
           current_url_arg = ''):
+    matchs = Match.objects.exclude(date_closed=None).filter(tournament__visibility=True)
     match_filter = MatchFilter(request.GET,
-                               Match.objects.filter(tournament__visibility=True),
+                               matchs,
                                tournament_qs=Tournament.objects.filter(visibility=True))
     matchs = match_filter.qs
     participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
