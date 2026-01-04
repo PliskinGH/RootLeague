@@ -41,5 +41,6 @@ class TournamentAdmin(admin.ModelAdmin):
             initial_data['deck'] = league.deck
             initial_data['board_map'] = league.board_map
             initial_data['random_suits'] = league.random_suits
-            initial_data['stats_display'] = league.stats_display
+            initial_data['visibility'] = league.visibility
+            initial_data['public'] = league.public
         return initial_data

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 15:51+0100\n"
+"POT-Creation-Date: 2026-01-04 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\league\apps.py:7 .\league\models.py:89 .\league\models.py:134
+#: .\league\apps.py:7 .\league\models.py:92 .\league\models.py:137
 msgid "league"
 msgstr ""
 
@@ -150,123 +150,123 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: .\league\constants.py:143
+#: .\league\constants.py:144
 msgid "Black Market"
 msgstr ""
 
-#: .\league\constants.py:144
+#: .\league\constants.py:145
 msgid "Elder Treetop"
 msgstr ""
 
-#: .\league\constants.py:145
+#: .\league\constants.py:146
 msgid "The Ferry"
 msgstr ""
 
-#: .\league\constants.py:146
+#: .\league\constants.py:147
 msgid "Legendary Forge"
 msgstr ""
 
-#: .\league\constants.py:147
+#: .\league\constants.py:148
 msgid "Lost City"
 msgstr ""
 
-#: .\league\constants.py:148
+#: .\league\constants.py:149
 msgid "The Tower"
 msgstr ""
 
-#: .\league\constants.py:184
+#: .\league\constants.py:185
 msgid "Vault Keepers"
 msgstr ""
 
-#: .\league\constants.py:185
+#: .\league\constants.py:186
 msgid "Badger Bodyguards"
 msgstr ""
 
-#: .\league\constants.py:186
+#: .\league\constants.py:187
 msgid "Popular Band"
 msgstr ""
 
-#: .\league\constants.py:187
+#: .\league\constants.py:188
 msgid "Street Band"
 msgstr ""
 
-#: .\league\constants.py:188
+#: .\league\constants.py:189
 msgid "Highway Bandits"
 msgstr ""
 
-#: .\league\constants.py:189
+#: .\league\constants.py:190
 msgid "Bandit Gangs"
 msgstr ""
 
-#: .\league\constants.py:190
+#: .\league\constants.py:191
 msgid "Corvid Spies"
 msgstr ""
 
-#: .\league\constants.py:191
+#: .\league\constants.py:192
 msgid "Raven Sentries"
 msgstr ""
 
-#: .\league\constants.py:192 .\league\constants.py:194
+#: .\league\constants.py:193 .\league\constants.py:195
 msgid "Warm Sun Prophets"
 msgstr ""
 
-#: .\league\constants.py:193 .\league\constants.py:195
+#: .\league\constants.py:194 .\league\constants.py:196
 msgid "Lizard Envoys"
 msgstr ""
 
-#: .\league\constants.py:196
+#: .\league\constants.py:197
 msgid "Last Dynasty"
 msgstr ""
 
-#: .\league\constants.py:197
+#: .\league\constants.py:198
 msgid "Bluebird Nobles"
 msgstr ""
 
-#: .\league\constants.py:198
+#: .\league\constants.py:199
 msgid "Forest Patrol"
 msgstr ""
 
-#: .\league\constants.py:199
+#: .\league\constants.py:200
 msgid "Feline Physicians"
 msgstr ""
 
-#: .\league\constants.py:200
+#: .\league\constants.py:201
 msgid "Furious Protector"
 msgstr ""
 
-#: .\league\constants.py:201
+#: .\league\constants.py:202
 msgid "Stoic Protector"
 msgstr ""
 
-#: .\league\constants.py:202
+#: .\league\constants.py:203
 msgid "Flame Bearers"
 msgstr ""
 
-#: .\league\constants.py:203
+#: .\league\constants.py:204
 msgid "Rat Smugglers"
 msgstr ""
 
-#: .\league\constants.py:204
+#: .\league\constants.py:205
 msgid "Riverfolk Flotilla"
 msgstr ""
 
-#: .\league\constants.py:205
+#: .\league\constants.py:206
 msgid "Otter Divers"
 msgstr ""
 
-#: .\league\constants.py:206
+#: .\league\constants.py:207
 msgid "The Exile"
 msgstr ""
 
-#: .\league\constants.py:207
+#: .\league\constants.py:208
 msgid "The Brigand"
 msgstr ""
 
-#: .\league\constants.py:208
+#: .\league\constants.py:209
 msgid "Spring Uprising"
 msgstr ""
 
-#: .\league\constants.py:209
+#: .\league\constants.py:210
 msgid "Rabbit Scouts"
 msgstr ""
 
@@ -358,12 +358,24 @@ msgstr ""
 msgid "random suits"
 msgstr ""
 
-#: .\league\models.py:92
+#: .\league\models.py:65
+msgid "visibility"
+msgstr ""
+
+#: .\league\models.py:68
+msgid "Public RDL league or tournament."
+msgstr ""
+
+#: .\league\models.py:95
 msgid "tournament"
 msgstr ""
 
-#: .\league\models.py:129
+#: .\league\models.py:132
 msgid "active season"
+msgstr ""
+
+#: .\league\models.py:134
+msgid "is default"
 msgstr ""
 
 #: .\league\templates\league\leaderboard.html:7
@@ -455,26 +467,26 @@ msgstr ""
 msgid "Nothing to display."
 msgstr ""
 
-#: .\league\views.py:266
+#: .\league\views.py:271
 msgid "Stats"
 msgstr ""
 
-#: .\league\views.py:269
+#: .\league\views.py:274
 msgid "stats"
 msgstr ""
 
-#: .\league\views.py:297
+#: .\league\views.py:302
 msgid "All Vagabonds"
 msgstr ""
 
-#: .\league\views.py:298
+#: .\league\views.py:303
 msgid "All Factions"
 msgstr ""
 
-#: .\league\views.py:305
+#: .\league\views.py:310
 msgid "Faction"
 msgstr ""
 
-#: .\league\views.py:356
+#: .\league\views.py:361
 msgid "Turn order"
 msgstr ""

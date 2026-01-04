@@ -5,6 +5,7 @@ from django.core.exceptions import FieldDoesNotExist
 
 from decimal import Decimal
 
+from .models import Tournament
 from .forms import PlayerInStatsForm
 from .filters import LeaderboardFilter
 from .common import get_league, get_tournament, get_dropdown_menu, get_title
@@ -23,7 +24,9 @@ def leaderboard(request,
                 title = None,
                 ordering = None,
                 number_per_page = 15):
-    match_filter = MatchFilter(request.GET, Match.objects.all())
+    match_filter = MatchFilter(request.GET,
+                               Match.objects.filter(tournament__visibility=True),
+                               tournament_qs=Tournament.objects.filter(visibility=True))
     matchs = match_filter.qs
     participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
     participations = participant_filter.qs
@@ -229,7 +232,9 @@ def stats(request,
           sort_fields = None,
           current_url = '',
           current_url_arg = ''):
-    match_filter = MatchFilter(request.GET, Match.objects.all())
+    match_filter = MatchFilter(request.GET,
+                               Match.objects.filter(tournament__visibility=True),
+                               tournament_qs=Tournament.objects.filter(visibility=True))
     matchs = match_filter.qs
     participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
     participations = participant_filter.qs

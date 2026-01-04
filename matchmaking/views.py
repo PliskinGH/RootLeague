@@ -17,6 +17,7 @@ from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
 from .filters import MatchDRFFilter, ParticipantFilter, MatchFilter
 from .serializers import MatchSerializer
+from league.models import Tournament
 from league.common import get_league, get_tournament, get_dropdown_menu, get_title
 from misc.views import ImprovedListView
 
@@ -54,6 +55,7 @@ def listing(request,
             template_name=None):
     if (matchs is None):
         matchs = Match.objects.all()
+    matchs = matchs.filter(tournament__visibility=True)
 
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
@@ -70,7 +72,7 @@ def listing(request,
     elif (league not in EMPTY_VALUES):
         matchs = matchs.filter(tournament__league=league)
     
-    match_filter = MatchFilter(request.GET, matchs)
+    match_filter = MatchFilter(request.GET, matchs, tournament_qs=Tournament.objects.filter(visibility=True))
     matchs = match_filter.qs
     participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
     participations = participant_filter.qs
@@ -338,6 +340,19 @@ class EditMatchViewMixin(object):
     inlines = [ParticipantInline]
     pk_url_kwarg='match_id'
     
+    def filter_form_tournaments(self, form):
+        tournament_qs = form.fields['tournament'].queryset
+        if (tournament_qs not in EMPTY_VALUES):
+            tournament = None
+            if (form.instance not in EMPTY_VALUES):
+                tournament = form.instance.tournament
+            query = Q(public=True)
+            if (tournament not in EMPTY_VALUES):
+                query = query | Q(pk=tournament.pk)
+            tournament_qs = tournament_qs.filter(query)
+            form.fields['tournament'].queryset = tournament_qs
+        return form
+    
     def post(self, request, *args, **kwargs):
         """
         Handles POST requests, instantiating a form and formset instances with the
@@ -416,18 +431,20 @@ class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixi
     
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        initial_tournament_name = ""
-        if (self.request.method == 'GET'):
-            initial_tournament_name = self.request.GET.get("tournament", "")
-        initial_tournaments = []
-        if (initial_tournament_name not in EMPTY_VALUES):
-            initial_tournaments = form.fields['tournament'].queryset.filter(name=initial_tournament_name)
-        initial_tournament = None
-        if (len(initial_tournaments) == 1):
-            initial_tournament = initial_tournaments[0]
-        if (initial_tournament is not None):
-            form.fields['tournament'].initial = initial_tournament
-            form.fields['tournament'].disabled = True
+        forced_tournament_name = ""
+        forced_tournament_id = None
+        forced_tournament_name = self.request.GET.get("tournament_name", "")
+        forced_tournament_id = self.request.GET.get("tournament_id", None)
+        tournament_qs = form.fields['tournament'].queryset
+        forced_tournaments = tournament_qs
+        if (forced_tournament_name not in EMPTY_VALUES):
+            forced_tournaments = forced_tournaments.filter(name=forced_tournament_name)
+        if (forced_tournament_id not in EMPTY_VALUES):
+            forced_tournaments = forced_tournaments.filter(id=forced_tournament_id)
+        if (forced_tournaments.count() == 1):
+            form.fields['tournament'].queryset = forced_tournaments
+        else:
+            form = self.filter_form_tournaments(form)
         return form
     
     def post(self, request, *args, **kwargs):
@@ -443,17 +460,16 @@ class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixi
         self.object.save()
         return response
 
-class UpdateMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, UpdateWithInlinesView):
+class UpdateMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, UpdateWithInlinesView):
     form_class = UpdateMatchForm
     success_message = _("Match successfully updated!")
     extra_context = {'upper_title' : _("Update match"),
                      'lower_title' : _("Form")}
-
-    def get_object(self, *args, **kwargs):
-        match = super().get_object(*args, **kwargs)
-        if not(match.is_editable_by(self.request.user)):
-            raise PermissionDenied()
-        return match
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form = self.filter_form_tournaments(form)
+        return form
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -471,7 +487,7 @@ class UpdateMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, EditMatchVi
         self.object.save()
         return response
 
-class DeleteMatchView(LoginRequiredMixin, EditMatchPermissionsMixin, SuccessMessageMixin, DeleteView):
+class DeleteMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Match
     form_class = DeleteMatchForm
     pk_url_kwarg='match_id'

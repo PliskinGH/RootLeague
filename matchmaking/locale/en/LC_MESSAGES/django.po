@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 15:51+0100\n"
+"POT-Creation-Date: 2026-01-04 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,42 +38,60 @@ msgstr ""
 msgid "matchmaking"
 msgstr ""
 
-#: .\matchmaking\filters.py:15
+#: .\matchmaking\filters.py:16
 msgid "This filter uses AND logic."
 msgstr ""
 
-#: .\matchmaking\filters.py:16
+#: .\matchmaking\filters.py:17
 msgid "Any Vagabond"
 msgstr ""
 
-#: .\matchmaking\filters.py:38
-#: .\matchmaking\templates\matchmaking\match_detail.html:115
+#: .\matchmaking\filters.py:21
+msgid "Any Hireling"
+msgstr ""
+
+#: .\matchmaking\filters.py:22
+msgid "Any Promoted Hireling"
+msgstr ""
+
+#: .\matchmaking\filters.py:23
+msgid "Any Demoted Hireling"
+msgstr ""
+
+#: .\matchmaking\filters.py:25
+msgid "Any Landmark"
+msgstr ""
+
+#: .\matchmaking\filters.py:47 .\matchmaking\filters.py:114
+#: .\matchmaking\filters.py:116
 #: .\matchmaking\templates\matchmaking\match_detail.html:123
 msgid "Landmarks"
 msgstr ""
 
-#: .\matchmaking\filters.py:39
+#: .\matchmaking\filters.py:48 .\matchmaking\filters.py:107
+#: .\matchmaking\filters.py:109
+#: .\matchmaking\templates\matchmaking\match_detail.html:115
 msgid "Hirelings"
 msgstr ""
 
-#: .\matchmaking\filters.py:66
+#: .\matchmaking\filters.py:75
 msgid "Match filters"
 msgstr ""
 
-#: .\matchmaking\filters.py:76
+#: .\matchmaking\filters.py:91
 #: .\matchmaking\templates\matchmaking\match_list.html:52
 msgid "Players"
 msgstr ""
 
-#: .\matchmaking\filters.py:82
+#: .\matchmaking\filters.py:97
 msgid "Factions"
 msgstr ""
 
-#: .\matchmaking\filters.py:107
+#: .\matchmaking\filters.py:134
 msgid "Participant filters"
 msgstr ""
 
-#: .\matchmaking\filters.py:115
+#: .\matchmaking\filters.py:142
 #: .\matchmaking\templates\matchmaking\match_detail.html:139
 msgid "Faction"
 msgstr ""
@@ -107,36 +125,36 @@ msgstr ""
 msgid "Final Results"
 msgstr ""
 
-#: .\matchmaking\forms.py:34 .\matchmaking\views.py:414
+#: .\matchmaking\forms.py:34 .\matchmaking\views.py:429
 msgid "Register match"
 msgstr ""
 
-#: .\matchmaking\forms.py:111
+#: .\matchmaking\forms.py:112
 msgid "A map is required for closed games."
 msgstr ""
 
-#: .\matchmaking\forms.py:115
+#: .\matchmaking\forms.py:116
 msgid "A deck is required for closed games."
 msgstr ""
 
-#: .\matchmaking\forms.py:205
+#: .\matchmaking\forms.py:209
 msgid "The distribution must be random for this map."
 msgstr ""
 
-#: .\matchmaking\forms.py:208 .\matchmaking\views.py:449
+#: .\matchmaking\forms.py:212 .\matchmaking\views.py:466
 msgid "Update match"
 msgstr ""
 
-#: .\matchmaking\forms.py:220
+#: .\matchmaking\forms.py:224
 msgid "Confirm"
 msgstr ""
 
-#: .\matchmaking\forms.py:225
+#: .\matchmaking\forms.py:229
 #: .\matchmaking\templates\matchmaking\match_detail.html:164
 msgid "Coalition with"
 msgstr ""
 
-#: .\matchmaking\forms.py:318
+#: .\matchmaking\forms.py:322
 #, python-format
 msgid ""
 "Turn orders are wrong.                       Please check again that they "
@@ -144,20 +162,20 @@ msgid ""
 "%(nb_participants)d."
 msgstr ""
 
-#: .\matchmaking\forms.py:327
+#: .\matchmaking\forms.py:331
 msgid ""
 "Factions are wrong.                       Please check again that all "
 "participants have a defined faction                       with no duplicates."
 msgstr ""
 
-#: .\matchmaking\forms.py:334
+#: .\matchmaking\forms.py:338
 msgid ""
 "Something is wrong with the submitted players.                       Please "
 "check again that they are all defined                       with no "
 "duplicates."
 msgstr ""
 
-#: .\matchmaking\forms.py:351
+#: .\matchmaking\forms.py:355
 #, python-format
 msgid ""
 "The number of promoted hirelings (%(nb_p)i) and demoted hirelings "
@@ -165,64 +183,64 @@ msgid ""
 "%(nb_p_theo)i and %(nb_d_theo)i."
 msgstr ""
 
-#: .\matchmaking\forms.py:363
+#: .\matchmaking\forms.py:367
 #, python-format
 msgid "This tournament does not allow more than %(max_nb)d players per game."
 msgstr ""
 
-#: .\matchmaking\forms.py:371
+#: .\matchmaking\forms.py:375
 #, python-format
 msgid "This tournament does not allow fewer than %(min_nb)d players per game."
 msgstr ""
 
-#: .\matchmaking\forms.py:400
+#: .\matchmaking\forms.py:404
 #, python-format
 msgid "Player %(index_player)i must be defined, if the game is closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:407
+#: .\matchmaking\forms.py:411
 #, python-format
 msgid ""
 "Player %(index_player)i must have a defined tournament score, if the game is "
 "closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:414
+#: .\matchmaking\forms.py:418
 #, python-format
 msgid ""
 "A faction must be defined for player %(index_player)i if the game is closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:423
+#: .\matchmaking\forms.py:427
 #, python-format
 msgid ""
 "Player %(index_player)i must have a defined game score, coalition or "
 "dominance, if the game is closed."
 msgstr ""
 
-#: .\matchmaking\forms.py:430
+#: .\matchmaking\forms.py:434
 #, python-format
 msgid ""
 "Player %(index_player)i cannot both have a game score and be in a coalition."
 msgstr ""
 
-#: .\matchmaking\forms.py:436
+#: .\matchmaking\forms.py:440
 #, python-format
 msgid ""
 "Player %(index_player)i cannot both play a dominance and have a game score."
 msgstr ""
 
-#: .\matchmaking\forms.py:442
+#: .\matchmaking\forms.py:446
 #, python-format
 msgid "Player %(index_player)i is not a vagabond and cannot play a coalition."
 msgstr ""
 
-#: .\matchmaking\forms.py:448
+#: .\matchmaking\forms.py:452
 #, python-format
 msgid "Player %(index_player)i is a vagabond and cannot play a dominance."
 msgstr ""
 
-#: .\matchmaking\forms.py:466
+#: .\matchmaking\forms.py:470
 #, python-format
 msgid ""
 "Player %(index_player)i does not have a correct tournament "
@@ -230,7 +248,7 @@ msgid ""
 "%(win_score)0.2f (for a win) and %(coal_win)0.2f (for a win in coalition)."
 msgstr ""
 
-#: .\matchmaking\forms.py:473
+#: .\matchmaking\forms.py:477
 #, python-format
 msgid ""
 "Player %(index_player)i does not have a correct tournament "
@@ -238,21 +256,21 @@ msgid ""
 "%(win_score)0.2f (for a win)."
 msgstr ""
 
-#: .\matchmaking\forms.py:480
+#: .\matchmaking\forms.py:484
 #, python-format
 msgid ""
 "Player %(index_player)i is in a coalition                          but this "
 "tournament does not allow coalitions."
 msgstr ""
 
-#: .\matchmaking\forms.py:487
+#: .\matchmaking\forms.py:491
 #, python-format
 msgid ""
 "Player %(index_player)i is in a three-way coalition                          "
 "but this tournament does not allow three-way coalitions."
 msgstr ""
 
-#: .\matchmaking\forms.py:497
+#: .\matchmaking\forms.py:501
 #, python-format
 msgid "The total score should be %(total)0.2f."
 msgstr ""
@@ -377,7 +395,7 @@ msgstr ""
 
 #: .\matchmaking\templates\matchmaking\match_detail.html:30
 #: .\matchmaking\templates\matchmaking\match_list.html:78
-#: .\matchmaking\views.py:482
+#: .\matchmaking\views.py:498
 msgid "Delete match"
 msgstr ""
 
@@ -552,42 +570,42 @@ msgstr ""
 msgid "Matches"
 msgstr ""
 
-#: .\matchmaking\views.py:28
+#: .\matchmaking\views.py:29
 msgid "Latest matches"
 msgstr ""
 
-#: .\matchmaking\views.py:50
+#: .\matchmaking\views.py:51
 msgid "Find a match"
 msgstr ""
 
-#: .\matchmaking\views.py:201
+#: .\matchmaking\views.py:203
 msgid "Submitted games"
 msgstr ""
 
-#: .\matchmaking\views.py:251
+#: .\matchmaking\views.py:253
 msgid "Played games"
 msgstr ""
 
-#: .\matchmaking\views.py:413
+#: .\matchmaking\views.py:428
 msgid "Match successfully registered!"
 msgstr ""
 
-#: .\matchmaking\views.py:415 .\matchmaking\views.py:450
+#: .\matchmaking\views.py:430 .\matchmaking\views.py:467
 msgid "Form"
 msgstr ""
 
-#: .\matchmaking\views.py:448
+#: .\matchmaking\views.py:465
 msgid "Match successfully updated!"
 msgstr ""
 
-#: .\matchmaking\views.py:478
+#: .\matchmaking\views.py:494
 msgid "Match successfully deleted!"
 msgstr ""
 
-#: .\matchmaking\views.py:487
+#: .\matchmaking\views.py:503
 msgid "Unknown match"
 msgstr ""
 
-#: .\matchmaking\views.py:503
+#: .\matchmaking\views.py:519
 msgid "Stats summary"
 msgstr ""

@@ -61,8 +61,11 @@ class AbstractTournament(models.Model):
     random_suits = models.BooleanField(blank=True, null=True,
                                        verbose_name=_('random suits'))
     
-    stats_display = models.BooleanField(default=False,
-                                        verbose_name="displayed in stats")
+    visibility = models.BooleanField(default=False,
+                                     verbose_name=_("visibility"))
+    
+    public = models.BooleanField(default=False,
+                                 help_text=_('Public RDL league or tournament.'))
     
     class Meta:
         abstract = True
@@ -128,7 +131,7 @@ class League(AbstractTournament):
                                          related_name="active_in_league",
                                          verbose_name=_('active season'))
     is_default = models.BooleanField(null=False, blank=False, default=False,
-                                     verbose_name='is default')
+                                     verbose_name=_('is default'))
 
     class Meta:
         verbose_name = _("league")

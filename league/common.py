@@ -78,9 +78,9 @@ def get_dropdown_menu(league = None,
     
     seasons = Tournament.objects.none()
     if (league not in EMPTY_VALUES):
-        seasons = league.seasons.filter(stats_display=True).order_by('-start_date', '-pk')
+        seasons = league.seasons.filter(visibility=True).order_by('-start_date', '-pk')
 
-    leagues = League.objects.filter(stats_display=True)
+    leagues = League.objects.filter(visibility=True)
     nbLeagues = leagues.count()
     if (nbLeagues > 1 or
         (not(league) and nbLeagues)):

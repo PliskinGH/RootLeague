@@ -2,6 +2,7 @@
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import EMPTY_VALUES
 from django_filters import rest_framework as filters
 
 from .models import Match, Participant
@@ -73,6 +74,12 @@ class MatchDRFFilter(MatchFilterMethodsMixin, filters.FilterSet):
 class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterSet):
     html_title = _("Match filters")
     html_id = "matchFiltersModal"
+
+    def __init__(self, *args, **kwargs):
+        tournament_qs = kwargs.pop("tournament_qs", None)
+        super().__init__(*args, **kwargs)
+        if (tournament_qs not in EMPTY_VALUES):
+            self.filters['tournament'].queryset = tournament_qs.order_by('start_date', 'name')
 
     title__icontains = filters.CharFilter(field_name='title', lookup_expr='icontains')
     tournament = filters.ModelMultipleChoiceFilter(queryset=Tournament.objects.all().order_by('start_date', 'name'),
