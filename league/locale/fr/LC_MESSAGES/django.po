@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 18:14+0100\n"
+"POT-Creation-Date: 2026-01-06 00:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,13 +208,23 @@ msgstr "Conspiration des corvidés"
 msgid "Raven Sentries"
 msgstr ""
 
-#: .\league\constants.py:193 .\league\constants.py:195
+#: .\league\constants.py:193
 msgid "Warm Sun Prophets"
 msgstr ""
 
-#: .\league\constants.py:194 .\league\constants.py:196
+#: .\league\constants.py:194
 msgid "Lizard Envoys"
 msgstr ""
+
+#: .\league\constants.py:195
+msgid "Sunward Expedition"
+msgstr ""
+
+#: .\league\constants.py:196
+#, fuzzy
+#| msgid "Exiles and Partisans"
+msgid "Mole Artisans"
+msgstr "Exilés et Partisans"
 
 #: .\league\constants.py:197
 msgid "Last Dynasty"
@@ -479,27 +489,27 @@ msgstr "Score de jeu moyen"
 msgid "Nothing to display."
 msgstr "Rien à afficher."
 
-#: .\league\views.py:271
+#: .\league\views.py:272
 msgid "Stats"
 msgstr "Statistiques"
 
-#: .\league\views.py:274
+#: .\league\views.py:275
 msgid "stats"
 msgstr "statistiques"
 
-#: .\league\views.py:302
+#: .\league\views.py:303
 msgid "All Vagabonds"
 msgstr "Tout Vagabond"
 
-#: .\league\views.py:303
+#: .\league\views.py:304
 msgid "All Factions"
 msgstr "Toute Faction"
 
-#: .\league\views.py:310
+#: .\league\views.py:311
 msgid "Faction"
 msgstr ""
 
-#: .\league\views.py:361
+#: .\league\views.py:362
 msgid "Turn order"
 msgstr "Tour de jeu"
 
