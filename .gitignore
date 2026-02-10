@@ -5,6 +5,7 @@ matchmaking/migrations/__pycache__/
 misc/__pycache__/
 misc/migrations/__pycache__/
 .env
+.venv
 dumps/
 .spyproject/
 **/*.mo
