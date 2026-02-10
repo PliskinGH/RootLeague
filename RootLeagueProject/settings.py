@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "mailer",
     'tinymce',
     'rest_framework',
+    'analytical',
     'authentification',
     'matchmaking',
     'league',
@@ -258,6 +259,9 @@ REST_FRAMEWORK = {
         'user': '1000/day'
     }
 }
+
+# Analytics
+GOOGLE_ANALYTICS_GTAG_PROPERTY_ID = os.environ.get('ROOTLEAGUE_GTAG_PROPERTY_ID', None)
 
 
 # Static files (CSS, JavaScript, Images)
