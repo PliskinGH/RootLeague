@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 04:13+0100\n"
+"POT-Creation-Date: 2026-02-19 00:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,41 +57,61 @@ msgstr "Se connecter"
 msgid "Send confirmation"
 msgstr ""
 
-#: .\authentification\models.py:14
+#: .\authentification\models.py:15
 msgid "name"
 msgstr "nom"
 
-#: .\authentification\models.py:16
+#: .\authentification\models.py:17
 msgid "icon"
 msgstr "icone"
 
-#: .\authentification\models.py:25
+#: .\authentification\models.py:28
+msgid ""
+"Enter a valid Discord username. This value may contain only unaccented "
+"lowercase letters, numbers, and ./_ characters."
+msgstr ""
+
+#: .\authentification\models.py:35
+msgid ""
+"Enter a valid username. This value may contain only unaccented lowercase a-z "
+"and uppercase A-Z letters, numbers, and @/./-/_ characters."
+msgstr ""
+
+#: .\authentification\models.py:41
 msgid "email address"
 msgstr "adresse e-mail"
 
-#: .\authentification\models.py:30
-msgid "discord username"
+#: .\authentification\models.py:46
+#, fuzzy
+#| msgid "discord username"
+msgid "Discord username"
 msgstr "nom discord"
 
-#: .\authentification\models.py:32
-msgid "in-game Username"
+#: .\authentification\models.py:50
+#, fuzzy
+#| msgid "in-game Username"
+msgid "in-game username"
 msgstr "nom dans le jeu"
 
-#: .\authentification\models.py:34
+#: .\authentification\models.py:52
 msgid "in-game ID"
 msgstr "ID dans le jeu"
 
-#: .\authentification\models.py:37
+#: .\authentification\models.py:56
 msgid "roles"
 msgstr ""
 
-#: .\authentification\models.py:40
+#: .\authentification\models.py:59
 msgid "player"
 msgstr "joueur"
 
-#: .\authentification\models.py:41
+#: .\authentification\models.py:60
 msgid "players"
 msgstr "joueurs"
+
+#: .\authentification\models.py:66
+msgid "A user with that ign+igid already exists."
+msgstr ""
 
 #: .\authentification\templates\authentification\password_reset_email.html:2
 #, python-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 18:14+0100\n"
+"POT-Creation-Date: 2026-02-19 00:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,102 +107,102 @@ msgstr ""
 msgid "No announcements found."
 msgstr ""
 
-#: .\misc\templates\misc\base.html:16 .\misc\templates\misc\base.html:53
+#: .\misc\templates\misc\base.html:21 .\misc\templates\misc\base.html:60
 msgid "ROOT Digital League"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:16
+#: .\misc\templates\misc\base.html:21
 msgid ""
 "Root Digital League is a fun and informal way to play Root using the digital "
 "app. League games are highly competitive and entertaining, organized over "
 "the length of an established season, and results are reported and tracked."
 msgstr ""
 
-#: .\misc\templates\misc\base.html:52
+#: .\misc\templates\misc\base.html:59
 msgid "An unofficial game tracking and ranking"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:63
+#: .\misc\templates\misc\base.html:70
 msgid "Community"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:66 .\misc\views.py:140
+#: .\misc\templates\misc\base.html:73 .\misc\views.py:140
 msgid "Home"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:67
+#: .\misc\templates\misc\base.html:74
 msgid "News"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:74
+#: .\misc\templates\misc\base.html:81
 msgid "Match"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:77
+#: .\misc\templates\misc\base.html:84
 msgid "List"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:78
+#: .\misc\templates\misc\base.html:85
 msgid "Submit"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:81
+#: .\misc\templates\misc\base.html:88
 msgid "Leaderboard"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:84
+#: .\misc\templates\misc\base.html:91
 msgid "Stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:87
+#: .\misc\templates\misc\base.html:94
 msgid "Summary"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:88
+#: .\misc\templates\misc\base.html:95
 msgid "Faction stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:89
+#: .\misc\templates\misc\base.html:96
 msgid "Turn order stats"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:96 .\misc\templates\misc\base.html:105
+#: .\misc\templates\misc\base.html:103 .\misc\templates\misc\base.html:112
 msgid "About"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:110
+#: .\misc\templates\misc\base.html:117
 msgid "Account"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:113
+#: .\misc\templates\misc\base.html:120
 msgid "Submitted games"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:114
+#: .\misc\templates\misc\base.html:121
 msgid "Played games"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:115
+#: .\misc\templates\misc\base.html:122
 msgid "Profile"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:117
+#: .\misc\templates\misc\base.html:124
 msgid "Admin"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:124
+#: .\misc\templates\misc\base.html:131
 msgid "Log out"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:129
+#: .\misc\templates\misc\base.html:136
 msgid "Log in"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:132
+#: .\misc\templates\misc\base.html:139
 msgid "Sign up"
 msgstr ""
 
-#: .\misc\templates\misc\base.html:163
+#: .\misc\templates\misc\base.html:170
 msgid ""
 "\n"
 "                    Contributions and bug reports are welcome on <a "
@@ -210,7 +210,7 @@ msgid ""
 "                    "
 msgstr ""
 
-#: .\misc\templates\misc\base.html:168
+#: .\misc\templates\misc\base.html:175
 msgid ""
 "\n"
 "                    To join league games, visit the official Root <a "

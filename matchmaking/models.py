@@ -38,7 +38,8 @@ class Match(models.Model):
     turn_timing = models.CharField(max_length=20,
                                    blank=True,
                                    choices=TURN_TIMING_TYPES,
-                                   verbose_name=_('turn timing'))
+                                   verbose_name=_('turn timing'),
+                                   help_text=_("Live games with <em>no timer</em> must be <strong>submitted as Live</strong>!"))
     table_talk_url = models.URLField(blank=True, null=True, max_length=1000,
                                      help_text=_("E.g. Discord thread."),
                                      verbose_name=_('table talk URL'))

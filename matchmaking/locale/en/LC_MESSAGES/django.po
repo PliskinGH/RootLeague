@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 18:14+0100\n"
+"POT-Creation-Date: 2026-02-19 00:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Only in title. For other fields, use the filters."
 msgstr ""
 
-#: .\matchmaking\admin.py:32 .\matchmaking\models.py:125
+#: .\matchmaking\admin.py:32 .\matchmaking\models.py:126
 msgid "coalition"
 msgstr ""
 
@@ -303,79 +303,84 @@ msgstr ""
 msgid "turn timing"
 msgstr ""
 
-#: .\matchmaking\models.py:43
-msgid "E.g. Discord thread."
+#: .\matchmaking\models.py:42
+msgid ""
+"Live games with <em>no timer</em> must be <strong>submitted as Live</strong>!"
 msgstr ""
 
 #: .\matchmaking\models.py:44
+msgid "E.g. Discord thread."
+msgstr ""
+
+#: .\matchmaking\models.py:45
 msgid "table talk URL"
 msgstr ""
 
-#: .\matchmaking\models.py:49
+#: .\matchmaking\models.py:50
 msgid "setup"
 msgstr ""
 
-#: .\matchmaking\models.py:52
+#: .\matchmaking\models.py:53
 msgid "Only in advanced setup."
 msgstr ""
 
-#: .\matchmaking\models.py:53
+#: .\matchmaking\models.py:54
 msgid "undrafted faction"
 msgstr ""
 
-#: .\matchmaking\models.py:57
+#: .\matchmaking\models.py:58
 msgid "deck"
 msgstr ""
 
-#: .\matchmaking\models.py:60
+#: .\matchmaking\models.py:61
 msgid "map"
 msgstr ""
 
-#: .\matchmaking\models.py:62
+#: .\matchmaking\models.py:63
 msgid "random suits"
 msgstr ""
 
-#: .\matchmaking\models.py:75 .\matchmaking\models.py:111
+#: .\matchmaking\models.py:76 .\matchmaking\models.py:112
 msgid "match"
 msgstr ""
 
-#: .\matchmaking\models.py:83
+#: .\matchmaking\models.py:84
 msgid "Match#"
 msgstr ""
 
-#: .\matchmaking\models.py:108
+#: .\matchmaking\models.py:109
 msgid "player"
 msgstr ""
 
-#: .\matchmaking\models.py:115
+#: .\matchmaking\models.py:116
 msgid "faction"
 msgstr ""
 
-#: .\matchmaking\models.py:118
+#: .\matchmaking\models.py:119
 msgid "game score"
 msgstr ""
 
-#: .\matchmaking\models.py:121
+#: .\matchmaking\models.py:122
 msgid "dominance"
 msgstr ""
 
-#: .\matchmaking\models.py:128
+#: .\matchmaking\models.py:129
 msgid "tournament score"
 msgstr ""
 
-#: .\matchmaking\models.py:132
+#: .\matchmaking\models.py:133
 msgid "turn order"
 msgstr ""
 
-#: .\matchmaking\models.py:135
+#: .\matchmaking\models.py:136
 msgid "participant"
 msgstr ""
 
-#: .\matchmaking\models.py:142
+#: .\matchmaking\models.py:143
 msgid " in "
 msgstr ""
 
-#: .\matchmaking\models.py:144
+#: .\matchmaking\models.py:145
 msgid "UnknownParticipant#"
 msgstr ""
 

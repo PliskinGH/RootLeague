@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 00:48+0100\n"
+"POT-Creation-Date: 2026-02-19 00:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,113 +175,113 @@ msgid "The Tower"
 msgstr ""
 
 #: .\league\constants.py:185
-msgid "Vault Keepers"
+msgid "Vault Keepers (P)"
 msgstr ""
 
 #: .\league\constants.py:186
-msgid "Badger Bodyguards"
+msgid "Badger Bodyguards (D)"
 msgstr ""
 
 #: .\league\constants.py:187
-msgid "Popular Band"
+msgid "Popular Band (P)"
 msgstr ""
 
 #: .\league\constants.py:188
-msgid "Street Band"
+msgid "Street Band (D)"
 msgstr ""
 
 #: .\league\constants.py:189
-msgid "Highway Bandits"
+msgid "Highway Bandits (P)"
 msgstr ""
 
 #: .\league\constants.py:190
-msgid "Bandit Gangs"
+msgid "Bandit Gangs (D)"
 msgstr ""
 
 #: .\league\constants.py:191
 #, fuzzy
 #| msgid "Corvid Conspiracy"
-msgid "Corvid Spies"
+msgid "Corvid Spies (P)"
 msgstr "Conspiration des corvidés"
 
 #: .\league\constants.py:192
-msgid "Raven Sentries"
+msgid "Raven Sentries (D)"
 msgstr ""
 
 #: .\league\constants.py:193
-msgid "Warm Sun Prophets"
+msgid "Warm Sun Prophets (P)"
 msgstr ""
 
 #: .\league\constants.py:194
-msgid "Lizard Envoys"
+msgid "Lizard Envoys (D)"
 msgstr ""
 
 #: .\league\constants.py:195
-msgid "Sunward Expedition"
+msgid "Sunward Expedition (P)"
 msgstr ""
 
 #: .\league\constants.py:196
 #, fuzzy
 #| msgid "Exiles and Partisans"
-msgid "Mole Artisans"
+msgid "Mole Artisans (D)"
 msgstr "Exilés et Partisans"
 
 #: .\league\constants.py:197
-msgid "Last Dynasty"
+msgid "Last Dynasty (P)"
 msgstr ""
 
 #: .\league\constants.py:198
-msgid "Bluebird Nobles"
+msgid "Bluebird Nobles (D)"
 msgstr ""
 
 #: .\league\constants.py:199
-msgid "Forest Patrol"
+msgid "Forest Patrol (P)"
 msgstr ""
 
 #: .\league\constants.py:200
-msgid "Feline Physicians"
+msgid "Feline Physicians (D)"
 msgstr ""
 
 #: .\league\constants.py:201
-msgid "Furious Protector"
+msgid "Furious Protector (P)"
 msgstr ""
 
 #: .\league\constants.py:202
-msgid "Stoic Protector"
+msgid "Stoic Protector (D)"
 msgstr ""
 
 #: .\league\constants.py:203
-msgid "Flame Bearers"
+msgid "Flame Bearers (P)"
 msgstr ""
 
 #: .\league\constants.py:204
-msgid "Rat Smugglers"
+msgid "Rat Smugglers (D)"
 msgstr ""
 
 #: .\league\constants.py:205
 #, fuzzy
 #| msgid "Riverfolk Company"
-msgid "Riverfolk Flotilla"
+msgid "Riverfolk Flotilla (P)"
 msgstr "Compagnie de la rivière"
 
 #: .\league\constants.py:206
-msgid "Otter Divers"
+msgid "Otter Divers (D)"
 msgstr ""
 
 #: .\league\constants.py:207
-msgid "The Exile"
+msgid "The Exile (P)"
 msgstr ""
 
 #: .\league\constants.py:208
-msgid "The Brigand"
+msgid "The Brigand (D)"
 msgstr ""
 
 #: .\league\constants.py:209
-msgid "Spring Uprising"
+msgid "Spring Uprising (P)"
 msgstr ""
 
 #: .\league\constants.py:210
-msgid "Rabbit Scouts"
+msgid "Rabbit Scouts (D)"
 msgstr ""
 
 #: .\league\filters.py:15

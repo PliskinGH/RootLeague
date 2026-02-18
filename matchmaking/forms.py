@@ -66,7 +66,7 @@ class MatchForm(ModelForm):
         self.helper.layout = Layout(
             Row(Column("title", css_class='col-md-8'), Column("tournament", css_class='col-md-4')),
             Row(Column("game_setup", css_class='col-md-6'), Column("undrafted_faction", css_class='col-md-6')),
-            Row(Column("turn_timing", css_class='col-md-3'), Column("table_talk_url", css_class='col-md-9')),
+            Row(Column("turn_timing", css_class='col-md-4'), Column("table_talk_url", css_class='col-md-8')),
             Row(Column("deck", css_class='col-md-4'), Column("board_map", css_class='col-md-4'), Column("random_suits", css_class='col-md-4')),
             Row(Column("hirelings", css_class='col-md-6') if (self.hirelings_displayed) else HTML(""),
                 Column("landmarks", css_class='col-md-6') if (self.landmarks_displayed) else HTML(""),) \
