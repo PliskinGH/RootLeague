@@ -20,12 +20,14 @@ from django.contrib.sitemaps import views as sitemap_views
 from rest_framework import routers
 
 from matchmaking import views as match_views
+from authentification import views as authentification_views
 from misc import views as misc_views
 from .sitemaps import sitemaps
 
 # DRF rooter
 router = routers.SimpleRouter()
 router.register('match', match_views.MatchViewset, basename='match')
+router.register('registration', authentification_views.PlayerRegistrationViewSet, basename='registration')
 
 urlpatterns = [
     path("select2/", include("django_select2.urls")),

@@ -6,7 +6,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from . import forms
+from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.viewsets import GenericViewSet
+
+from . import forms, serializers
+from .models import Player
+
 
 # Create your views here.
 
@@ -65,3 +70,9 @@ class PlayerPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmVi
     success_message = _("Password changed successfully!")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Reset Password")}
+
+# API ViewSet for checking whether a particular Player, with the specified Discord Username, is registered for league
+class PlayerRegistrationViewSet(GenericViewSet, RetrieveModelMixin):
+    queryset = Player.objects.all()
+    serializer_class = serializers.PlayerRegistrationSerializer
+    lookup_field = "discord_name"
