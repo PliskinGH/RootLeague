@@ -27,6 +27,7 @@ from .sitemaps import sitemaps
 # DRF rooter
 router = routers.SimpleRouter()
 router.register('match', match_views.MatchViewset, basename='match')
+router.register('player', authentification_views.PlayerViewSet, basename='player')
 router.register('registration', authentification_views.PlayerRegistrationViewSet, basename='registration')
 
 urlpatterns = [

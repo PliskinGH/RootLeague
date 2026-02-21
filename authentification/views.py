@@ -6,11 +6,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from rest_framework.mixins import RetrieveModelMixin
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from . import forms, serializers
+from . import forms
 from .models import Player
+from .serializers import PlayerSerializer
 
 
 # Create your views here.
@@ -70,9 +70,13 @@ class PlayerPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmVi
     success_message = _("Password changed successfully!")
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Reset Password")}
+    
+class PlayerViewSet(ReadOnlyModelViewSet):
+    serializer_class = PlayerSerializer
+ 
+    def get_queryset(self):
+        return Player.objects.filter(is_active=True)
 
 # API ViewSet for checking whether a particular Player, with the specified Discord Username, is registered for league
-class PlayerRegistrationViewSet(GenericViewSet, RetrieveModelMixin):
-    queryset = Player.objects.all()
-    serializer_class = serializers.PlayerRegistrationSerializer
+class PlayerRegistrationViewSet(PlayerViewSet):
     lookup_field = "discord_name"
