@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from more_admin_filters.filters import MultiSelectRelatedFilter
+from rest_framework.authtoken.admin import TokenAdmin
 
 from .models import Player
 from matchmaking.admin import ParticipationInline
@@ -16,9 +17,11 @@ class PlayerAdmin(UserAdmin):
     list_filter = ['date_joined', 'is_active', 'is_staff',
                    ('groups', MultiSelectRelatedFilter),
                    ]
+    readonly_fields = ('auth_token',)
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (_("Personal info"), {"fields": ("email", "in_game_name", "in_game_id", "discord_name")}),
+        (_("API"), {"fields": ("auth_token",)}),
         (
             _("Permissions"),
             {
@@ -51,3 +54,5 @@ class PlayerAdmin(UserAdmin):
             },
         ),
     )
+
+TokenAdmin.autocomplete_fields = ['user']

@@ -4,8 +4,40 @@
 
 {% load crispy_forms_tags %}
 
+{% block form_header %}
+<h3>{{ _("Personal info") }}</h3>
+{% endblock form_header %}
+
 {% block form_footer %}
-<a href="{% url 'auth:password_change' %}" class="btn btn-outline-secondary">
-    {% blocktranslate %}Change password{% endblocktranslate %}
-</a>
+<h3>{{ _("Secrets") }}</h3>
+
+<div class="table-responsive">
+<table class="table table-borderless table-striped">
+  <tbody>
+    <tr class="table-active">
+      <th scope="row">{{_("Password")}}</th>
+      <td></td>
+      <td>
+        <a href="{% url 'auth:password_change' %}" class="btn btn-outline-secondary">
+            {% blocktranslate %}Change password{% endblocktranslate %}
+        </a>
+      </td>
+    </tr>
+    <tr class="table-active">
+      <th scope="row">{{_("API Token")}}</th>
+      <td>{{ request.user.auth_token }}</td>
+      <td>
+        <form method="post" action="{% url 'auth:api-token' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-secondary">
+                {% blocktranslate %}Generate API token{% endblocktranslate %}
+            </button>
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 {% endblock form_footer %}

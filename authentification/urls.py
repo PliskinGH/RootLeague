@@ -22,4 +22,5 @@ urlpatterns = [
          ),
     path('register/', views.PlayerSignUpView.as_view(), name='register'),
     path('profile/', views.profileEditView, name='profile'),
+    path('api-token/', views.PlayerAPITokenGenerateView.as_view(), name='api-token'),
 ]

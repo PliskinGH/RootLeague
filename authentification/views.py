@@ -1,12 +1,16 @@
+from django.views import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, LoginView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.views import RedirectURLMixin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.authtoken.models import Token
 
 from . import forms
 from .models import Player
@@ -45,6 +49,20 @@ class PlayerProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
 @login_required
 def profileEditView(request):
     return PlayerProfileEditView.as_view()(request, pk=request.user.pk)
+
+class PlayerAPITokenGenerateView(LoginRequiredMixin, RedirectURLMixin, View):
+    """
+    Generate API token for a user.
+    """
+
+    http_method_names = ["post", "options"]
+    next_page = "auth:profile"
+
+    def post(self, request, *args, **kwargs):
+        """Token generation done via POST."""
+        Token.objects.get_or_create(user=request.user)
+        redirect_to = self.get_success_url()
+        return HttpResponseRedirect(redirect_to)
 
 class PlayerPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
     form_class = forms.PlayerPasswordChangeForm

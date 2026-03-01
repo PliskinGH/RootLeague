@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "mailer",
     'tinymce',
     'rest_framework',
+    'rest_framework.authtoken',
     'analytical',
     'authentification',
     'matchmaking',
@@ -245,6 +246,12 @@ IMPORT_EXPORT_SKIP_ADMIN_ACTION_EXPORT_UI = True
 
 # REST
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 50,
     
