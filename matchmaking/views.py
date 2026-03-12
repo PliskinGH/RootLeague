@@ -506,6 +506,7 @@ class DeleteMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, SuccessMess
 class MatchViewset(ReadOnlyModelViewSet):
     serializer_class = MatchSerializer
     filterset_class = MatchDRFFilter
+    lookup_value_converter = 'int'
  
     def get_queryset(self):
         return Match.objects.exclude(date_closed=None)

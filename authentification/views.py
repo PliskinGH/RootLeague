@@ -91,6 +91,7 @@ class PlayerPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmVi
     
 class PlayerViewSet(ReadOnlyModelViewSet):
     serializer_class = PlayerSerializer
+    lookup_value_converter = 'int'
  
     def get_queryset(self):
         return Player.objects.filter(is_active=True)
@@ -98,3 +99,4 @@ class PlayerViewSet(ReadOnlyModelViewSet):
 # API ViewSet for checking whether a particular Player, with the specified Discord Username, is registered for league
 class PlayerRegistrationViewSet(PlayerViewSet):
     lookup_field = "discord_name"
+    lookup_value_converter = 'str'
