@@ -14,6 +14,7 @@ from league.constants import MAX_NUMBER_OF_PLAYERS_IN_MATCH, VAGABOND_PREFIX, WI
 from league.constants import HIRELINGS_NUMBER, HIRELING_SUFFIX_SIZE, HIRELING_PROMOTED_SUFFIX, HIRELING_DEMOTED_SUFFIX
 # from league.constants import TURN_TIMING_URLS, DECKS_URLS, MAPS_URLS
 from league.models import Tournament
+from authentification.models import Player
 from authentification.widgets import PlayerWidget
 from misc.forms import NonPrimarySubmit
 # from misc.forms import IconSelect
@@ -249,6 +250,7 @@ class ParticipantForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['player'].queryset = Player.objects.filter(is_active=True)
         self.helper = ModalEditFormHelper()
         self.helper.layout = ModalEditLayout(
             'turn_order',
