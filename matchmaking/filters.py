@@ -17,12 +17,16 @@ AND_FILTER_HELP_TEXT = _("This filter uses AND logic.")
 FACTIONS_FILTER_CHOICES = constants.FACTIONS + [(constants.VAGABOND_PREFIX, _("Any Vagabond"))]
 REGEX_PROMOTED_HIRELING = r'{}[a-z]+{}'.format(constants.HIRELING_PREFIX, constants.HIRELING_PROMOTED_SUFFIX)
 REGEX_DEMOTED_HIRELING = r'{}[a-z]+{}'.format(constants.HIRELING_PREFIX, constants.HIRELING_DEMOTED_SUFFIX)
-HIRELINGS_FILTER_CHOICES = constants.HIRELINGS +\
-                           [(constants.HIRELING_PREFIX, _("Any Hireling")),
-                            (REGEX_PROMOTED_HIRELING, _("Any Promoted Hireling")),
-                            (REGEX_DEMOTED_HIRELING, _("Any Demoted Hireling"))]
+REGEX_EMPTY = r'^$'
+HIRELINGS_FILTER_CHOICES_PARTIAL = constants.HIRELINGS +\
+                                [(REGEX_PROMOTED_HIRELING, _("Any Promoted Hireling")),
+                                 (REGEX_DEMOTED_HIRELING, _("Any Demoted Hireling"))]
+HIRELINGS_FILTER_CHOICES = HIRELINGS_FILTER_CHOICES_PARTIAL +\
+                            [(constants.HIRELING_PREFIX, _("Any Hireling")),
+                             (REGEX_EMPTY, _("No Hireling"))]  
 LANDMARKS_FILTER_CHOICES = constants.LANDMARKS +\
-                           [(constants.LANDMARK_PREFIX, _("Any Landmark"))]
+                           [(constants.LANDMARK_PREFIX, _("Any Landmark")),
+                            (REGEX_EMPTY, _("No Landmark"))]
 
 class MatchFilterMethodsMixin(object):
     def filter_isnotnull(self, queryset, name, value):
@@ -106,14 +110,14 @@ class MatchFilter(ModalFormFilterMixin, MatchFilterMethodsMixin, filters.FilterS
                                               widget=FullWidthSelect2MultipleWidget,)
     hirelings = filters.MultipleChoiceFilter(choices=HIRELINGS_FILTER_CHOICES, lookup_expr="regex", label=_("Hirelings"),
                                              widget=FullWidthSelect2MultipleWidget,)
-    hirelings_and = filters.MultipleChoiceFilter(choices=HIRELINGS_FILTER_CHOICES, lookup_expr="regex", label=_("Hirelings"),
+    hirelings_and = filters.MultipleChoiceFilter(choices=HIRELINGS_FILTER_CHOICES_PARTIAL, lookup_expr="regex", label=_("Hirelings"),
                                                  widget=FullWidthSelect2MultipleWidget,
                                                  field_name="hirelings",
                                                  conjoined=True,
                                                  help_text=AND_FILTER_HELP_TEXT)
-    landmarks = filters.MultipleChoiceFilter(choices=LANDMARKS_FILTER_CHOICES, lookup_expr="contains", label=_("Landmarks"),
+    landmarks = filters.MultipleChoiceFilter(choices=LANDMARKS_FILTER_CHOICES, lookup_expr="regex", label=_("Landmarks"),
                                              widget=FullWidthSelect2MultipleWidget,)
-    landmarks_and = filters.MultipleChoiceFilter(choices=constants.LANDMARKS, lookup_expr="contains", label=_("Landmarks"),
+    landmarks_and = filters.MultipleChoiceFilter(choices=constants.LANDMARKS, lookup_expr="regex", label=_("Landmarks"),
                                                  widget=FullWidthSelect2MultipleWidget,
                                                  field_name="landmarks",
                                                  conjoined=True,
