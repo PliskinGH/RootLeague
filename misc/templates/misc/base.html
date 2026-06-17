@@ -86,13 +86,14 @@
                             <a class="dropdown-item" href="{% url 'match:register' %}">{{_("Submit")}}</a>
                         </div>
                     </li>
-                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
                     <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">
                         <a class="nav-link mx-auto text-uppercase dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{_("Stats")}}
                         </a>
                         <div class="dropdown-menu mx-auto" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'match:summary' %}">{{_("Summary")}}</a>
+                            <a class="dropdown-item" href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a>
+                            <a class="dropdown-item" href="https://tricholome.github.io/rootelo/index.html">Rootelo</a>
                             <a class="dropdown-item" href="{% url 'league:default_faction_stats' %}">{{_("Faction stats")}}</a>
                             <a class="dropdown-item" href="{% url 'league:default_turn_order_stats' %}">{{_("Turn order stats")}}</a>
                         </div>
