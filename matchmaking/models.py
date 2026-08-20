@@ -91,7 +91,16 @@ class Match(models.Model):
 
     def get_embed_description(self):
         participants = self.participants.order_by('turn_order')
-        players = ", ".join(str(participant.player or participant) for participant in participants)
+        players = []
+        for participant in participants:
+            player = str(participant.player or participant)
+            faction = participant.get_faction_display()
+            if faction:
+                player = _("%(player)s (%(faction)s)") % {
+                    'player': player,
+                    'faction': faction,
+                }
+            players.append(player)
         settings = []
         for label, value in (
             (_("Setup"), self.get_game_setup_display()),
@@ -110,10 +119,14 @@ class Match(models.Model):
             settings.append(_("Hirelings: %(value)s") % {'value': self.get_hirelings_display()})
         if self.landmarks:
             settings.append(_("Landmarks: %(value)s") % {'value': self.get_landmarks_display()})
-        return _("Players: %(players)s. Settings: %(settings)s.") % {
-            'players': players or _("Unknown"),
-            'settings': ", ".join(str(setting) for setting in settings if setting),
-        }
+        sections = []
+        if players:
+            sections.append(_("Players:\n- %(players)s") % {'players': "\n- ".join(players)})
+        if settings:
+            sections.append(_("Settings:\n- %(settings)s") % {
+                'settings': "\n- ".join(str(setting) for setting in settings),
+            })
+        return "\n\n".join(sections)
     
     def is_editable_by(self, user):
         editable = False

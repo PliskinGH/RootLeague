@@ -9,7 +9,7 @@
 
 {% block meta %}
     {% include "misc/meta.html" with title=upper_title|add:" | "|add:lower_title|add:" | "|add:site_title
-                                                                    description=upper_title|add:" - "|add:lower_title|add:"." %}
+                                                                    description=site_description %}
 {% endblock meta %}
 
 {% block content %}
