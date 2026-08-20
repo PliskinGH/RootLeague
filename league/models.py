@@ -74,7 +74,7 @@ class AbstractTournament(models.Model):
         if (self.three_coalition_allowed is None and
             self.coalition_allowed is not None):
             self.three_coalition_allowed = self.coalition_allowed
-        super(AbstractTournament, self).save()
+        super(AbstractTournament, self).save(*args, **kwargs)
 
     def __str__(self):
         result = super().__str__()

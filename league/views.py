@@ -1,7 +1,7 @@
 from django.db.models import Sum, Count, Q, F
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import EMPTY_VALUES
-from django.core.exceptions import FieldDoesNotExist
+from django.core.exceptions import FieldDoesNotExist, FieldError
 
 from decimal import Decimal
 
@@ -216,7 +216,7 @@ def get_stats(rows = None,
                              game_score=game_score,
                              average_game_score=average_game_score)
             stats[total_key] = row_stats
-    except (AttributeError, FieldDoesNotExist):
+    except (AttributeError, FieldDoesNotExist, FieldError):
         stats = {}
     return stats
 

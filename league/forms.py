@@ -36,9 +36,9 @@ class LeagueAdminForm(ModelForm):
             self.fields['active_season'].queryset = self.instance.seasons.all()
             widget = self.fields['active_season'].widget
             self.fields['active_season'].widget = (
-                    TournamentFieldWidgetWrapper( 
+                    TournamentFieldWidgetWrapper(
                         widget.widget,
-                        widget.rel,            
+                        widget.rel,
                         widget.admin_site,
                         can_add_related=widget.can_add_related,
                         can_change_related=widget.can_change_related,
@@ -46,13 +46,13 @@ class LeagueAdminForm(ModelForm):
                         can_view_related=widget.can_view_related,
                         extra_param=self.instance.id,
                     )
-            )
+                )
         else:
             self.fields['active_season'].queryset = Tournament.objects.none()
 
 class TournamentAdminForm(ModelForm):
     class Meta:
-        model = League
+        model = Tournament
         fields = "__all__"
     
     def __init__(self, *args, **kwargs):

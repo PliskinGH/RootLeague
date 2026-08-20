@@ -110,8 +110,6 @@
                         {% endfor %}
                         </div>
                     </li>
-                    {% else %}
-                    <li class="nav-item mx-auto px-lg-2 px-xl-4"><a class="nav-link text-uppercase" href="{% url 'misc:about' %}">{{_("About")}}</a></li>
                     {% endif %}
                     {%  if user.is_authenticated %}
                     <li class="nav-item dropdown mx-auto px-lg-2 px-xl-4 text-center">

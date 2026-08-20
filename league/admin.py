@@ -22,7 +22,11 @@ class TournamentAdmin(admin.ModelAdmin):
         league_id = request.GET.get('league', None)
         leagues = []
         if league_id not in EMPTY_VALUES:
-            leagues = League.objects.filter(id=int(league_id))
+            try:
+                leagues = League.objects.filter(id=int(league_id))
+            except (TypeError, ValueError):
+                leagues = []
+                initial_data.pop('league', None)
         league = None
         if leagues not in EMPTY_VALUES and len(leagues) == 1:
             league = leagues.first()
