@@ -95,6 +95,47 @@ class MatchApiTestCase(TestCase):
         match = models.Match.objects.get(title='API match')
         self.assertEqual(match.submitted_by, self.user)
 
+    def test_create_uses_default_tournament(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(reverse('match-list'), {
+            'title': 'API default tournament match',
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        match = models.Match.objects.get(title='API default tournament match')
+        self.assertEqual(match.tournament_id, Tournament.get_default_pk())
+
+    def test_create_accepts_participants_by_discord_username(self):
+        player = Player.objects.create_user('ParticipantUser', 'participant@test.com', 'test')
+        player.discord_name = 'participant'
+        player.save()
+        self.client.force_authenticate(self.user)
+        response = self.client.post(reverse('match-list'), {
+            'title': 'API participants match',
+            'tournament': self.tournament.pk,
+            'participants': [{'discord_username': 'participant'}],
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        match = models.Match.objects.get(title='API participants match')
+        self.assertEqual(match.participants.get().player, player)
+
+    def test_update_accepts_participants_by_discord_username(self):
+        player = Player.objects.create_user('ParticipantUser', 'participant@test.com', 'test')
+        player.discord_name = 'participant'
+        player.save()
+        match = models.Match.objects.create(
+            title='API participants match',
+            tournament=self.tournament,
+            submitted_by=self.user,
+        )
+        self.client.force_authenticate(self.user)
+        response = self.client.patch(
+            reverse('match-detail', args=(match.pk,)),
+            {'participants': [{'discord_username': 'participant'}]},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(match.participants.get().player, player)
+
     def test_update_requires_editable_match(self):
         match = models.Match.objects.create(
             title='API match',
