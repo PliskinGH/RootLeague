@@ -75,6 +75,11 @@ class Match(models.Model):
     class Meta:
         verbose_name = _("match")
         ordering = ['-date_closed', '-date_modified', '-date_registered']
+        permissions = [
+            ('drf_add_match', _('Can add matches through the DRF API')),
+            ('drf_change_match', _('Can change matches through the DRF API')),
+            ('drf_delete_match', _('Can delete matches through the DRF API')),
+        ]
     
     def __str__(self):
         result = ""

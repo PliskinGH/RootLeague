@@ -11,11 +11,12 @@ from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
 from django.core.exceptions import PermissionDenied
 from django.db.models import Sum, Q
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework import viewsets
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
 from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
 from .filters import MatchDRFFilter, ParticipantFilter, MatchFilter
+from .permissions import DRFMatchPermission
 from .serializers import MatchSerializer
 from league.models import Tournament
 from league.common import get_league, get_tournament, get_dropdown_menu, get_title
@@ -503,13 +504,22 @@ class DeleteMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, SuccessMess
             kwargs['lower_title'] = _("Unknown match")
         return super().get_context_data(*args, **kwargs)
 
-class MatchViewset(ReadOnlyModelViewSet):
+class MatchViewset(viewsets.ModelViewSet):
     serializer_class = MatchSerializer
     filterset_class = MatchDRFFilter
     lookup_value_converter = 'int'
+    permission_classes = (DRFMatchPermission,)
  
     def get_queryset(self):
-        return Match.objects.exclude(date_closed=None)
+        queryset = Match.objects.exclude(date_closed=None)
+        if (self.request.user.is_authenticated and
+                (self.request.user.has_perm('matchmaking.drf_change_match') or
+                 self.request.user.has_perm('matchmaking.drf_delete_match'))):
+            queryset = Match.objects.all()
+        return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(submitted_by=self.request.user)
 
 def summary(request,
             league = None,

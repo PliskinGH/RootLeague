@@ -3,6 +3,7 @@ from rest_framework.serializers import ModelSerializer, StringRelatedField, Mult
 
 from .models import Match, Participant
 from league.constants import HIRELINGS, LANDMARKS
+from league.models import Tournament
 
 class CoalitionedPlayerField(StringRelatedField):
     def to_representation(self, value):
@@ -11,6 +12,12 @@ class CoalitionedPlayerField(StringRelatedField):
             value.player not in EMPTY_VALUES):
             rep = str(value.player)
         return rep
+
+
+class TournamentField(PrimaryKeyRelatedField):
+    def to_representation(self, value):
+        return str(value)
+
 
 class ParticipantSerializer(ModelSerializer):
     player = StringRelatedField()
@@ -23,9 +30,9 @@ class ParticipantSerializer(ModelSerializer):
 
 class MatchSerializer(ModelSerializer):
     participants = ParticipantSerializer(many=True, read_only=True)
-    tournament = StringRelatedField()
-    hirelings = MultipleChoiceField(choices=HIRELINGS)
-    landmarks = MultipleChoiceField(choices=LANDMARKS)
+    tournament = TournamentField(queryset=Tournament.objects.all())
+    hirelings = MultipleChoiceField(choices=HIRELINGS, required=False)
+    landmarks = MultipleChoiceField(choices=LANDMARKS, required=False)
 
     class Meta:
         model = Match
