@@ -7,11 +7,10 @@
 {% block upper_title %}{{_("Leaderboard")}}{% endblock %}
 {% block lower_title %}{{ title }}{% endblock %}
 
-{% block title_wrapper %}
-  {% with prefix_title=_("Leaderboard")|add:" | "|add:title|add:" | " %}
-    {{ block.super }}
-  {% endwith %}
-{% endblock title_wrapper %} 
+{% block meta %}
+  {% include "misc/meta.html" with title=_("Leaderboard")|add:" | "|add:title|add:" | "|add:site_title
+                                  description=_("View the leaderboard and compare player scores and rankings for ")|add:title|add:"." %}
+{% endblock meta %}
 
 {% block extra-css %}
 {% for filter in filters %}

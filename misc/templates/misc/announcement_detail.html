@@ -7,11 +7,10 @@
 {% block upper_title %}{{ object.date_created }}{% endblock %}
 {% block lower_title %}{{ object.title }}{% endblock %}
 
-{% block title_wrapper %}
-  {% with prefix_title=_("Announcement")|add:" | " %}
-    {{ block.super }}
-  {% endwith %}
-{% endblock title_wrapper %} 
+{% block meta %}
+  {% include "misc/meta.html" with title=_("Announcement")|add:" | "|add:object.title|add:" | "|add:site_title
+                                  description=object.content|striptags|truncatewords:30 %}
+{% endblock meta %}
 
 {% block content %}
 

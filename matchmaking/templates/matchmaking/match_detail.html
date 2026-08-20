@@ -9,11 +9,10 @@
 {% block upper_title %}{{_("Match details")}}{% endblock %}
 {% block lower_title %}{{ object.title }}{% endblock %}
 
-{% block title_wrapper %}
-  {% with prefix_title=_("Match details")|add:" | "|add:object.title|add:" | " %}
-    {{ block.super }}
-  {% endwith %}
-{% endblock title_wrapper %} 
+{% block meta %}
+  {% include "misc/meta.html" with title=_("Match details")|add:" | "|add:object.title|add:" | "|add:site_title
+                                  description=object.get_embed_description %}
+{% endblock meta %}
 
 {% block content %}
 

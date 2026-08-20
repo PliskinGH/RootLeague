@@ -7,13 +7,12 @@
 {% load custom_tags %}
 
 {% block upper_title %}{{ title }}{% endblock %}
-{% block lower_title %}{{ _("Root Digital League") }}{% endblock %}
+{% block lower_title %}{{ site_title }}{% endblock %}
 
-{% block title_wrapper %}
-  {% with prefix_title=title|add:" | " %}
-    {{ block.super }}
-  {% endwith %}
-{% endblock title_wrapper %} 
+{% block meta %}
+  {% include "misc/meta.html" with title=title|add:" | "|add:site_title
+                                  description=site_description %}
+{% endblock meta %}
 
 {% block content %}
 

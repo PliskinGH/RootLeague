@@ -88,6 +88,32 @@ class Match(models.Model):
         else:
             result = _("Match#") + str(self.id)
         return result
+
+    def get_embed_description(self):
+        participants = self.participants.order_by('turn_order')
+        players = ", ".join(str(participant.player or participant) for participant in participants)
+        settings = []
+        for label, value in (
+            (_("Setup"), self.get_game_setup_display()),
+            (_("Turn timing"), self.get_turn_timing_display()),
+            (_("Deck"), self.get_deck_display()),
+            (_("Map"), self.get_board_map_display()),
+        ):
+            if value:
+                settings.append(_("%(label)s: %(value)s") % {'label': label, 'value': value})
+        if self.random_suits is not None:
+            suit_distribution = _("random") if self.random_suits else _("fixed")
+            settings.append(_("Suit distribution: %(value)s") % {'value': suit_distribution})
+        if self.undrafted_faction:
+            settings.append(_("Undrafted faction: %(value)s") % {'value': self.get_undrafted_faction_display()})
+        if self.hirelings:
+            settings.append(_("Hirelings: %(value)s") % {'value': self.get_hirelings_display()})
+        if self.landmarks:
+            settings.append(_("Landmarks: %(value)s") % {'value': self.get_landmarks_display()})
+        return _("Players: %(players)s. Settings: %(settings)s.") % {
+            'players': players or _("Unknown"),
+            'settings': ", ".join(str(setting) for setting in settings if setting),
+        }
     
     def is_editable_by(self, user):
         editable = False
