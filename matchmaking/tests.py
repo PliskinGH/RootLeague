@@ -327,6 +327,33 @@ class MatchListingTestCase(TestCase):
         self.assertIn(self.visible_match, queryset)
         self.assertNotIn(self.hidden_match, queryset)
 
+    def test_listing_displays_matches_without_participants(self):
+        empty_match = models.Match.objects.create(
+            title='Empty match', tournament=self.tournament, submitted_by=self.user,
+        )
+        request = RequestFactory().get(reverse('match:listing'))
+        request.user = self.user
+        with patch('matchmaking.views.ImprovedListView.as_view', return_value=lambda request: HttpResponse(status=204)) as as_view:
+            listing(request)
+        queryset = as_view.call_args.kwargs['queryset']
+        self.assertIn(self.visible_match, queryset)
+        self.assertIn(empty_match, queryset)
+        self.assertNotIn(self.hidden_match, queryset)
+
+    def test_listing_participant_filter_still_restricts_matches(self):
+        other_user = Player.objects.create_user('OtherListingUser', 'other-listing@test.com', 'test')
+        other_match = models.Match.objects.create(
+            title='Other match', tournament=self.tournament, submitted_by=other_user,
+        )
+        models.Participant.objects.create(match=other_match, player=other_user)
+        request = RequestFactory().get(reverse('match:listing'), {'player': [other_user.pk]})
+        request.user = self.user
+        with patch('matchmaking.views.ImprovedListView.as_view', return_value=lambda request: HttpResponse(status=204)) as as_view:
+            listing(request)
+        queryset = as_view.call_args.kwargs['queryset']
+        self.assertIn(other_match, queryset)
+        self.assertNotIn(self.visible_match, queryset)
+
 class MatchApiTestCase(TestCase):
 
     def setUp(self):

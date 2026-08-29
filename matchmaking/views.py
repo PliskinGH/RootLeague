@@ -77,7 +77,15 @@ def listing(request,
     matchs = match_filter.qs
     participant_filter = ParticipantFilter(request.GET, queryset=Participant.objects.filter(match__in=matchs))
     participations = participant_filter.qs
-    matchs = matchs.filter(participants__in=participations).distinct()
+    # Only restrict matches to their participants when a participant filter is
+    # actually active. Otherwise the join produced by `participants__in`
+    # silently drops matches that have no participants at all.
+    participant_filters_active = any(
+        value.exists() if hasattr(value, 'exists') else value not in EMPTY_VALUES
+        for value in participant_filter.form.cleaned_data.values()
+    )
+    if (participant_filters_active):
+        matchs = matchs.filter(participants__in=participations).distinct()
 
     match_filter.append_hidden_fields(participant_filter)
     participant_filter.append_hidden_fields(match_filter)
