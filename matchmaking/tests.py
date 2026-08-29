@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
+from django.template.loader import render_to_string
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -241,6 +242,55 @@ class MatchFilterTestCase(TestCase):
     def test_drf_filter_by_tournament_name(self):
         filtered = MatchDRFFilter({'tournament__name': 'Filter'}, queryset=models.Match.objects.all()).qs
         self.assertCountEqual(filtered, [self.open_match, self.closed_match])
+
+    def test_active_filters_are_empty_by_default(self):
+        match_filter = MatchFilter({}, queryset=models.Match.objects.all())
+        self.assertEqual(match_filter.active_filters, [])
+        participant_filter = ParticipantFilter({}, queryset=models.Participant.objects.all())
+        self.assertEqual(participant_filter.active_filters, [])
+
+    def test_active_filters_display_choice_values(self):
+        match_filter = MatchFilter({'board_map': ['winter']}, queryset=models.Match.objects.all())
+        active = match_filter.active_filters
+        self.assertEqual(len(active), 1)
+        self.assertEqual(active[0]['name'], 'board_map')
+        self.assertEqual(str(active[0]['label']), 'Map')
+        self.assertEqual(active[0]['display'], 'Winter')
+        self.assertEqual(active[0]['remove_query'], '')
+
+    def test_active_filters_removal_keeps_other_params(self):
+        match_filter = MatchFilter({'board_map': ['winter'], 'deck': ['standard']}, queryset=models.Match.objects.all())
+        active = {item['name']: item for item in match_filter.active_filters}
+        self.assertEqual(active['board_map']['remove_query'], 'deck=standard')
+        self.assertEqual(active['deck']['remove_query'], 'board_map=winter')
+
+    def test_active_filters_display_model_and_boolean_values(self):
+        participant_filter = ParticipantFilter(
+            {'player': [self.player.pk], 'faction': ['cats']},
+            queryset=models.Participant.objects.all(),
+        )
+        active = {item['name']: item for item in participant_filter.active_filters}
+        self.assertEqual(active['player']['display'], str(self.player))
+        self.assertEqual(active['faction']['display'], 'Marquise de Cat')
+        closed = MatchFilter({'closed': 'true'}, queryset=models.Match.objects.all())
+        active_closed = {item['name']: item for item in closed.active_filters}
+        self.assertEqual(active_closed['closed']['display'], 'Yes')
+
+    def test_active_filters_clear_query_removes_all_params(self):
+        match_filter = MatchFilter({'board_map': ['winter'], 'deck': ['standard']}, queryset=models.Match.objects.all())
+        self.assertEqual(match_filter.clear_query, '')
+        self.assertEqual(match_filter.active_filters[0]['remove_query'], 'deck=standard')
+
+    def test_active_filters_template_rendering(self):
+        request = RequestFactory().get('/match/', {'board_map': ['winter']})
+        match_filter = MatchFilter(request.GET, queryset=models.Match.objects.all())
+        html = render_to_string('misc/filters.html', {'filters': [match_filter], 'request': request})
+        self.assertIn('Map: Winter', html)
+        self.assertIn('href="/match/"', html)
+        self.assertIn('Clear all', html)
+        # First filter row uses the secondary color, like its modal button.
+        self.assertIn('bg-secondary', html)
+        self.assertNotIn('bg-primary', html)
 
 
 class MatchHtmlAccessTestCase(TestCase):

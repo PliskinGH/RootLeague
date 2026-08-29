@@ -37,7 +37,7 @@
                                           url_get_param='' only %}
 {% endif %}
 
-{% include 'misc/filters.html' with filters=filters only %}
+{% include 'misc/filters.html' with filters=filters request=request only %}
 
 {% if display_search %}
 {% include 'misc/search_form.html' with url_search=url_search

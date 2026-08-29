@@ -1,4 +1,5 @@
 
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 <div class="container d-flex align-items-center justify-content-center">
@@ -13,6 +14,35 @@
 {% endfor %}
 </div>
 </div>
+
+{% for filter in filters %}
+  {% with active_filters=filter.active_filters %}
+  {% if active_filters %}
+  <br />
+  <div class="container d-flex align-items-center justify-content-center mt-1">
+  <div class="row row-cols-auto btn-group align-items-center" role="group" aria-label="{{ filter.html_title }}">
+    <span class="col small fw-bold text-muted me-2">{{ filter.html_title }}:</span>
+    {% for active in active_filters %}
+    <div class="col mx-auto">
+      <a href="{{ request.path }}{% if active.remove_query %}?{{ active.remove_query }}{% endif %}"
+         class="badge rounded-pill {% if forloop.parentloop.counter|divisibleby:"2" %} bg-primary {% else %} bg-secondary {% endif %} text-white text-decoration-none"
+         title="{{ _('Remove this filter') }}">
+        {{ active.label }}: {{ active.display }} &times;
+      </a>
+    </div>
+    {% endfor %}
+    <div class="col mx-auto">
+      <a href="{{ request.path }}{% if filter.clear_query %}?{{ filter.clear_query }}{% endif %}"
+         class="badge rounded-pill bg-danger text-white text-decoration-none"
+         title="{{ _('Clear all filters') }}">
+        {{ _("Clear all") }}
+      </a>
+    </div>
+  </div>
+  </div>
+  {% endif %}
+  {% endwith %}
+{% endfor %}
 
 {% for filter in filters %}
   <!-- Modal form -->
