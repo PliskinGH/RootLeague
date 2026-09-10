@@ -74,7 +74,7 @@
         {% endif %}
       </td>
       <td>
-        <form method="post" action="{% url 'auth:api-token' %}">
+        <form method="post" action="{% url 'auth:api_token' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-secondary">
                 {% blocktranslate %}Generate API token{% endblocktranslate %}

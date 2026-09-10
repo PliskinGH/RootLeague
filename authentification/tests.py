@@ -237,16 +237,16 @@ class AuthenticationViewTestCase(TestCase):
         self.assertTrue(self.user.check_password('NewStrongPassword123!'))
 
     def test_api_token_requires_login(self):
-        response = self.client.post(reverse('auth:api-token'))
+        response = self.client.post(reverse('auth:api_token'))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Token.objects.exists())
 
     def test_api_token_is_created_once(self):
         self.client.force_login(self.user)
-        response = self.client.post(reverse('auth:api-token'))
+        response = self.client.post(reverse('auth:api_token'))
         self.assertEqual(response.status_code, 302)
         token = Token.objects.get(user=self.user)
-        self.client.post(reverse('auth:api-token'))
+        self.client.post(reverse('auth:api_token'))
         self.assertEqual(Token.objects.filter(user=self.user).count(), 1)
         self.assertEqual(Token.objects.get(user=self.user), token)
 
@@ -266,7 +266,7 @@ class AuthenticationViewTestCase(TestCase):
 
     def test_api_token_is_displayed_after_generation_redirect(self):
         self.client.force_login(self.user)
-        response = self.client.post(reverse('auth:api-token'))
+        response = self.client.post(reverse('auth:api_token'))
         self.assertEqual(response.status_code, 302)
         token = Token.objects.get(user=self.user)
         self.assertIn('show_token=1', response['Location'])
@@ -276,7 +276,7 @@ class AuthenticationViewTestCase(TestCase):
 
     def test_api_token_message_reports_new_token(self):
         self.client.force_login(self.user)
-        response = self.client.post(reverse('auth:api-token'), follow=True)
+        response = self.client.post(reverse('auth:api_token'), follow=True)
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertIn('new API token', str(messages[0]))
@@ -284,7 +284,7 @@ class AuthenticationViewTestCase(TestCase):
     def test_api_token_message_reports_existing_token(self):
         Token.objects.create(user=self.user)
         self.client.force_login(self.user)
-        response = self.client.post(reverse('auth:api-token'), follow=True)
+        response = self.client.post(reverse('auth:api_token'), follow=True)
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertIn('already existed', str(messages[0]))
