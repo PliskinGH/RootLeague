@@ -245,6 +245,46 @@ class AuthenticationViewTestCase(TestCase):
         self.assertEqual(Token.objects.filter(user=self.user).count(), 1)
         self.assertEqual(Token.objects.get(user=self.user), token)
 
+    def test_profile_hides_existing_token(self):
+        token = Token.objects.create(user=self.user)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('auth:profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, token.key)
+
+    def test_profile_shows_token_only_with_show_token_param(self):
+        token = Token.objects.create(user=self.user)
+        self.client.force_login(self.user)
+        response = self.client.get(f"{reverse('auth:profile')}?show_token=1")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, token.key)
+
+    def test_api_token_is_displayed_after_generation_redirect(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('auth:api-token'))
+        self.assertEqual(response.status_code, 302)
+        token = Token.objects.get(user=self.user)
+        self.assertIn('show_token=1', response['Location'])
+        response = self.client.get(response['Location'])
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, token.key)
+
+    def test_api_token_message_reports_new_token(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('auth:api-token'), follow=True)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertIn('new API token', str(messages[0]))
+
+    def test_api_token_message_reports_existing_token(self):
+        Token.objects.create(user=self.user)
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('auth:api-token'), follow=True)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertIn('already existed', str(messages[0]))
+        self.assertEqual(Token.objects.filter(user=self.user).count(), 1)
+
     def test_registration_creates_player_and_redirects_to_login(self):
         response = self.client.post(reverse('auth:register'), {
             'username': 'NewRegisteredUser',

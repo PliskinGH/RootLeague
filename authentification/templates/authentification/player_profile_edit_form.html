@@ -25,7 +25,11 @@
     </tr>
     <tr class="table-active">
       <th scope="row">{{_("API Token")}}</th>
-      <td>{{ request.user.auth_token }}</td>
+      <td>
+        {% if show_token %}
+          <code>{{ request.user.auth_token }}</code>
+        {% endif %}
+      </td>
       <td>
         <form method="post" action="{% url 'auth:api-token' %}">
             {% csrf_token %}

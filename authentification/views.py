@@ -1,13 +1,13 @@
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, LoginView, PasswordResetView, PasswordResetConfirmView
-from django.contrib.auth.views import RedirectURLMixin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.authtoken.models import Token
@@ -46,22 +46,31 @@ class PlayerProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
     extra_context = {'upper_title' : _("Account"),
                      'lower_title' : _("Profile")}
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_token'] = self.request.GET.get('show_token')
+        return context
+
 @login_required
 def profileEditView(request):
     return PlayerProfileEditView.as_view()(request, pk=request.user.pk)
 
-class PlayerAPITokenGenerateView(LoginRequiredMixin, RedirectURLMixin, View):
+class PlayerAPITokenGenerateView(LoginRequiredMixin, View):
     """
     Generate API token for a user.
     """
 
     http_method_names = ["post", "options"]
-    next_page = "auth:profile"
 
     def post(self, request, *args, **kwargs):
         """Token generation done via POST."""
-        Token.objects.get_or_create(user=request.user)
-        redirect_to = self.get_success_url()
+        token, created = Token.objects.get_or_create(user=request.user)
+        if created:
+            message = _("A new API token has been generated.")
+        else:
+            message = _("An API token already existed.")
+        messages.success(request, message)
+        redirect_to = f"{reverse('auth:profile')}?show_token=1"
         return HttpResponseRedirect(redirect_to)
 
 class PlayerPasswordChangeView(SuccessMessageMixin, PasswordChangeView):
