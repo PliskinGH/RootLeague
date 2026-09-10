@@ -23,4 +23,10 @@ urlpatterns = [
     path('register/', views.PlayerSignUpView.as_view(), name='register'),
     path('profile/', views.profileEditView, name='profile'),
     path('api-token/', views.PlayerAPITokenGenerateView.as_view(), name='api-token'),
+    path('discord/connect/', views.DiscordConnectView.as_view(),
+         name='discord_connect'),
+    path('discord/callback/', views.DiscordCallbackView.as_view(),
+         name='discord_callback'),
+    path('discord/disconnect/', views.DiscordDisconnectView.as_view(),
+         name='discord_disconnect'),
 ]

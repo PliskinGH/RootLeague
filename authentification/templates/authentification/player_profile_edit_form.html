@@ -9,6 +9,49 @@
 {% endblock form_header %}
 
 {% block form_footer %}
+<h3>{{ _("Linked accounts") }}</h3>
+
+<div class="table-responsive">
+<table class="table table-borderless table-striped">
+  <tbody>
+    <tr class="table-active">
+      <th scope="row">{{ _("Discord") }}</th>
+      <td>
+        {% if request.user.discord_name %}
+          <code>{{ request.user.discord_name }}</code>
+        {% else %}
+          {{ _("Not linked") }}
+        {% endif %}
+      </td>
+      <td>
+        {% if request.user.discord_name %}
+        <form method="post" action="{% url 'auth:discord_disconnect' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-secondary">
+                {% blocktranslate %}Unlink{% endblocktranslate %}
+            </button>
+        </form>
+        {% endif %}
+      </td>
+      <td>
+        {% if discord_enabled %}
+        <form method="post" action="{% url 'auth:discord_connect' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-secondary">
+                {% if request.user.discord_name %}
+                    {% blocktranslate %}Re-link Discord account{% endblocktranslate %}
+                {% else %}
+                    {% blocktranslate %}Link Discord account{% endblocktranslate %}
+                {% endif %}
+            </button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 <h3>{{ _("Secrets") }}</h3>
 
 <div class="table-responsive">

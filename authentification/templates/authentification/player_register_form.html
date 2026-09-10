@@ -4,6 +4,26 @@
 
 {% load crispy_forms_tags %}
 
+{% block form_header %}
+{% if discord_enabled %}
+<h3>{{ _("Discord account") }}</h3>
+{% if pending_discord_name %}
+<p>
+    {% blocktranslate with discord_name=pending_discord_name %}Your Discord account <b>{{ discord_name }}</b> has been verified and will be linked to your new player account.{% endblocktranslate %}
+</p>
+{% else %}
+<form method="post" action="{% url 'auth:discord_connect' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-secondary">
+        {% blocktranslate %}Link with Discord{% endblocktranslate %}
+    </button>
+</form>
+<br />
+{% endif %}
+<h3>{{ _("League account") }}</h3>
+{% endif %}
+{% endblock form_header %}
+
 {% block form_footer %}
 {% blocktranslate %}You only need to register once! You already have an account?{% endblocktranslate %}
 <a href="{% url 'auth:login' %}" class="btn btn-outline-primary">

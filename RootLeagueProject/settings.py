@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from dotenv import load_dotenv
 import dj_database_url
+from django.contrib.messages import constants as message_constants
 
 load_dotenv()
 
@@ -191,6 +192,15 @@ LOGIN_URL = '/auth/'
 LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'authentification.Player'
 AUTHENTICATION_BACKENDS = ['authentification.backends.EmailBackend']
+
+# Flash messages use Bootstrap alert classes
+MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
+
+# Discord OAuth2 (Discord account linking)
+# Application to manage at https://discord.com/developers/applications
+DISCORD_CLIENT_ID = os.environ.get('ROOTLEAGUE_DISCORD_CLIENT_ID')
+DISCORD_CLIENT_SECRET = os.environ.get('ROOTLEAGUE_DISCORD_CLIENT_SECRET')
+DISCORD_REDIRECT_URI = os.environ.get('ROOTLEAGUE_DISCORD_REDIRECT_URI')
 
 
 # Internationalization

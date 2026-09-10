@@ -19,7 +19,7 @@ class PlayerRegisterForm(UserCreationForm):
 
   class Meta:
       model = get_user_model()
-      fields = ('username', 'email', 'discord_name',
+      fields = ('username', 'email',
                 'in_game_name', 'in_game_id')
 
 class PlayerProfileEditForm(forms.ModelForm):
@@ -32,7 +32,7 @@ class PlayerProfileEditForm(forms.ModelForm):
 
   class Meta:
       model = get_user_model()
-      fields = ('username', 'email', 'discord_name',
+      fields = ('username', 'email',
                 'in_game_name', 'in_game_id')
 
 class PlayerLoginForm(AuthenticationForm):

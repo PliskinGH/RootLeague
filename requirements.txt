@@ -1,4 +1,6 @@
-asgiref==3.11.1
+asgiref==3.11.1                                                                                       
+certifi==2026.7.22
+charset-normalizer==3.5.1
 click==8.3.1
 colorama==0.4.6
 crispy-bootstrap5==2025.6
@@ -26,6 +28,7 @@ djangorestframework==3.16.1
 djlint==1.36.4
 EditorConfig==0.17.1
 gunicorn==25.0.3
+idna==3.19
 jsbeautifier==1.15.4
 json5==0.13.0
 lockfile==0.12.2
@@ -37,6 +40,7 @@ python-dotenv==1.2.1
 python-gettext==5.0
 PyYAML==6.0.3
 regex==2026.2.28
+requests==2.32.5
 setuptools==82.0.0
 six==1.17.0
 sqlparse==0.5.5
@@ -44,5 +48,6 @@ tablib==3.9.0
 tqdm==4.67.3
 typing_extensions==4.15.0
 tzdata==2025.3
+urllib3==2.7.0
 wheel==0.46.3
 whitenoise==6.11.0

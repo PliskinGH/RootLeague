@@ -10,8 +10,14 @@ class LoginTestCase(TestCase):
     def setUp(self):
         self.user = Player.objects.create_user('TestUser', 'test@test.com', 'test')
 
+from contextlib import contextmanager
+from unittest.mock import Mock, patch
+from urllib.parse import parse_qs, urlsplit
+
+import requests
+
 from django.core.exceptions import ValidationError
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
@@ -95,7 +101,6 @@ class PlayerFormTestCase(TestCase):
         data = {
             'username': 'RegisteredUser',
             'email': 'registered@test.com',
-            'discord_name': 'registered',
             'in_game_name': 'Registered',
             'in_game_id': '100',
             'password1': 'StrongPassword123!',
@@ -113,10 +118,10 @@ class PlayerFormTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('email', form.errors)
 
-    def test_registration_form_rejects_invalid_discord_name(self):
-        form = PlayerRegisterForm(data=self.valid_registration_data(discord_name='Invalid Name'))
-        self.assertFalse(form.is_valid())
-        self.assertIn('discord_name', form.errors)
+    def test_registration_form_has_no_discord_name_field(self):
+        form = PlayerRegisterForm(data=self.valid_registration_data(discord_name='typed_by_hand'))
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertNotIn('discord_name', form.fields)
 
     def test_registration_form_rejects_duplicate_email(self):
         Player.objects.create_user('ExistingUser', 'registered@test.com', 'test')
@@ -125,18 +130,18 @@ class PlayerFormTestCase(TestCase):
         self.assertIn('email', form.errors)
 
     def test_profile_form_updates_player(self):
-        player = Player.objects.create_user('ProfileUser', 'profile@test.com', 'test')
+        player = Player.objects.create_user('ProfileUser', 'profile@test.com', 'test',
+                                            discord_name='kept_discord')
         form = PlayerProfileEditForm(instance=player, data={
             'username': 'UpdatedProfileUser',
             'email': 'updated-profile@test.com',
-            'discord_name': 'updated_profile',
             'in_game_name': 'UpdatedProfile',
             'in_game_id': '200',
         })
         self.assertTrue(form.is_valid(), form.errors)
         updated = form.save()
         self.assertEqual(updated.username, 'UpdatedProfileUser')
-        self.assertEqual(updated.discord_name, 'updated_profile')
+        self.assertEqual(updated.discord_name, 'kept_discord')
 
     def test_login_form_accepts_username(self):
         player = Player.objects.create_user('LoginUser', 'login@test.com', 'test')
@@ -289,7 +294,6 @@ class AuthenticationViewTestCase(TestCase):
         response = self.client.post(reverse('auth:register'), {
             'username': 'NewRegisteredUser',
             'email': 'new-registered@test.com',
-            'discord_name': 'new_registered',
             'in_game_name': 'NewRegistered',
             'in_game_id': '400',
             'password1': 'StrongPassword123!',
@@ -336,3 +340,159 @@ class AuthenticationAPITestCase(TestCase):
         url = reverse('player-detail', args=(self.active.pk,))
         self.assertEqual(self.client.patch(url, {'in_game_name': 'Changed'}).status_code, 405)
         self.assertEqual(self.client.delete(url).status_code, 405)
+
+
+@override_settings(DISCORD_CLIENT_ID='test-client-id',
+                   DISCORD_CLIENT_SECRET='test-client-secret')
+class DiscordLinkingTestCase(TestCase):
+
+    def setUp(self):
+        self.user = Player.objects.create_user('DiscordUser', 'discord@test.com', 'test')
+
+    def set_session_state(self, state='valid-state'):
+        session = self.client.session
+        session['discord_oauth_state'] = state
+        session.save()
+
+    def set_session_pending(self, discord_name='verified_user'):
+        session = self.client.session
+        session['discord_oauth_pending'] = {'discord_name': discord_name}
+        session.save()
+
+    @contextmanager
+    def discord_api(self, username='verified_user', post_side_effect=None):
+        token_response = Mock()
+        token_response.raise_for_status.return_value = None
+        token_response.json.return_value = {'access_token': 'access-token'}
+        user_response = Mock()
+        user_response.raise_for_status.return_value = None
+        user_response.json.return_value = {'id': '987654321098765432', 'username': username}
+        with patch('authentification.discord.requests.post', return_value=token_response,
+                   side_effect=post_side_effect) as post_mock, \
+             patch('authentification.discord.requests.get', return_value=user_response) as get_mock:
+            yield post_mock, get_mock
+
+    def test_connect_redirects_to_discord_authorization(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('auth:discord_connect'))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].startswith('https://discord.com/oauth2/authorize?'))
+        params = parse_qs(urlsplit(response['Location']).query)
+        self.assertEqual(params['client_id'], ['test-client-id'])
+        self.assertEqual(params['response_type'], ['code'])
+        self.assertEqual(params['scope'], ['identify'])
+        self.assertEqual(params['redirect_uri'], ['http://testserver/auth/discord/callback/'])
+        self.assertEqual(self.client.session['discord_oauth_state'], params['state'][0])
+
+    def test_connect_uses_configured_redirect_uri(self):
+        self.client.force_login(self.user)
+        with override_settings(DISCORD_REDIRECT_URI='https://rootleague.example/auth/discord/callback/'):
+            response = self.client.post(reverse('auth:discord_connect'))
+        params = parse_qs(urlsplit(response['Location']).query)
+        self.assertEqual(params['redirect_uri'],
+                         ['https://rootleague.example/auth/discord/callback/'])
+
+    def test_connect_is_post_only(self):
+        self.client.force_login(self.user)
+        self.assertEqual(self.client.get(reverse('auth:discord_connect')).status_code, 405)
+
+    def test_connect_returns_404_when_not_configured(self):
+        self.client.force_login(self.user)
+        with override_settings(DISCORD_CLIENT_ID=None, DISCORD_CLIENT_SECRET=None):
+            response = self.client.post(reverse('auth:discord_connect'))
+        self.assertEqual(response.status_code, 404)
+
+    def test_connect_is_allowed_for_anonymous_users(self):
+        response = self.client.post(reverse('auth:discord_connect'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('discord_oauth_state', self.client.session)
+
+    def test_callback_links_discord_account_to_logged_in_player(self):
+        self.client.force_login(self.user)
+        self.set_session_state()
+        with self.discord_api() as (post_mock, get_mock):
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'code': 'auth-code', 'state': 'valid-state'},
+                                       follow=True)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.discord_name, 'verified_user')
+        self.assertNotIn('discord_oauth_state', self.client.session)
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('successfully linked' in str(message) for message in messages_list))
+        self.assertEqual(post_mock.call_args.kwargs['data']['code'], 'auth-code')
+        self.assertEqual(get_mock.call_args.kwargs['headers']['Authorization'],
+                         'Bearer access-token')
+
+    def test_callback_rejects_invalid_state(self):
+        self.client.force_login(self.user)
+        self.set_session_state('valid-state')
+        with self.discord_api():
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'code': 'auth-code', 'state': 'forged-state'},
+                                       follow=True)
+        self.user.refresh_from_db()
+        self.assertIsNone(self.user.discord_name)
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('failed' in str(message) for message in messages_list))
+
+    def test_callback_handles_discord_api_failure(self):
+        self.client.force_login(self.user)
+        self.set_session_state()
+        with self.discord_api(post_side_effect=requests.ConnectionError('boom')):
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'code': 'auth-code', 'state': 'valid-state'},
+                                       follow=True)
+        self.user.refresh_from_db()
+        self.assertIsNone(self.user.discord_name)
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('failed' in str(message) for message in messages_list))
+
+    def test_callback_reports_conflict_and_leaves_player_unchanged(self):
+        Player.objects.create_user('OtherUser', 'other@test.com', 'test',
+                                   discord_name='verified_user')
+        self.client.force_login(self.user)
+        self.set_session_state()
+        with self.discord_api():
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'code': 'auth-code', 'state': 'valid-state'},
+                                       follow=True)
+        self.user.refresh_from_db()
+        self.assertIsNone(self.user.discord_name)
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('contact the administrators' in str(message)
+                            for message in messages_list))
+
+    def test_callback_allows_relinking_the_same_discord_name(self):
+        self.user.discord_name = 'verified_user'
+        self.user.save()
+        self.client.force_login(self.user)
+        self.set_session_state()
+        with self.discord_api():
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'code': 'auth-code', 'state': 'valid-state'},
+                                       follow=True)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.discord_name, 'verified_user')
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('successfully linked' in str(message) for message in messages_list))
+
+    def test_callback_reports_cancellation(self):
+        self.client.force_login(self.user)
+        self.set_session_state()
+        with self.discord_api() as (post_mock, get_mock):
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'error': 'access_denied'}, follow=True)
+        post_mock.assert_not_called()
+        get_mock.assert_not_called()
+        self.user.refresh_from_db()
+        self.assertIsNone(self.user.discord_name)
+
+    def test_callback_stores_pending_link_for_anonymous_users(self):
+        self.set_session_state()
+        with self.discord_api():
+            response = self.client.get(reverse('auth:discord_callback'),
+                                       {'code': 'auth-code', 'state': 'valid-state'})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], reverse('auth:register'))
+        self.assertEqual(self.client.session['discord_oauth_pending'],
+                         {'discord_name': 'verified_user'})
