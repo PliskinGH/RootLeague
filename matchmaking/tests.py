@@ -46,6 +46,20 @@ class MatchModelTestCase(TestCase):
         self.match.save()
         self.assertFalse(self.match.is_editable_by(self.user))
 
+    def test_players_lists_registered_participants_ordered_and_distinct(self):
+        self.user.in_game_name = 'Mike'
+        self.user.save()
+        player_a = Player.objects.create_user('ModelPlayerA', 'a@test.com', 'test',
+                                              in_game_name='Alpha', in_game_id=101)
+        player_b = Player.objects.create_user('ModelPlayerB', 'b@test.com', 'test',
+                                              in_game_name='Zulu', in_game_id=102)
+        models.Participant.objects.create(match=self.match, player=player_b, turn_order=1)
+        models.Participant.objects.create(match=self.match, player=self.user, turn_order=2)
+        models.Participant.objects.create(match=self.match, player=player_a, turn_order=3)
+        models.Participant.objects.create(match=self.match, player=None, turn_order=4)
+        models.Participant.objects.create(match=self.match, player=player_a, turn_order=5)
+        self.assertEqual(list(self.match.players), [player_a, self.user, player_b])
+
 
 class MatchFormTestCase(TestCase):
 

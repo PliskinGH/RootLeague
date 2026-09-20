@@ -34,6 +34,7 @@ urlpatterns = [
     path("select2/", include("django_select2.urls")),
     path('', misc_views.home, name='home'),
     path('match/', include('matchmaking.urls', namespace='match')),
+    path('reports/', include('reports.urls', namespace='reports')),
     path('misc/', include('misc.urls', namespace='misc')),
     path('auth/', include('authentification.urls', namespace='auth')),
     path('league/', include('league.urls', namespace='league')),

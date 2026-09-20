@@ -6,12 +6,20 @@ from rest_framework.authtoken.admin import TokenAdmin
 
 from .models import Player
 from matchmaking.admin import ParticipationInline
+from reports.admin import FiledReportInline, ReferencedReportInline, ReportedPlayerInline
+from reports.models import Report
 
 # Register your models here.
 
 @admin.register(Player)
 class PlayerAdmin(UserAdmin):
-    inlines = [ParticipationInline,] # list of participants in the match
+    inlines = [ParticipationInline, ReportedPlayerInline,
+               FiledReportInline, ReferencedReportInline,]
+    report_inline_fk_names = {
+        ReportedPlayerInline: 'reported_player',
+        FiledReportInline: 'reporter',
+        ReferencedReportInline: 'reference_player',
+    }
     search_fields = ['username', 'in_game_name', 'discord_name', 'email']
     list_display = ("username", "email", "in_game_name", "in_game_id", "discord_name", "is_staff")
     list_filter = ['date_joined', 'is_active', 'is_staff',
@@ -54,5 +62,14 @@ class PlayerAdmin(UserAdmin):
             },
         ),
     )
+
+    def get_inline_instances(self, request, obj=None):
+        instances = super().get_inline_instances(request, obj)
+        if obj is not None and obj.pk is not None:
+            instances = [inline for inline in instances
+                         if self.report_inline_fk_names.get(inline.__class__) is None
+                         or Report.objects.filter(
+                             **{self.report_inline_fk_names[inline.__class__]: obj}).exists()]
+        return instances
 
 TokenAdmin.autocomplete_fields = ['user']

@@ -134,9 +134,19 @@ class Match(models.Model):
             if self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME:
                 editable = self.submitted_by == user
                 if (not(editable) and self.date_closed is None):
-                    editable = self.participants.filter(player=user).count() >= 1
+                    editable = user in self.players
         return editable
     
+    def is_reportable_by(self, user):
+        reportable = False
+        if user is not None and user.is_authenticated and user.pk is not None:
+            reportable = user in self.players
+        return reportable
+
+    @property
+    def players(self):
+        return Player.objects.filter(participations__match=self).distinct().order_by('in_game_name')
+
     def get_absolute_url(self):
         return reverse_lazy('match:detail', args=(self.id,))
     

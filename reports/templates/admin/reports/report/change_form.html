@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% block submit_buttons_bottom %}
+{% if original %}
+<div class="submit-row">
+    <input type="submit" name="_mark-in-review" value="{% translate 'Mark as in review' %}">
+    <input type="submit" name="_mark-resolved" value="{% translate 'Mark as resolved' %}">
+    <input type="submit" name="_mark-dismissed" value="{% translate 'Mark as dismissed' %}" class="deletelink">
+</div>
+{% endif %}
+{{ block.super }}
+{% endblock %}

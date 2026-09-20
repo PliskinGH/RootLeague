@@ -1,0 +1,21 @@
+{% extends 'misc/base.html' %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block upper_title %}{{ upper_title }}{% endblock %}
+{% block lower_title %}{{ lower_title }}{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <h3>{{ _("Evidence (screenshots, max 3)") }}</h3>
+    {{ evidence_formset.management_form }}
+    {% for evidence_form in evidence_formset %}
+        {{ evidence_form|crispy }}
+    {% endfor %}
+    <button type="submit" class="btn btn-outline-secondary">{{ _("Submit report") }}</button>
+</form>
+{% endblock content %}

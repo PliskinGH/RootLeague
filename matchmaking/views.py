@@ -310,6 +310,7 @@ class MatchDetailView(DetailView):
         match = self.object
         if (match is not None):
             kwargs['display_edit'] = match.is_editable_by(self.request.user)
+            kwargs['display_report'] = match.is_reportable_by(self.request.user)
         return super().get_context_data(*args, **kwargs)
 
 class ParticipantInline(InlineFormSetFactory):

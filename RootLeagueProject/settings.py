@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'matchmaking',
     'league',
     'misc',
+    'reports',
 ]
 
 MIDDLEWARE = [

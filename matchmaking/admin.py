@@ -13,6 +13,7 @@ from .models import Match, Participant
 from .forms import ParticipantAdminForm, MatchAdminForm
 from .ressources import ParticipantResource, MatchResource
 from misc.admin import MultiSelectChoicesFilter
+from reports.admin import MatchReportInline
 
 MATCH_SEARCH_HELP_TEXT = _("Only in title. For other fields, use the filters.")
 
@@ -116,7 +117,7 @@ class ParticipantPlayerFilter(AutocompleteFilter):
 
 @admin.register(Match)
 class MatchAdmin(ImportMixin, admin.ModelAdmin):
-    inlines = [ParticipantInline,] # list of participants in the match
+    inlines = [ParticipantInline, MatchReportInline,]
     search_fields = ['title']
     search_help_text = MATCH_SEARCH_HELP_TEXT
     list_filter = [ParticipantPlayerFilter,
@@ -136,3 +137,17 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
     readonly_fields = ['date_registered', 'date_modified']
     resource_classes = [MatchResource]
     form = MatchAdminForm
+
+    def get_admin_url(self, obj, app = "matchmaking"):
+        content_type = ContentType.objects.get_for_model(obj.__class__)
+        return reverse("admin:"+app+"_%s_change" % (
+            content_type.model),
+            args=(obj.id,))
+
+    def get_inline_instances(self, request, obj=None):
+        instances = super().get_inline_instances(request, obj)
+        if obj is not None and obj.pk is not None:
+            instances = [inline for inline in instances
+                         if not isinstance(inline, MatchReportInline)
+                         or obj.reports.exists()]
+        return instances

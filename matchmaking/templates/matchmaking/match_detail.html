@@ -16,7 +16,7 @@
 
 {% block content %}
 
-{% if display_edit or user.is_staff  %}
+{% if display_edit or user.is_staff or display_report %}
 <div class="row row-cols-auto btn-group" role="group">
   {% if display_edit %}
   <div class="dropdown col mx-auto">
@@ -34,6 +34,13 @@
   <div class="dropdown col mx-auto">
     <a href="{% url 'admin:matchmaking_match_change' object.id %}" class="btn btn-outline-info">
       {{ _('Admin page') }}
+    </a>
+  </div>
+  {% endif %}
+  {% if display_report %}
+  <div class="dropdown col mx-auto">
+    <a href="{% url 'reports:report_match' match_id=object.id %}" class="btn btn-outline-warning">
+      {{ _('Report an issue') }}
     </a>
   </div>
   {% endif %}
