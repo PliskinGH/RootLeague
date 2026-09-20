@@ -13,7 +13,7 @@ from . import models
 from .forms import MatchForm, ParticipantForm, ParticipantFormSet, UpdateMatchForm
 from .filters import MatchFilter, MatchDRFFilter, ParticipantFilter
 from .serializers import CoalitionedPlayerField, MatchSerializer, TournamentField
-from .views import MatchDetailView, listing
+from .views import MatchDetailView, index, listing, played_games, submissions
 from authentification.models import Player
 from league.models import Tournament
 from league.constants import MAP_WINTER
@@ -418,6 +418,65 @@ class MatchListingTestCase(TestCase):
         self.assertIn(other_match, queryset)
         self.assertNotIn(self.visible_match, queryset)
 
+class VoidMatchTestCase(TestCase):
+
+    def setUp(self):
+        self.user = Player.objects.create_user('VoidUser', 'void@test.com', 'test')
+        self.tournament = Tournament.objects.create(name='Void Tournament', visibility=True)
+        self.match = models.Match.objects.create(
+            title='Valid match', tournament=self.tournament, submitted_by=self.user,
+            date_closed=timezone.now(),
+        )
+        models.Participant.objects.create(match=self.match, player=self.user,
+                                          tournament_score=1)
+        self.void_match = models.Match.objects.create(
+            title='Void match', tournament=self.tournament, submitted_by=self.user,
+            date_closed=timezone.now(), is_void=True,
+        )
+        models.Participant.objects.create(match=self.void_match, player=self.user,
+                                          tournament_score=1)
+
+    def get_listing_queryset(self, view, **kwargs):
+        request = RequestFactory().get(reverse('match:listing'))
+        request.user = self.user
+        with patch('matchmaking.views.ImprovedListView.as_view', return_value=lambda request: HttpResponse(status=204)) as as_view:
+            view(request, **kwargs)
+        return as_view.call_args.kwargs['queryset']
+
+    def test_index_and_listing_hide_void_matches(self):
+        for view in (index, listing):
+            queryset = self.get_listing_queryset(view)
+            self.assertIn(self.match, queryset)
+            self.assertNotIn(self.void_match, queryset)
+
+    def test_my_games_listings_keep_void_matches(self):
+        for view in (submissions, played_games):
+            queryset = self.get_listing_queryset(view)
+            self.assertIn(self.match, queryset)
+            self.assertIn(self.void_match, queryset)
+
+    def test_void_match_detail_shows_the_void_notice(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:detail', args=(self.void_match.pk,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'table-danger')
+        self.assertContains(response, 'Void')
+
+    def test_void_match_is_not_editable_by_its_submitter(self):
+        self.assertFalse(self.void_match.is_editable_by(self.user))
+
+    def test_void_match_cannot_be_updated_by_its_submitter(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:update', args=(self.void_match.pk,)))
+        self.assertEqual(response.status_code, 403)
+
+    def test_void_match_cannot_be_deleted_by_its_submitter(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('match:delete', args=(self.void_match.pk,)), {})
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(models.Match.objects.filter(pk=self.void_match.pk).exists())
+
+
 class MatchApiTestCase(TestCase):
 
     def setUp(self):
@@ -555,6 +614,38 @@ class MatchApiTestCase(TestCase):
         )
         delete_user.user_permissions.add(delete_permission)
         models.Match.objects.create(title='Open API match', tournament=self.tournament)
+
+        self.client.force_authenticate(delete_user)
+        response = self.client.get(reverse('match-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+
+    def test_void_matches_are_visible_to_change_permission_users(self):
+        models.Match.objects.create(
+            title='Void API match', tournament=self.tournament,
+            date_closed=timezone.now(), is_void=True,
+        )
+        self.client.force_authenticate(self.user)
+        response = self.client.get(reverse('match-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+
+        self.client.force_authenticate(self.other_user)
+        response = self.client.get(reverse('match-list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 0)
+
+    def test_void_matches_are_visible_to_delete_permission_users(self):
+        delete_user = Player.objects.create_user('VoidDeleteUser', 'void-delete@test.com', 'test')
+        delete_permission = Permission.objects.get(
+            content_type__app_label='matchmaking',
+            codename='drf_delete_match',
+        )
+        delete_user.user_permissions.add(delete_permission)
+        models.Match.objects.create(
+            title='Void API match', tournament=self.tournament,
+            date_closed=timezone.now(), is_void=True,
+        )
 
         self.client.force_authenticate(delete_user)
         response = self.client.get(reverse('match-list'))

@@ -41,7 +41,7 @@ class MatchSerializer(ModelSerializer):
 
     class Meta:
         model = Match
-        exclude = ('submitted_by',)
+        exclude = ('submitted_by', 'is_void')
 
     @transaction.atomic
     def create(self, validated_data):

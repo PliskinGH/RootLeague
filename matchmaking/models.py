@@ -26,6 +26,8 @@ class Match(models.Model):
                                          verbose_name=_('date modified'))
     date_closed = models.DateTimeField(blank=True, null=True,
                                        verbose_name=_('date closed'))
+    is_void = models.BooleanField(default=False,
+                                  verbose_name=_('void'))
     submitted_by = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True,
                                      blank=True, related_name="submissions",
                                      verbose_name=_('submitted by'))
@@ -130,7 +132,8 @@ class Match(models.Model):
     
     def is_editable_by(self, user):
         editable = False
-        if user is not None and user.is_authenticated and user.pk is not None:
+        if (user is not None and user.is_authenticated and user.pk is not None and
+                not(self.is_void)):
             if self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME:
                 editable = self.submitted_by == user
                 if (not(editable) and self.date_closed is None):

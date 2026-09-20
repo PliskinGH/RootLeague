@@ -43,6 +43,7 @@ def listing(request,
             total_number = None,
             number_per_page = 10,
             extra_context = None,
+            include_void = False,
             use_stats = False,
             use_search = False,
             use_league_menu = True,
@@ -57,6 +58,8 @@ def listing(request,
     if (matchs is None):
         matchs = Match.objects.all()
     matchs = matchs.filter(tournament__visibility=True)
+    if (not(include_void)):
+        matchs = matchs.exclude(is_void=True)
 
     if (league in EMPTY_VALUES and
         tournament not in EMPTY_VALUES):
@@ -212,6 +215,7 @@ def submissions(request,
     title = _("Submitted games")
     return listing(request,
                    submitted_by=player,
+                   include_void=True,
                    league=league, tournament=tournament,
                    title=title,
                    number_per_page=number_per_page,
@@ -262,6 +266,7 @@ def played_games(request,
     title = _("Played games")
     return listing(request,
                    player=player,
+                   include_void=True,
                    league=league, tournament=tournament,
                    title=title,
                    number_per_page=number_per_page,
@@ -520,7 +525,7 @@ class MatchViewset(viewsets.ModelViewSet):
     permission_classes = (DRFMatchPermission,)
  
     def get_queryset(self):
-        queryset = Match.objects.exclude(date_closed=None)
+        queryset = Match.objects.exclude(date_closed=None).exclude(is_void=True)
         if (self.request.user.is_authenticated and
                 (self.request.user.has_perm('matchmaking.drf_change_match') or
                  self.request.user.has_perm('matchmaking.drf_delete_match'))):

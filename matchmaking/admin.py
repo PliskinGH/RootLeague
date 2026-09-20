@@ -126,9 +126,10 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
                    ('deck', MultiSelectChoicesFilter),
                    ('board_map', MultiSelectChoicesFilter),
                    ('random_suits', MultiSelectFilter),
+                   'is_void',
                    'date_registered', 'date_modified', 'date_closed',
                    ]
-    list_display = ['title', 'date_registered', 'date_closed',
+    list_display = ['title', 'is_void', 'date_registered', 'date_closed',
                    'tournament',
                    'turn_timing',
                    'board_map', 'deck', 'random_suits']
@@ -137,6 +138,7 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
     readonly_fields = ['date_registered', 'date_modified']
     resource_classes = [MatchResource]
     form = MatchAdminForm
+    actions = ['void_matches', 'restore_matches']
 
     def get_admin_url(self, obj, app = "matchmaking"):
         content_type = ContentType.objects.get_for_model(obj.__class__)
@@ -151,3 +153,11 @@ class MatchAdmin(ImportMixin, admin.ModelAdmin):
                          if not isinstance(inline, MatchReportInline)
                          or obj.reports.exists()]
         return instances
+
+    @admin.action(description=_('Void selected matches'))
+    def void_matches(self, request, queryset):
+        queryset.update(is_void=True)
+
+    @admin.action(description=_('Restore selected matches'))
+    def restore_matches(self, request, queryset):
+        queryset.update(is_void=False)

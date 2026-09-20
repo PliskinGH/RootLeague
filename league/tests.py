@@ -204,6 +204,21 @@ class LeagueStatsTestCase(TestCase):
 		stats = get_stats(rows=[(FACTION_CATS, 'Cats')], field='faction')
 		self.assertEqual(stats[FACTION_CATS]['score'], Decimal('5'))
 
+	def test_get_stats_excludes_void_matches(self):
+		void_match = Match.objects.create(
+			title='Void match', tournament=self.tournament,
+			date_closed='2026-01-03T00:00:00Z', is_void=True,
+		)
+		Participant.objects.create(
+			match=void_match, player=self.player, faction=FACTION_CATS,
+			tournament_score=Decimal('4.00'),
+		)
+		stats = get_stats(
+			rows=[(FACTION_CATS, 'Cats')], field='faction', tournament=self.tournament,
+		)
+		self.assertEqual(stats[FACTION_CATS]['total'], 1)
+		self.assertEqual(stats[FACTION_CATS]['score'], Decimal('5'))
+
 	def test_get_stats_handles_invalid_fields_and_empty_totals(self):
 		self.assertEqual(get_stats(rows=[('x', 'X')], field='not_a_field'), {})
 		stats = get_stats(
@@ -259,6 +274,16 @@ class LeagueViewTestCase(TestCase):
 		request.user = self.player
 		with patch('league.views.ImprovedListView.as_view', return_value=lambda request: HttpResponse(status=204)) as as_view:
 			leaderboard(request, number_per_page=10)
+		queryset = as_view.call_args.kwargs['queryset']
+		self.assertNotIn(self.player, queryset)
+
+	def test_leaderboard_ignores_void_matches(self):
+		self.match.is_void = True
+		self.match.save()
+		request = RequestFactory().get(reverse('league:tournament_leaderboard', args=(self.tournament.pk,)))
+		request.user = self.player
+		with patch('league.views.ImprovedListView.as_view', return_value=lambda request: HttpResponse(status=204)) as as_view:
+			leaderboard(request, tournament=self.tournament, number_per_page=10)
 		queryset = as_view.call_args.kwargs['queryset']
 		self.assertNotIn(self.player, queryset)
 

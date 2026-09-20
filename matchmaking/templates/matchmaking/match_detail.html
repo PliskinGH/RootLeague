@@ -71,6 +71,12 @@
       {% endif %}
     </td>
     </tr>
+    {% if object.is_void %}
+    <tr class="table-danger">
+      <th scope="row">{{_("Void")}}</th>
+      <td>{{_("Does not count towards the standings.")}}</td>
+    </tr>
+    {% endif %}
     {% if object.submitted_by %}
     <tr>
       <th scope="row">{{_("Submitted by")}}</th>

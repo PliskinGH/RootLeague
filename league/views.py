@@ -24,7 +24,7 @@ def leaderboard(request,
                 title = None,
                 ordering = None,
                 number_per_page = 15):
-    matchs = Match.objects.exclude(date_closed=None).filter(tournament__visibility=True)
+    matchs = Match.objects.exclude(date_closed=None).exclude(is_void=True).filter(tournament__visibility=True)
     match_filter = MatchFilter(request.GET,
                                matchs,
                                tournament_qs=Tournament.objects.filter(visibility=True))
@@ -150,7 +150,7 @@ def get_stats(rows = None,
     if (participations is not None):
         all_participations = participations
     if (all_participations is None):
-        all_participations = Participant.objects.exclude(match__date_closed=None)
+        all_participations = Participant.objects.exclude(match__date_closed=None).exclude(match__is_void=True)
     if (tournament not in EMPTY_VALUES):
         all_participations = all_participations.filter(match__tournament=tournament)
     elif (league not in EMPTY_VALUES):
@@ -232,7 +232,7 @@ def stats(request,
           sort_fields = None,
           current_url = '',
           current_url_arg = ''):
-    matchs = Match.objects.exclude(date_closed=None).filter(tournament__visibility=True)
+    matchs = Match.objects.exclude(date_closed=None).exclude(is_void=True).filter(tournament__visibility=True)
     match_filter = MatchFilter(request.GET,
                                matchs,
                                tournament_qs=Tournament.objects.filter(visibility=True))

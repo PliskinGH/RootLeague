@@ -90,7 +90,12 @@
         {% endif %}
       </td>
       {% endif %}
-      <td>{{ match.title }}</td>
+      <td>
+        {{ match.title }}
+        {% if match.is_void %}
+        <span class="badge bg-danger">{{_("Void")}}</span>
+        {% endif %}
+      </td>
       <td>
         {% if match.tournament != None %}
         {{ match.tournament }}
