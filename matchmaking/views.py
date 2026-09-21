@@ -48,6 +48,7 @@ def listing(request,
             use_search = False,
             use_league_menu = True,
             display_edit = False,
+            display_delete = False,
             current_url = 'match:listing',
             current_url_arg = "",
             search_placeholder = _("Find a match"),
@@ -108,8 +109,10 @@ def listing(request,
         
     if (display_edit):
         display_edit = {}
+        display_delete = {}
         for match in matchs:
             display_edit[match.id] = match.is_editable_by(request.user)
+            display_delete[match.id] = match.is_deletable_by(request.user)
         if (not(True in display_edit.values())):
             display_edit = False
     
@@ -123,6 +126,7 @@ def listing(request,
         extra_context['tournament_url'] = tournament_url
     extra_context['display_league_menu'] = use_league_menu
     extra_context['display_edit'] = display_edit
+    extra_context['display_delete'] = display_delete
     extra_context['filters'] = [match_filter, participant_filter]
 
     if (use_stats):
@@ -315,6 +319,7 @@ class MatchDetailView(DetailView):
         match = self.object
         if (match is not None):
             kwargs['display_edit'] = match.is_editable_by(self.request.user)
+            kwargs['display_delete'] = match.is_deletable_by(self.request.user)
             kwargs['display_report'] = match.is_reportable_by(self.request.user)
         return super().get_context_data(*args, **kwargs)
 
@@ -431,10 +436,17 @@ class EditMatchViewMixin(object):
         self.object.save()
         return response
 
-class EditMatchPermissionsMixin(object):
+class UpdateMatchPermissionsMixin(object):
     def get_object(self, *args, **kwargs):
         match = super().get_object(*args, **kwargs)
         if not(match.is_editable_by(self.request.user)):
+            raise PermissionDenied()
+        return match
+
+class DeleteMatchPermissionsMixin(object):
+    def get_object(self, *args, **kwargs):
+        match = super().get_object(*args, **kwargs)
+        if not(match.is_deletable_by(self.request.user)):
             raise PermissionDenied()
         return match
 
@@ -475,7 +487,7 @@ class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixi
         self.object.save()
         return response
 
-class UpdateMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, UpdateWithInlinesView):
+class UpdateMatchView(UpdateMatchPermissionsMixin, LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, UpdateWithInlinesView):
     form_class = UpdateMatchForm
     success_message = _("Match successfully updated!")
     extra_context = {'upper_title' : _("Update match"),
@@ -502,7 +514,7 @@ class UpdateMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, EditMatchVi
         self.object.save()
         return response
 
-class DeleteMatchView(EditMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class DeleteMatchView(DeleteMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Match
     form_class = DeleteMatchForm
     pk_url_kwarg='match_id'

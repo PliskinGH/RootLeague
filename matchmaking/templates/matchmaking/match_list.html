@@ -84,9 +84,15 @@
         <a title="{{_("Update results")}}" href="{% url 'match:update' match.id %}">
           <img src="{% static 'admin/img/icon-changelink.svg' %}" alt="" width="20" height="20">
         </a>
+        {% endif %}
+        {% if display_delete|dict_value:match.id %}
         <a title="{{_("Delete match")}}" href="{% url 'match:delete' match.id %}">
           <img src="{% static 'admin/img/icon-deletelink.svg' %}" alt="" width="20" height="20">
         </a>
+        {% else %}
+        <span title="{{_("This match cannot be deleted, likely because some reports depend on it.")}}">
+          <img class="opacity-50" src="{% static 'admin/img/icon-deletelink.svg' %}" alt="" width="20" height="20">
+        </span>
         {% endif %}
       </td>
       {% endif %}

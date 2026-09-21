@@ -24,10 +24,20 @@
       {{ _('Update results') }}
     </a>
   </div>
+  {% endif %}
+  {% if display_delete %}
   <div class="dropdown col mx-auto">
     <a href="{% url 'match:delete' match_id=object.id %}" class="btn btn-outline-danger">
       {{ _('Delete match') }}
     </a>
+  </div>
+  {% elif display_edit %}
+  <div class="dropdown col mx-auto">
+    <span title="{{ _('This match cannot be deleted, likely because some reports depend on it.') }}">
+      <a class="btn btn-outline-danger disabled" aria-disabled="true" tabindex="-1">
+        {{ _('Delete match') }}
+      </a>
+    </span>
   </div>
   {% endif %}
   {% if user.is_staff  %}

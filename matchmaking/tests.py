@@ -17,8 +17,13 @@ from .views import MatchDetailView, index, listing, played_games, submissions
 from authentification.models import Player
 from league.models import Tournament
 from league.constants import MAP_WINTER
+from reports.models import Report
 
 # Create your tests here.
+
+def create_report(match, reporter):
+    return Report.objects.create(reporter=reporter, match=match,
+                                 reason=Report.Reason.OTHER, description='A report.')
 
 class MatchModelTestCase(TestCase):
 
@@ -45,6 +50,14 @@ class MatchModelTestCase(TestCase):
         self.match.date_closed = timezone.now() - timedelta(days=30)
         self.match.save()
         self.assertFalse(self.match.is_editable_by(self.user))
+
+    def test_submitter_can_delete_a_match_without_reports(self):
+        self.assertTrue(self.match.is_deletable_by(self.user))
+
+    def test_match_with_a_report_is_not_deletable(self):
+        create_report(self.match, self.user)
+        self.assertTrue(self.match.is_editable_by(self.user))
+        self.assertFalse(self.match.is_deletable_by(self.user))
 
     def test_players_lists_registered_participants_ordered_and_distinct(self):
         self.user.in_game_name = 'Mike'
@@ -349,6 +362,39 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertEqual(response['Location'], reverse('match:submissions'))
         self.assertFalse(models.Match.objects.filter(pk=self.match.pk).exists())
 
+    def test_match_with_a_report_cannot_be_deleted(self):
+        create_report(self.match, self.user)
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('match:delete', args=(self.match.pk,)), {})
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(models.Match.objects.filter(pk=self.match.pk).exists())
+
+    def test_reported_match_detail_disables_the_delete_button(self):
+        create_report(self.match, self.user)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
+        self.assertContains(response, 'Update results')
+        self.assertContains(response, 'This match cannot be deleted')
+        self.assertContains(response, 'aria-disabled="true"')
+        self.assertNotContains(response, reverse('match:delete', args=(self.match.pk,)))
+
+    def test_match_detail_shows_the_delete_button_without_reports(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
+        self.assertContains(response, reverse('match:delete', args=(self.match.pk,)))
+
+    def test_submissions_list_disables_the_delete_icon_for_a_reported_match(self):
+        self.match.tournament.visibility = True
+        self.match.tournament.save()
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:submissions'))
+        self.assertContains(response, reverse('match:delete', args=(self.match.pk,)))
+        create_report(self.match, self.user)
+        response = self.client.get(reverse('match:submissions'))
+        self.assertContains(response, 'icon-changelink.svg')
+        self.assertContains(response, 'This match cannot be deleted')
+        self.assertNotContains(response, reverse('match:delete', args=(self.match.pk,)))
+
     def test_detail_context_marks_editable_match(self):
         request = RequestFactory().get(reverse('match:detail', args=(self.match.pk,)))
         request.user = self.user
@@ -593,6 +639,18 @@ class MatchApiTestCase(TestCase):
         response = self.client.delete(reverse('match-detail', args=(match.pk,)))
         self.assertEqual(response.status_code, 204)
         self.assertFalse(models.Match.objects.filter(pk=match.pk).exists())
+
+    def test_delete_is_refused_when_a_report_is_filed(self):
+        match = models.Match.objects.create(
+            title='Reported API match',
+            tournament=self.tournament,
+            submitted_by=self.user,
+        )
+        create_report(match, self.user)
+        self.client.force_authenticate(self.user)
+        response = self.client.delete(reverse('match-detail', args=(match.pk,)))
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(models.Match.objects.filter(pk=match.pk).exists())
 
     def test_open_matches_are_visible_to_change_permission_users(self):
         models.Match.objects.create(title='Open API match', tournament=self.tournament)

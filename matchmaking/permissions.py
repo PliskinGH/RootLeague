@@ -12,6 +12,8 @@ class DRFMatchPermission(permissions.BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ('update', 'partial_update', 'destroy'):
+        if view.action in ('update', 'partial_update'):
             return obj.is_editable_by(request.user)
+        if view.action == 'destroy':
+            return obj.is_deletable_by(request.user)
         return True
