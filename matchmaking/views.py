@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
 from django.core.validators import EMPTY_VALUES
 from django.core.exceptions import PermissionDenied
-from django.db.models import Sum, Q
+from django.db.models import Prefetch, Sum, Q
 from rest_framework import viewsets
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
@@ -31,6 +31,32 @@ def index(request):
                    total_number=5, number_per_page=5,
                    use_search=False,
                    use_league_menu=False)
+
+class MatchDisplayFlagsMixin:
+    """Compute edit/delete flags for the matches on the current page only."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if not context.get('compute_display_flags'):
+            return context
+        page = context.get('page_obj')
+        matches = list(page.object_list) if page is not None else []
+        display_edit = {}
+        display_delete = {}
+        for match in matches:
+            editable = match.is_editable_by(self.request.user)
+            display_edit[match.id] = editable
+            display_delete[match.id] = editable and not match.reports.exists()
+        if (True not in display_edit.values()):
+            display_edit = False
+        context['display_edit'] = display_edit
+        context['display_delete'] = display_delete
+        return context
+
+
+class MatchListView(MatchDisplayFlagsMixin, ImprovedListView):
+    pass
+
 
 def listing(request,
             matchs = None,
@@ -99,6 +125,9 @@ def listing(request,
     ordering += ['title', 'pk']
     
     matchs = matchs.order_by(*ordering)
+    matchs = matchs.select_related('tournament', 'submitted_by').prefetch_related(
+        Prefetch('participants',
+                 queryset=Participant.objects.select_related('player').order_by('turn_order')))
 
     if (total_number is not None):
         matchs = matchs[:total_number]
@@ -107,15 +136,6 @@ def listing(request,
         title = get_title(tournament=tournament,
                           league=league)
         
-    if (display_edit):
-        display_edit = {}
-        display_delete = {}
-        for match in matchs:
-            display_edit[match.id] = match.is_editable_by(request.user)
-            display_delete[match.id] = match.is_deletable_by(request.user)
-        if (not(True in display_edit.values())):
-            display_edit = False
-    
     if (extra_context in EMPTY_VALUES):
         extra_context = {}
     if (use_league_menu):
@@ -127,6 +147,7 @@ def listing(request,
     extra_context['display_league_menu'] = use_league_menu
     extra_context['display_edit'] = display_edit
     extra_context['display_delete'] = display_delete
+    extra_context['compute_display_flags'] = bool(display_edit)
     extra_context['filters'] = [match_filter, participant_filter]
 
     if (use_stats):
@@ -166,21 +187,21 @@ def listing(request,
                 stats['relative_coal_score'] = stats['coal_score'] / total_coal * 100
         extra_context['stats'] = stats
     
-    return ImprovedListView.as_view(model=Match,
-                                    queryset=matchs,
-                                    paginate_by=number_per_page,
-                                    search_use_q=use_search,
-                                    current_url=current_url,
-                                    current_url_arg=current_url_arg,
-                                    search_placeholder=search_placeholder,
-                                    search_fields = ['title',
-                                                     'participants__player__in_game_name',
-                                                     'participants__player__username',
-                                                     'participants__player__discord_name'],
-                                    title=title,
-                                    extra_context=extra_context,
-                                    template_name=template_name,
-                                    )(request)
+    return MatchListView.as_view(model=Match,
+                                 queryset=matchs,
+                                 paginate_by=number_per_page,
+                                 search_use_q=use_search,
+                                 current_url=current_url,
+                                 current_url_arg=current_url_arg,
+                                 search_placeholder=search_placeholder,
+                                 search_fields = ['title',
+                                                  'participants__player__in_game_name',
+                                                  'participants__player__username',
+                                                  'participants__player__discord_name'],
+                                 title=title,
+                                 extra_context=extra_context,
+                                 template_name=template_name,
+                                )(request)
 
 def league_listing(request,
                    league_id = None,
@@ -314,6 +335,13 @@ def tournament_played_games(request,
 class MatchDetailView(DetailView):
     model = Match
     pk_url_kwarg='match_id'
+
+    def get_queryset(self):
+        return (Match.objects
+                .select_related('tournament', 'submitted_by')
+                .prefetch_related(Prefetch(
+                    'participants',
+                    queryset=Participant.objects.select_related('player').order_by('turn_order'))))
 
     def get_context_data(self, *args, **kwargs):
         match = self.object
@@ -542,7 +570,10 @@ class MatchViewset(viewsets.ModelViewSet):
                 (self.request.user.has_perm('matchmaking.drf_change_match') or
                  self.request.user.has_perm('matchmaking.drf_delete_match'))):
             queryset = Match.objects.all()
-        return queryset
+        return queryset.select_related('tournament').prefetch_related(
+            Prefetch('participants',
+                     queryset=Participant.objects.select_related(
+                         'player', 'coalition__player').order_by('turn_order')))
 
     def perform_create(self, serializer):
         serializer.save(submitted_by=self.request.user)

@@ -164,7 +164,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for participant in object.participants.all|sort_by:"turn_order" %}
+    {% for participant in object.participants.all %}
     <tr>
       <th scope="row">
       {% if participant.turn_order != None %}

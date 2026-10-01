@@ -92,7 +92,7 @@ class Match(models.Model):
         return result
 
     def get_embed_description(self):
-        participants = self.participants.order_by('turn_order')
+        participants = self.participants.select_related('player').order_by('turn_order')
         players = []
         for participant in participants:
             player = str(participant.player or participant)
@@ -135,9 +135,9 @@ class Match(models.Model):
         if (user is not None and user.is_authenticated and user.pk is not None and
                 not(self.is_void)):
             if self.date_closed is None or self.date_closed > timezone.now() - MAX_EDIT_TIMEFRAME:
-                editable = self.submitted_by == user
+                editable = self.submitted_by_id == user.pk
                 if (not(editable) and self.date_closed is None):
-                    editable = user in self.players
+                    editable = self.participants.filter(player=user).exists()
         return editable
     
     def is_deletable_by(self, user):
@@ -146,7 +146,7 @@ class Match(models.Model):
     def is_reportable_by(self, user):
         reportable = False
         if user is not None and user.is_authenticated and user.pk is not None:
-            reportable = user in self.players
+            reportable = self.participants.filter(player=user).exists()
         return reportable
 
     @property
