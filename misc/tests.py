@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.flatpages.models import FlatPage
+from django.contrib.sites.models import Site
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -184,6 +185,48 @@ class MiscFormsAndWidgetsTestCase(TestCase):
 	def test_full_width_select_widget_sets_width(self):
 		widget = FullWidthSelect2MultipleWidget()
 		self.assertEqual(widget.attrs['style'], 'width : 100%')
+
+
+class FooterTestCase(TestCase):
+
+	def setUp(self):
+		self.user = Player.objects.create_user('FooterUser', 'footer@test.com', 'test')
+
+	def test_footer_keeps_community_links(self):
+		response = self.client.get(reverse('home'))
+		self.assertContains(response, 'https://github.com/PliskinGH/RootLeague')
+		self.assertContains(response, 'https://discord.gg/woodland-warriors-476234833572397056')
+
+	def test_footer_column_headings_render(self):
+		response = self.client.get(reverse('home'))
+		self.assertContains(response, 'Navigate')
+		self.assertContains(response, 'Community')
+		self.assertContains(response, 'Leaderboard')
+		self.assertContains(response, 'Rootelo')
+
+	def test_footer_hides_about_link_without_flatpage(self):
+		response = self.client.get(reverse('home'))
+		self.assertNotContains(response, '/pages/about/')
+
+	def test_footer_shows_only_root_about_flatpage(self):
+		site = Site.objects.get_current()
+		about = FlatPage.objects.create(url='/about/', title='About', content='About us.')
+		about.sites.add(site)
+		rules = FlatPage.objects.create(url='/about/rules/', title='Rules', content='Rules.')
+		rules.sites.add(site)
+		response = self.client.get(reverse('home'))
+		footer = response.content.split(b'<footer', 1)[1]
+		self.assertIn(about.get_absolute_url().encode(), footer)
+		self.assertNotIn(rules.get_absolute_url().encode(), footer)
+
+	def test_footer_hides_report_link_from_anonymous(self):
+		response = self.client.get(reverse('home'))
+		self.assertNotContains(response, reverse('reports:report'))
+
+	def test_footer_shows_report_link_to_logged_in_user(self):
+		self.client.force_login(self.user)
+		response = self.client.get(reverse('home'))
+		self.assertContains(response, reverse('reports:report'))
 from django.test import TestCase
 
 # Create your tests here.

@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import CreateView
@@ -14,37 +15,23 @@ from django.views.generic.edit import CreateView
 from authentification.models import Player
 from matchmaking.models import Match
 
-from .forms import ReportEvidenceFormSet, ReportMatchForm
+from .forms import ReportEvidenceFormSet, ReportGeneralForm, ReportMatchForm
 from .models import Report
 
 MAX_OPEN_REPORTS_PER_DAY = 5
 
 
-class ReportMatchCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ReportCreateBaseView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Report
-    form_class = ReportMatchForm
     template_name = 'reports/report_form.html'
-    success_message = _('Your report was submitted. Moderators will review it.')
-    pk_url_kwarg = 'match_id'
-
-    def dispatch(self, request, *args, **kwargs):
-        self.match = get_object_or_404(Match, pk=kwargs.get(self.pk_url_kwarg))
-        if (request.user.is_authenticated
-                and not self.match.is_reportable_by(request.user)):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['match'] = self.match
-        return kwargs
+    success_message = _('Your report was submitted. Admins will review it.')
+    success_url = reverse_lazy('home')
+    match = None
 
     def get_context_data(self, **kwargs):
         if 'evidence_formset' not in kwargs:
             kwargs['evidence_formset'] = ReportEvidenceFormSet(prefix='evidence')
-        kwargs['match'] = self.match
         kwargs['upper_title'] = _('Report an issue')
-        kwargs['lower_title'] = str(self.match)
         return super().get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -80,7 +67,11 @@ class ReportMatchCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView)
             reporter=self.request.user, match=self.match,
             reported_player=reported, status=Report.Status.OPEN).exists()
         if exists:
-            form.add_error(None, _('You already have an open report for this player in this match.'))
+            if self.match is not None:
+                message = _('You already have an open report for this player in this match.')
+            else:
+                message = _('You already have an open report for this player.')
+            form.add_error(None, message)
 
     def check_rate_limit(self, form):
         since = timezone.now() - timedelta(days=1)
@@ -105,5 +96,35 @@ class ReportMatchCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView)
             message = render_to_string('reports/report_email.html', context)
             send_mail(subject, message, None, recipients, fail_silently=True)
 
+
+class ReportMatchCreateView(ReportCreateBaseView):
+    form_class = ReportMatchForm
+    pk_url_kwarg = 'match_id'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.match = get_object_or_404(Match, pk=kwargs.get(self.pk_url_kwarg))
+        if (request.user.is_authenticated
+                and not self.match.is_reportable_by(request.user)):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['match'] = self.match
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        kwargs['match'] = self.match
+        kwargs['lower_title'] = str(self.match)
+        return super().get_context_data(**kwargs)
+
     def get_success_url(self):
         return self.match.get_absolute_url()
+
+
+class ReportCreateView(ReportCreateBaseView):
+    form_class = ReportGeneralForm
+
+    def get_context_data(self, **kwargs):
+        kwargs['lower_title'] = get_current_site(self.request).name
+        return super().get_context_data(**kwargs)

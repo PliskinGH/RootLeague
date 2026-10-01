@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-19 00:43+0100\n"
+"POT-Creation-Date: 2026-10-01 19:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,21 +18,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\authentification\admin.py:21 .\authentification\admin.py:42
+#: .\authentification\admin.py:31 .\authentification\admin.py:53
+#: .\authentification\templates\authentification\player_profile_edit_form.html:8
 msgid "Personal info"
 msgstr ""
 
-#: .\authentification\admin.py:23 .\authentification\admin.py:44
+#: .\authentification\admin.py:32
+msgid "API"
+msgstr ""
+
+#: .\authentification\admin.py:34 .\authentification\admin.py:55
 msgid "Permissions"
 msgstr ""
 
-#: .\authentification\admin.py:32
+#: .\authentification\admin.py:43
 msgid "Important dates"
 msgstr ""
 
 #: .\authentification\apps.py:6
 msgid "authentication"
 msgstr "authentification"
+
+#: .\authentification\discord.py:24
+msgid ""
+"This Discord account is already linked to another player. Please contact the "
+"administrators."
+msgstr ""
 
 #: .\authentification\forms.py:18
 msgid "Sign up"
@@ -48,8 +59,8 @@ msgid " or "
 msgstr ""
 
 #: .\authentification\forms.py:47
-#: .\authentification\templates\authentification\player_register_form.html:10
-#: .\authentification\views.py:19
+#: .\authentification\templates\authentification\player_register_form.html:30
+#: .\authentification\views.py:44
 msgid "Log in"
 msgstr "Se connecter"
 
@@ -159,27 +170,92 @@ msgid ""
 "used.  Please request a new password reset."
 msgstr ""
 
-#: .\authentification\templates\authentification\player_profile_edit_form.html:9
+#: .\authentification\templates\authentification\player_profile_edit_form.html:12
+msgid "Linked accounts"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:18
+#, fuzzy
+#| msgid "discord username"
+msgid "Discord"
+msgstr "nom discord"
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:23
+msgid "Not linked"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:31
+msgid "Unlink"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:42
+msgid "Re-link Discord account"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:44
+msgid "Link Discord account"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:55
+msgid "Secrets"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:61
+#, fuzzy
+#| msgid "Change Password"
+msgid "Password"
+msgstr "Changer de mot de passe"
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:65
 #, fuzzy
 #| msgid "Change Password"
 msgid "Change password"
 msgstr "Changer de mot de passe"
 
-#: .\authentification\templates\authentification\player_register_form.html:8
+#: .\authentification\templates\authentification\player_profile_edit_form.html:70
+msgid "API Token"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_profile_edit_form.html:80
+msgid "Generate API token"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_register_form.html:9
+#, fuzzy
+#| msgid "discord username"
+msgid "Discord account"
+msgstr "nom discord"
+
+#: .\authentification\templates\authentification\player_register_form.html:12
+#, python-format
+msgid ""
+"Your Discord account <b>%(discord_name)s</b> has been verified and will be "
+"linked to your new player account."
+msgstr ""
+
+#: .\authentification\templates\authentification\player_register_form.html:18
+msgid "Link with Discord"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_register_form.html:23
+msgid "League account"
+msgstr ""
+
+#: .\authentification\templates\authentification\player_register_form.html:28
 msgid "You only need to register once! You already have an account?"
 msgstr ""
 
-#: .\authentification\views.py:17
+#: .\authentification\views.py:42
 msgid "Log in successful!"
 msgstr "Connexion réussie !"
 
-#: .\authentification\views.py:18 .\authentification\views.py:28
-#: .\authentification\views.py:37 .\authentification\views.py:49
-#: .\authentification\views.py:58 .\authentification\views.py:66
+#: .\authentification\views.py:43 .\authentification\views.py:53
+#: .\authentification\views.py:82 .\authentification\views.py:199
+#: .\authentification\views.py:208 .\authentification\views.py:216
 msgid "Account"
 msgstr "Compte"
 
-#: .\authentification\views.py:26
+#: .\authentification\views.py:51
 msgid ""
 "Your player account was successfully created.                          You "
 "can now log in."
@@ -187,33 +263,68 @@ msgstr ""
 "Votre compte de joueur a bien été créé.                          Vous pouvez "
 "vous connecter."
 
-#: .\authentification\views.py:29
+#: .\authentification\views.py:54
 msgid "Register"
 msgstr "S'inscrire"
 
-#: .\authentification\views.py:36
+#: .\authentification\views.py:73 .\authentification\views.py:155
+msgid "Your Discord account was successfully linked."
+msgstr ""
+
+#: .\authentification\views.py:81
 msgid "Your profile was successfully updated."
 msgstr ""
 
-#: .\authentification\views.py:38
+#: .\authentification\views.py:83
 msgid "Profile"
 msgstr ""
 
-#: .\authentification\views.py:48 .\authentification\views.py:65
+#: .\authentification\views.py:107 .\authentification\views.py:134
+msgid "Discord account linking is not configured."
+msgstr ""
+
+#: .\authentification\views.py:137
+msgid "Discord account linking was cancelled."
+msgstr ""
+
+#: .\authentification\views.py:142 .\authentification\views.py:147
+msgid "Discord account linking failed. Please try again."
+msgstr ""
+
+#: .\authentification\views.py:158
+msgid ""
+"Your Discord account has been "
+"verified.                                          It will be linked to your "
+"player account once you register."
+msgstr ""
+
+#: .\authentification\views.py:173
+msgid "Your Discord account was unlinked."
+msgstr ""
+
+#: .\authentification\views.py:187
+msgid "A new API token has been generated."
+msgstr ""
+
+#: .\authentification\views.py:189
+msgid "An API token already existed."
+msgstr ""
+
+#: .\authentification\views.py:198 .\authentification\views.py:215
 msgid "Password changed successfully!"
 msgstr "Mot de passe modifié avec succès !"
 
-#: .\authentification\views.py:50
+#: .\authentification\views.py:200
 msgid "Change Password"
 msgstr "Changer de mot de passe"
 
-#: .\authentification\views.py:57
+#: .\authentification\views.py:207
 msgid ""
 "Confirmation email sent! Please follow the confirmation link to reset your "
 "password."
 msgstr ""
 
-#: .\authentification\views.py:59 .\authentification\views.py:67
+#: .\authentification\views.py:209 .\authentification\views.py:217
 #, fuzzy
 #| msgid "Change Password"
 msgid "Reset Password"

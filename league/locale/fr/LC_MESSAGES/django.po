@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-19 00:43+0100\n"
+"POT-Creation-Date: 2026-10-01 19:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -403,59 +403,63 @@ msgstr ""
 msgid "Leaderboard"
 msgstr "Classement"
 
-#: .\league\templates\league\leaderboard.html:24
-#: .\league\templates\league\stats.html:26
+#: .\league\templates\league\leaderboard.html:11
+msgid "View the leaderboard and compare player scores and rankings for "
+msgstr ""
+
+#: .\league\templates\league\leaderboard.html:22
+#: .\league\templates\league\stats.html:25
 msgid "No league selected"
 msgstr "Aucune ligue sélectionnée"
 
-#: .\league\templates\league\leaderboard.html:24
-#: .\league\templates\league\stats.html:26
+#: .\league\templates\league\leaderboard.html:22
+#: .\league\templates\league\stats.html:25
 msgid "All Leagues"
 msgstr "Toute ligue"
 
-#: .\league\templates\league\leaderboard.html:24
-#: .\league\templates\league\stats.html:26
+#: .\league\templates\league\leaderboard.html:22
+#: .\league\templates\league\stats.html:25
 msgid "No tournament selected"
 msgstr "Aucun tournoi sélectionné"
 
-#: .\league\templates\league\leaderboard.html:24
-#: .\league\templates\league\stats.html:26
+#: .\league\templates\league\leaderboard.html:22
+#: .\league\templates\league\stats.html:25
 msgid "All Seasons"
 msgstr "Toutes les saisons"
 
-#: .\league\templates\league\leaderboard.html:33
+#: .\league\templates\league\leaderboard.html:31
 msgid "Player"
 msgstr "Joueur"
 
-#: .\league\templates\league\leaderboard.html:34
-#: .\league\templates\league\stats.html:44
+#: .\league\templates\league\leaderboard.html:32
+#: .\league\templates\league\stats.html:43
 msgid "Total Games"
 msgstr "Nombre de parties"
 
-#: .\league\templates\league\leaderboard.html:35
-#: .\league\templates\league\stats.html:47
+#: .\league\templates\league\leaderboard.html:33
+#: .\league\templates\league\stats.html:46
 msgid "Total Score"
 msgstr "Score total"
 
-#: .\league\templates\league\leaderboard.html:36
-#: .\league\templates\league\stats.html:50
+#: .\league\templates\league\leaderboard.html:34
+#: .\league\templates\league\stats.html:49
 msgid "Relative Score"
 msgstr "Score relatif"
 
-#: .\league\templates\league\leaderboard.html:52
+#: .\league\templates\league\leaderboard.html:50
 msgid "No players above the threshold."
 msgstr "Aucun joueur au dessus du seuil."
 
-#: .\league\templates\league\leaderboard.html:64
+#: .\league\templates\league\leaderboard.html:62
 msgid "Minimum threshold"
 msgstr "Seuil minimal"
 
-#: .\league\templates\league\leaderboard.html:65
-#: .\league\templates\league\leaderboard.html:70
+#: .\league\templates\league\leaderboard.html:63
+#: .\league\templates\league\leaderboard.html:68
 msgid "game(s)"
 msgstr "partie(s)"
 
-#: .\league\templates\league\leaderboard.html:69
+#: .\league\templates\league\leaderboard.html:67
 #, fuzzy
 #| msgid "Minimum threshold"
 msgid "Maximum threshold"
@@ -481,11 +485,11 @@ msgstr ""
 msgid "View selected %(model)s"
 msgstr ""
 
-#: .\league\templates\league\stats.html:54
+#: .\league\templates\league\stats.html:53
 msgid "Average Game Score"
 msgstr "Score de jeu moyen"
 
-#: .\league\templates\league\stats.html:84
+#: .\league\templates\league\stats.html:83
 msgid "Nothing to display."
 msgstr "Rien à afficher."
 

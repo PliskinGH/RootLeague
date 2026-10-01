@@ -601,6 +601,25 @@ p {
   background-color: rgba(47, 23, 15, 0.9);
 }
 
+.footer-heading {
+  color: #e6a756;
+  font-family: "Alegreya SC", "Alegreya", Georgia, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.footer-links li {
+  margin-bottom: 0.35rem;
+}
+
+.footer-divider {
+  border-color: rgba(246, 225, 197, 0.2);
+  margin: 2rem 0 1rem;
+}
+
 .intro {
   position: relative;
 }

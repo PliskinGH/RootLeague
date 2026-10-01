@@ -1,5 +1,5 @@
 {% load i18n %}{% autoescape off %}
-{% blocktranslate %}A new player report was submitted on match {{ report.match }}.{% endblocktranslate %}
+{% if report.match %}{% blocktranslate %}A new player report was submitted on match {{ report.match }}.{% endblocktranslate %}{% else %}{% blocktranslate %}A new player report was submitted.{% endblocktranslate %}{% endif %}
 
 {% translate 'Reason:' %} {{ report.get_reason_display }}
 {% translate 'Reporter:' %} {{ report.reporter }}{% if report.reported_player %}

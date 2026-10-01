@@ -1,0 +1,314 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 19:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\reports\admin.py:41 .\reports\models.py:97
+msgid "report"
+msgstr ""
+
+#: .\reports\admin.py:49
+msgid "report filed against this player"
+msgstr ""
+
+#: .\reports\admin.py:50
+msgid "reports filed against this player"
+msgstr ""
+
+#: .\reports\admin.py:55
+msgid "report filed by this player"
+msgstr ""
+
+#: .\reports\admin.py:56
+msgid "reports filed by this player"
+msgstr ""
+
+#: .\reports\admin.py:61
+msgid "report filed on this match"
+msgstr ""
+
+#: .\reports\admin.py:62
+msgid "reports filed on this match"
+msgstr ""
+
+#: .\reports\admin.py:70
+msgid "report referencing this player as witness"
+msgstr ""
+
+#: .\reports\admin.py:71
+msgid "reports referencing this player as witness"
+msgstr ""
+
+#: .\reports\admin.py:97
+#, python-format
+msgid "Report marked as %(status)s."
+msgstr ""
+
+#: .\reports\admin.py:103
+#: .\reports\templates\admin\reports\report\change_form.html:6
+msgid "Mark as in review"
+msgstr ""
+
+#: .\reports\admin.py:107
+#: .\reports\templates\admin\reports\report\change_form.html:7
+msgid "Mark as resolved"
+msgstr ""
+
+#: .\reports\admin.py:111
+#: .\reports\templates\admin\reports\report\change_form.html:8
+msgid "Mark as dismissed"
+msgstr ""
+
+#: .\reports\apps.py:6
+msgid "reports"
+msgstr ""
+
+#: .\reports\forms.py:33
+msgid "The reported player is not part of this match."
+msgstr ""
+
+#: .\reports\forms.py:40
+msgid "The witness is not part of this match."
+msgstr ""
+
+#: .\reports\forms.py:56
+msgid "Leave empty if this report is not about a registered player."
+msgstr ""
+
+#: .\reports\models.py:10
+msgid "Timed out on purpose"
+msgstr ""
+
+#: .\reports\models.py:11
+msgid "Inappropriately resigned"
+msgstr ""
+
+#: .\reports\models.py:12
+msgid "Participated in private/side chats about game strategy"
+msgstr ""
+
+#: .\reports\models.py:13
+msgid "Intentionally broke a league rule in order to void game"
+msgstr ""
+
+#: .\reports\models.py:14
+msgid "Intentionally submitted a game result that was void"
+msgstr ""
+
+#: .\reports\models.py:15
+msgid "Participated in league game but did not register (i.e., ghosted)"
+msgstr ""
+
+#: .\reports\models.py:16
+msgid "Did not comply with the WW Community Guidelines"
+msgstr ""
+
+#: .\reports\models.py:17
+msgid "Match submission contains errors (details in description)"
+msgstr ""
+
+#: .\reports\models.py:18
+msgid "Other"
+msgstr ""
+
+#: .\reports\models.py:21
+msgid "Open"
+msgstr ""
+
+#: .\reports\models.py:22
+msgid "In review"
+msgstr ""
+
+#: .\reports\models.py:23
+msgid "Resolved"
+msgstr ""
+
+#: .\reports\models.py:24
+msgid "Dismissed"
+msgstr ""
+
+#: .\reports\models.py:28
+msgid "reporter"
+msgstr ""
+
+#: .\reports\models.py:31
+msgid "reported player"
+msgstr ""
+
+#: .\reports\models.py:32
+msgid ""
+"Match participant, if registered. Leave empty for an unregistered player or "
+"if the report is about submission errors."
+msgstr ""
+
+#: .\reports\models.py:37
+msgid "match"
+msgstr ""
+
+#: .\reports\models.py:40
+msgid "witness / reference player"
+msgstr ""
+
+#: .\reports\models.py:41
+msgid "Player who can corroborate the report."
+msgstr ""
+
+#: .\reports\models.py:43
+msgid "reason"
+msgstr ""
+
+#: .\reports\models.py:44
+msgid "description"
+msgstr ""
+
+#: .\reports\models.py:45
+msgid ""
+"Describe what happened. If the issue is about an unregistered player, state "
+"their discord name here."
+msgstr ""
+
+#: .\reports\models.py:49
+msgid "status"
+msgstr ""
+
+#: .\reports\models.py:50
+msgid "moderator notes"
+msgstr ""
+
+#: .\reports\models.py:53
+msgid "resolved by"
+msgstr ""
+
+#: .\reports\models.py:55
+msgid "resolved at"
+msgstr ""
+
+#: .\reports\models.py:56
+msgid "created"
+msgstr ""
+
+#: .\reports\models.py:57
+msgid "modified"
+msgstr ""
+
+#: .\reports\models.py:68
+#, python-format
+msgid "%(reason)s report by %(reporter)s"
+msgstr ""
+
+#: .\reports\models.py:75
+msgid ""
+"State the details of the report in the description, or pick a reported "
+"player."
+msgstr ""
+
+#: .\reports\models.py:79
+msgid "You cannot report yourself."
+msgstr ""
+
+#: .\reports\models.py:84
+msgid "The reference player cannot be the reporter."
+msgstr ""
+
+#: .\reports\models.py:87
+msgid "The reference player cannot be the reported player."
+msgstr ""
+
+#: .\reports\models.py:90
+msgid "Resolved reports require a moderator and a resolution date."
+msgstr ""
+
+#: .\reports\models.py:98
+msgid "URL"
+msgstr ""
+
+#: .\reports\models.py:99
+msgid "caption"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:2
+#, python-format
+msgid "A new player report was submitted on match %(report.match)s."
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:2
+msgid "A new player report was submitted."
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:4
+msgid "Reason:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:5
+msgid "Reporter:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:6
+msgid "Reported player:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:7
+msgid "Witness:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:10
+msgid "Evidence:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:13
+msgid "Review it in the admin interface:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:17
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\reports\templates\reports\report_email_subject.txt:1
+#, python-format
+msgid "New player report on %(site_name)s"
+msgstr ""
+
+#: .\reports\templates\reports\report_form.html:18
+msgid "Evidence (screenshots, max 3)"
+msgstr ""
+
+#: .\reports\templates\reports\report_form.html:23
+msgid "Submit report"
+msgstr ""
+
+#: .\reports\views.py:27
+msgid "Your report was submitted. Admins will review it."
+msgstr ""
+
+#: .\reports\views.py:34
+msgid "Report an issue"
+msgstr ""
+
+#: .\reports\views.py:71
+msgid "You already have an open report for this player in this match."
+msgstr ""
+
+#: .\reports\views.py:73
+msgid "You already have an open report for this player."
+msgstr ""
+
+#: .\reports\views.py:80
+msgid ""
+"You submitted too many reports recently. Please wait before filing another."
+msgstr ""

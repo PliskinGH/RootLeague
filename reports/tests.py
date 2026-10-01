@@ -6,10 +6,12 @@ from django.urls import reverse
 from django.utils import timezone
 
 from authentification.models import Player
+from authentification.widgets import PlayerWidget
 from matchmaking.models import Match, Participant
 
-from .forms import ReportEvidenceFormSet, ReportMatchForm
+from .forms import ReportEvidenceFormSet, ReportGeneralForm, ReportMatchForm
 from .models import Report, ReportEvidence
+from .views import MAX_OPEN_REPORTS_PER_DAY
 
 
 def make_match(reporter, accused=None, witness=None, **kwargs):
@@ -134,6 +136,17 @@ class ReportFormTestCase(TestCase):
             data[f'evidence-{i}-caption'] = ''
         self.assertFalse(ReportEvidenceFormSet(data, prefix='evidence').is_valid())
 
+    def test_general_form_player_fields_use_autocomplete(self):
+        form = ReportGeneralForm()
+        self.assertIsInstance(form.fields['reported_player'].widget, PlayerWidget)
+        self.assertIsInstance(form.fields['reference_player'].widget, PlayerWidget)
+
+    def test_general_form_players_not_scoped(self):
+        form = ReportGeneralForm()
+        self.assertIn(self.accused, form.fields['reported_player'].queryset)
+        self.assertIn(self.outsider, form.fields['reported_player'].queryset)
+
+
 class ReportViewTestCase(TestCase):
     def setUp(self):
         self.reporter = Player.objects.create_user('Reporter', 'reporter@test.com', 'test',
@@ -190,7 +203,8 @@ class ReportViewTestCase(TestCase):
     def test_match_page_hides_button_from_outsider(self):
         self.client.force_login(self.outsider)
         response = self.client.get(self.match.get_absolute_url())
-        self.assertNotContains(response, 'Report an issue')
+        self.assertNotContains(response, reverse('reports:report_match',
+                                                 kwargs={'match_id': self.match.pk}))
 
     def test_report_without_player_nor_description_blocked(self):
         response = self.post_report(self.reporter, reported_player='', description='')
@@ -332,5 +346,80 @@ class ReportEmailTestCase(TestCase):
         self.grant_view_permission(no_email)
         self.post_report()
         self.assertEqual(len(mail.outbox), 0)
+
+
+class ReportGeneralViewTestCase(TestCase):
+    def setUp(self):
+        self.reporter = Player.objects.create_user('Reporter', 'reporter@test.com', 'test',
+                                                   in_game_name='Reporter', in_game_id=1)
+        self.accused = Player.objects.create_user('Accused', 'accused@test.com', 'test',
+                                                  in_game_name='Accused', in_game_id=2)
+        self.witness = Player.objects.create_user('Witness', 'witness@test.com', 'test',
+                                                  in_game_name='Witness', in_game_id=3)
+        self.url = reverse('reports:report')
+
+    def post_report(self, user, **overrides):
+        self.client.force_login(user)
+        data = {'reported_player': self.accused.pk, 'reference_player': self.witness.pk,
+                'reason': Report.Reason.OTHER, 'description': 'Something went wrong.',
+                'evidence-TOTAL_FORMS': '0', 'evidence-INITIAL_FORMS': '0',
+                'evidence-MIN_NUM_FORMS': '0', 'evidence-MAX_NUM_FORMS': '3'}
+        data.update(overrides)
+        return self.client.post(self.url, data, follow=True)
+
+    def test_anonymous_redirected_to_login(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/auth/', response.url)
+
+    def test_form_renders_with_autocomplete_widgets(self):
+        self.client.force_login(self.reporter)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'django_select2')
+
+    def test_report_is_filed_without_match(self):
+        response = self.post_report(self.reporter)
+        self.assertEqual(response.status_code, 200)
+        report = Report.objects.get()
+        self.assertIsNone(report.match)
+        self.assertEqual(report.reporter, self.reporter)
+        self.assertEqual(report.reported_player, self.accused)
+        self.assertEqual(report.reference_player, self.witness)
+
+    def test_description_only_report_allowed(self):
+        self.post_report(self.reporter, reported_player='', reference_player='',
+                         description='The homepage layout is broken.')
+        report = Report.objects.get()
+        self.assertIsNone(report.match)
+        self.assertIsNone(report.reported_player)
+
+    def test_report_without_player_nor_description_blocked(self):
+        self.post_report(self.reporter, reported_player='', description='')
+        self.assertEqual(Report.objects.count(), 0)
+
+    def test_duplicate_open_report_blocked(self):
+        self.post_report(self.reporter)
+        response = self.post_report(self.reporter)
+        self.assertEqual(Report.objects.count(), 1)
+        self.assertContains(response, 'already have an open report')
+
+    def test_rate_limit_applies(self):
+        for i in range(MAX_OPEN_REPORTS_PER_DAY):
+            Report.objects.create(reporter=self.reporter, reason=Report.Reason.OTHER,
+                                  description=f'Existing report {i}.')
+        response = self.post_report(self.reporter)
+        self.assertEqual(Report.objects.count(), MAX_OPEN_REPORTS_PER_DAY)
+        self.assertContains(response, 'too many reports')
+
+    def test_success_redirects_home(self):
+        self.client.force_login(self.reporter)
+        response = self.client.post(self.url, {
+            'reported_player': '', 'reference_player': '',
+            'reason': Report.Reason.OTHER, 'description': 'Something went wrong.',
+            'evidence-TOTAL_FORMS': '0', 'evidence-INITIAL_FORMS': '0',
+            'evidence-MIN_NUM_FORMS': '0', 'evidence-MAX_NUM_FORMS': '3'})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('home'))
 
 

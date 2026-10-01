@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load flatpages %}
+<footer class="footer text-faded py-5">
+    <div class="container">
+        <div class="row g-4 text-center text-md-start">
+            <div class="col-md-6">
+                <h6 class="footer-heading">{{_("Navigate")}}</h6>
+                <ul class="list-unstyled footer-links small m-0">
+                    <li><a href="{% url 'match:listing' %}">{{_("Matches")}}</a></li>
+                    <li><a href="{% url 'league:default_leaderboard' %}">{{_("Leaderboard")}}</a></li>
+                    <li><a href="https://tricholome.github.io/rootelo/index.html">Rootelo</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h6 class="footer-heading">{{_("Community")}}</h6>
+                <ul class="list-unstyled footer-links small m-0">
+                    {% get_flatpages '/about/' for request.user as about_pages %}
+                    {% for page in about_pages %}
+                    {% if page.url == "/about/" %}
+                    <li><a href="{{ page.get_absolute_url }}">{{_("About")}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    <li><a href="{% url 'misc:news' %}">{{_("News")}}</a></li>
+                    <li><a href="https://discord.gg/woodland-warriors-476234833572397056">{{_("Discord server")}}</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'reports:report' %}">{{_("Report an issue")}}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <hr class="footer-divider" />
+        <p class="m-0 small text-center">
+            {% blocktrans %}
+            Contributions and bug reports are welcome on <a href="https://github.com/PliskinGH/RootLeague">GitHub</a>.
+            {% endblocktrans %}
+        </p>
+    </div>
+</footer>

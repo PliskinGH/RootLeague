@@ -4,6 +4,10 @@
 
 {% load crispy_forms_tags %}
 
+{% block extra-css %}
+{{ form.media.css }}
+{% endblock %}
+
 {% block upper_title %}{{ upper_title }}{% endblock %}
 {% block lower_title %}{{ lower_title }}{% endblock %}
 
@@ -19,3 +23,7 @@
     <button type="submit" class="btn btn-outline-secondary">{{ _("Submit report") }}</button>
 </form>
 {% endblock content %}
+
+{% block extra-js %}
+{{ form.media.js }}
+{% endblock %}

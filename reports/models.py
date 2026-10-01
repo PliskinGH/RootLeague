@@ -30,8 +30,8 @@ class Report(models.Model):
                                         null=True, blank=True, related_name='reports_against',
                                         verbose_name=_('reported player'),
                                         help_text=_('Match participant, if registered. Leave empty for an '
-                                                   'unregistered player (but give their discord name in the '
-                                                   'description) or if the report is about submission errors.'))
+                                                    'unregistered player or if the report is about ' \
+                                                    'submission errors.'))
     match = models.ForeignKey('matchmaking.Match', on_delete=models.SET_NULL,
                               null=True, blank=True, related_name='reports',
                               verbose_name=_('match'))
@@ -41,7 +41,10 @@ class Report(models.Model):
                                          help_text=_('Player who can corroborate the report.'))
     reason = models.CharField(max_length=30, choices=Reason.choices,
                               verbose_name=_('reason'))
-    description = models.TextField(blank=True, verbose_name=_('description'))
+    description = models.TextField(blank=True, verbose_name=_('description'),
+                                   help_text=_('Describe what happened. If the issue is about ' \
+                                               'an unregistered player, '
+                                               'state their discord name here.'))
     status = models.CharField(max_length=10, choices=Status.choices,
                               default=Status.OPEN, verbose_name=_('status'))
     moderator_notes = models.TextField(blank=True, verbose_name=_('moderator notes'))
