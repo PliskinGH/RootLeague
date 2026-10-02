@@ -189,7 +189,7 @@ class Participant(models.Model):
                                            verbose_name=_('tournament score'))
     
     turn_order = models.PositiveSmallIntegerField(choices=TURN_ORDERS,
-                                                  null=True,
+                                                  null=True, blank=True,
                                                   verbose_name=_('turn order'))
 
     class Meta:

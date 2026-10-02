@@ -140,6 +140,9 @@ class ParticipantFormTestCase(TestCase):
         self.assertIn(self.active_player, form.fields['player'].queryset)
         self.assertNotIn(self.inactive_player, form.fields['player'].queryset)
 
+    def test_turn_order_is_not_required(self):
+        self.assertFalse(ParticipantForm().fields['turn_order'].required)
+
 
 class ParticipantFormSetTestCase(TestCase):
 
@@ -212,6 +215,24 @@ class ParticipantFormSetTestCase(TestCase):
         }])
         self.assertFalse(formset.is_valid())
         self.assertIn('error_min_nb', {error.code for error in formset.non_form_errors().data})
+
+    def test_open_formset_allows_missing_turn_orders(self):
+        formset = self.formset([{
+            'player': self.player_one.pk,
+            'faction': models.FACTION_CATS,
+            'game_score': '30',
+        }], closed=False)
+        self.assertTrue(formset.is_valid(), formset.errors)
+
+    def test_closed_formset_still_requires_turn_orders(self):
+        formset = self.formset([{
+            'player': self.player_one.pk,
+            'faction': models.FACTION_CATS,
+            'tournament_score': '5',
+        }])
+        self.assertFalse(formset.is_valid())
+        self.assertIn('error_turn_order',
+                      {error.code for error in formset.non_form_errors().data})
 
 
 class MatchSerializerTestCase(TestCase):
