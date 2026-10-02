@@ -378,6 +378,12 @@ class ReportGeneralViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'django_select2')
 
+    def test_page_title_is_generic(self):
+        self.client.force_login(self.reporter)
+        response = self.client.get(self.url)
+        self.assertEqual(response.context['upper_title'], 'Report an issue')
+        self.assertEqual(response.context['lower_title'], 'Form')
+
     def test_report_is_filed_without_match(self):
         response = self.post_report(self.reporter)
         self.assertEqual(response.status_code, 200)

@@ -124,7 +124,4 @@ class ReportMatchCreateView(ReportCreateBaseView):
 
 class ReportCreateView(ReportCreateBaseView):
     form_class = ReportGeneralForm
-
-    def get_context_data(self, **kwargs):
-        kwargs['lower_title'] = get_current_site(self.request).name
-        return super().get_context_data(**kwargs)
+    extra_context = {'lower_title': _("Form")}
