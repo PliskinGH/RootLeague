@@ -1,10 +1,11 @@
 
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithInlinesView, SuccessMessageMixin as SuccessMessageMixinWithInlines
 from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import all_valid
@@ -14,7 +15,7 @@ from django.db.models import Prefetch, Sum, Q
 from rest_framework import viewsets
 
 from .models import Match, Participant, MAX_NUMBER_OF_PLAYERS_IN_MATCH, DEFAULT_NUMBER_OF_PLAYERS_IN_MATCH
-from .forms import MatchForm, UpdateMatchForm, DeleteMatchForm, ParticipantForm, ParticipantFormSet
+from .forms import MatchForm, UpdateMatchForm, ConfirmForm, ParticipantForm, ParticipantFormSet
 from .filters import MatchDRFFilter, ParticipantFilter, MatchFilter
 from .permissions import DRFMatchPermission
 from .serializers import MatchSerializer
@@ -349,6 +350,7 @@ class MatchDetailView(DetailView):
             kwargs['display_edit'] = match.is_editable_by(self.request.user)
             kwargs['display_delete'] = match.is_deletable_by(self.request.user)
             kwargs['display_report'] = match.is_reportable_by(self.request.user)
+            kwargs['display_void'] = match.is_editable_by(self.request.user)
         return super().get_context_data(*args, **kwargs)
 
 class ParticipantInline(InlineFormSetFactory):
@@ -544,12 +546,14 @@ class UpdateMatchView(UpdateMatchPermissionsMixin, LoginRequiredMixin, EditMatch
 
 class DeleteMatchView(DeleteMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Match
-    form_class = DeleteMatchForm
+    form_class = ConfirmForm
     pk_url_kwarg='match_id'
+    template_name = 'matchmaking/match_confirm_action.html'
     success_message = _("Match successfully deleted!")
     success_url = reverse_lazy('match:submissions')
 
     def get_context_data(self, *args, **kwargs):
+        kwargs['confirm_message'] = _("Are you sure? This match will be <strong>permanently</strong> deleted.")
         kwargs['upper_title'] = _("Delete match")
         match = self.object
         if (match is not None):
@@ -557,6 +561,32 @@ class DeleteMatchView(DeleteMatchPermissionsMixin, LoginRequiredMixin, SuccessMe
         else:
             kwargs['lower_title'] = _("Unknown match")
         return super().get_context_data(*args, **kwargs)
+
+class VoidMatchMixin:
+    def form_valid(self, form):
+        self.object.is_void = True
+        self.object.save()
+        return redirect(self.get_success_url())
+
+class VoidMatchView(UpdateMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, VoidMatchMixin, DeleteView):
+    model = Match
+    form_class = ConfirmForm
+    pk_url_kwarg = 'match_id'
+    template_name = 'matchmaking/match_confirm_action.html'
+    success_message = _("Match successfully voided!")
+
+    def get_context_data(self, **kwargs):
+        kwargs['confirm_message'] = _("Are you sure? Voiding is definitive and only admins can undo it. Please submit a report to explain the reason.")
+        kwargs['upper_title'] = _("Void match")
+        match = self.object
+        if (match is not None):
+            kwargs['lower_title'] = match.title
+        else:
+            kwargs['lower_title'] = _("Unknown match")
+        return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        return reverse('match:detail', kwargs={'match_id': self.object.id})
 
 class MatchViewset(viewsets.ModelViewSet):
     serializer_class = MatchSerializer

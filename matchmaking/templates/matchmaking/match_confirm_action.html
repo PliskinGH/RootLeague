@@ -1,0 +1,13 @@
+{% extends 'misc/basic_form.html' %}
+
+{% load i18n %}
+
+{% block form_header %}
+<p>
+{% if confirm_message %}
+    {{ confirm_message|safe }}
+{% else %}
+    {% blocktrans %}Are you sure? This action cannot be undone.{% endblocktrans %}
+{% endif %}
+</p>
+{% endblock form_header %}

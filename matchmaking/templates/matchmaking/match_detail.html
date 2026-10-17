@@ -40,6 +40,13 @@
     </span>
   </div>
   {% endif %}
+  {% if display_void %}
+  <div class="dropdown col mx-auto">
+    <a href="{% url 'match:void' match_id=object.id %}" class="btn btn-outline-dark">
+      {{ _('Void match') }}
+    </a>
+  </div>
+  {% endif %}
   {% if user.is_staff  %}
   <div class="dropdown col mx-auto">
     <a href="{% url 'admin:matchmaking_match_change' object.id %}" class="btn btn-outline-info">

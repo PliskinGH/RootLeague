@@ -217,7 +217,7 @@ class UpdateMatchForm(MatchForm):
         if (self.instance and self.instance.date_closed is None):
             self.fields['closed'].initial = False
 
-class DeleteMatchForm(Form):
+class ConfirmForm(Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()

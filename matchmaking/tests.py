@@ -399,6 +399,69 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertContains(response, 'aria-disabled="true"')
         self.assertNotContains(response, reverse('match:delete', args=(self.match.pk,)))
 
+    def test_reported_match_detail_shows_the_void_button(self):
+        create_report(self.match, self.user)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
+        self.assertContains(response, 'Void match')
+        self.assertContains(response, reverse('match:void', args=(self.match.pk,)))
+        self.assertContains(response, f'<a href="{reverse("match:void", args=(self.match.pk,))}"')
+
+    def test_non_editor_cannot_see_void_button(self):
+        self.client.force_login(self.other_user)
+        response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
+        self.assertNotContains(response, 'Void match')
+
+    def test_void_match_detail_hides_void_button(self):
+        self.match.is_void = True
+        self.match.save()
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
+        self.assertNotContains(response, 'Void match')
+
+    def test_void_match_detail_confirmation_page(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:void', args=(self.match.pk,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'definitive')
+        self.assertContains(response, 'admins')
+        self.assertContains(response, 'report')
+
+    def test_void_confirmation_page_does_not_void(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:void', args=(self.match.pk,)))
+        self.assertEqual(response.status_code, 200)
+        self.match.refresh_from_db()
+        self.assertFalse(self.match.is_void)
+
+    def test_delete_confirmation_page_keeps_html_markup(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:delete', args=(self.match.pk,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<strong>permanently</strong>')
+        self.assertNotContains(response, '&lt;strong&gt;')
+
+    def test_submitter_can_void_match(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('match:void', args=(self.match.pk,)), {})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], reverse('match:detail', args=(self.match.pk,)))
+        self.match.refresh_from_db()
+        self.assertTrue(self.match.is_void)
+
+    def test_void_shows_success_message(self):
+        self.client.force_login(self.user)
+        response = self.client.post(
+            reverse('match:void', args=(self.match.pk,)), {}, follow=True)
+        self.assertContains(response, 'Match successfully voided!')
+
+    def test_non_editor_cannot_void_match(self):
+        self.client.force_login(self.other_user)
+        response = self.client.post(reverse('match:void', args=(self.match.pk,)), {})
+        self.assertEqual(response.status_code, 403)
+        self.match.refresh_from_db()
+        self.assertFalse(self.match.is_void)
+
     def test_match_detail_shows_the_delete_button_without_reports(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
