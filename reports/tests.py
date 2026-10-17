@@ -1,7 +1,8 @@
+from django.contrib.admin.sites import site
 from django.contrib.auth.models import Permission
 from django.core import mail
 from django.core.exceptions import ValidationError
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -9,6 +10,7 @@ from authentification.models import Player
 from authentification.widgets import PlayerWidget
 from matchmaking.models import Match, Participant
 
+from .admin import MatchReportInline
 from .forms import ReportEvidenceFormSet, ReportGeneralForm, ReportMatchForm
 from .models import Report, ReportEvidence
 from .views import MAX_OPEN_REPORTS_PER_DAY
@@ -253,6 +255,34 @@ class ReportAdminTestCase(TestCase):
         self.report.refresh_from_db()
         self.assertEqual(self.report.status, Report.Status.IN_REVIEW)
         self.assertIsNone(self.report.resolved_by)
+
+
+class ReportInlineFormTestCase(TestCase):
+    def setUp(self):
+        self.staff = Player.objects.create_user(
+            'InlineStaff', 'inline-staff@test.com', 'test', in_game_name='Inline Staff',
+            in_game_id=10, is_staff=True, is_superuser=True)
+        self.reporter = Player.objects.create_user('InlineReporter', 'inline-reporter@test.com', 'test')
+        self.match = make_match(self.reporter)
+        self.report = Report.objects.create(
+            reporter=self.reporter, match=self.match,
+            reason=Report.Reason.INAPPROPRIATE_RESIGN, description='')
+
+    def test_read_only_inline_ignores_legacy_report_validation(self):
+        request = RequestFactory().get('/')
+        request.user = self.staff
+        inline = MatchReportInline(Match, site)
+        formset_class = inline.get_formset(request, obj=self.match)
+        prefix = formset_class.get_default_prefix()
+        data = {
+            f'{prefix}-TOTAL_FORMS': '1',
+            f'{prefix}-INITIAL_FORMS': '1',
+            f'{prefix}-MIN_NUM_FORMS': '0',
+            f'{prefix}-MAX_NUM_FORMS': '1000',
+            f'{prefix}-0-id': str(self.report.pk),
+        }
+        formset = formset_class(data, instance=self.match, prefix=prefix)
+        self.assertTrue(formset.is_valid())
 
 
 @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')

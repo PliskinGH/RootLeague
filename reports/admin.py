@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -24,8 +25,20 @@ CHANGE_STATUS_BUTTONS = {
 }
 
 
+class ReportInlineForm(forms.ModelForm):
+    """Read-only inline rows; stored reports are not edited or validated here."""
+
+    class Meta:
+        model = Report
+        fields = '__all__'
+
+    def _post_clean(self):
+        pass
+
+
 class ReportPlayerInlineBase(admin.TabularInline):
     model = Report
+    form = ReportInlineForm
     extra = 0
     readonly_fields = ['report_link', 'reason', 'match', 'status', 'created']
     fields = ['report_link', 'reason', 'match', 'status', 'created']
