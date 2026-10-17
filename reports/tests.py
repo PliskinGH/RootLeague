@@ -347,6 +347,41 @@ class ReportEmailTestCase(TestCase):
         self.post_report()
         self.assertEqual(len(mail.outbox), 0)
 
+    def test_email_includes_match_row_first(self):
+        self.grant_view_permission(self.moderator)
+        report = self.post_report()
+        self.assertEqual(len(mail.outbox), 1)
+        body = mail.outbox[0].body
+        lines = body.splitlines()
+        self.assertEqual(lines[0], 'A new match report was submitted.')
+        self.assertEqual(lines[1], '- Match: %s' % report.match)
+        self.assertIn('- Reason: Timed out on purpose', body)
+        self.assertIn('- Reporter: Reporter', body)
+        self.assertIn('- Reported player: Accused', body)
+
+    def test_email_has_no_blank_lines(self):
+        self.grant_view_permission(self.moderator)
+        self.post_report()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertNotIn('\n\n', mail.outbox[0].body)
+
+    def test_email_general_report_no_match_row(self):
+        self.grant_view_permission(self.moderator)
+        self.client.force_login(self.reporter)
+        data = {
+            'reason': Report.Reason.TIMED_OUT,
+            'description': 'Timed out on purpose.',
+            'evidence-TOTAL_FORMS': '0', 'evidence-INITIAL_FORMS': '0',
+            'evidence-MIN_NUM_FORMS': '0', 'evidence-MAX_NUM_FORMS': '3',
+        }
+        self.client.post(reverse('reports:report'), data, follow=True)
+        self.assertEqual(len(mail.outbox), 1)
+        body = mail.outbox[0].body
+        lines = body.splitlines()
+        self.assertEqual(lines[0], 'A new player report was submitted.')
+        self.assertNotIn('Match:', body)
+        self.assertIn('- Reason: Timed out on purpose', body)
+
 
 class ReportGeneralViewTestCase(TestCase):
     def setUp(self):

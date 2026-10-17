@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 19:53+0200\n"
+"POT-Creation-Date: 2026-10-17 16:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -241,40 +241,47 @@ msgstr ""
 msgid "caption"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:2
-#, python-format
-msgid "A new player report was submitted on match %(report.match)s."
+#: .\reports\templates\reports\report_email.html:1
+msgid "A new match report was submitted."
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:2
+#: .\reports\templates\reports\report_email.html:1
 msgid "A new player report was submitted."
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:4
+#: .\reports\templates\reports\report_email.html:2
+msgid "Match:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:3
 msgid "Reason:"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:5
+#: .\reports\templates\reports\report_email.html:4
 msgid "Reporter:"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:6
+#: .\reports\templates\reports\report_email.html:5
 msgid "Reported player:"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:7
+#: .\reports\templates\reports\report_email.html:6
 msgid "Witness:"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:10
+#: .\reports\templates\reports\report_email.html:7
+msgid "Description:"
+msgstr ""
+
+#: .\reports\templates\reports\report_email.html:8
 msgid "Evidence:"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:13
+#: .\reports\templates\reports\report_email.html:10
 msgid "Review it in the admin interface:"
 msgstr ""
 
-#: .\reports\templates\reports\report_email.html:17
+#: .\reports\templates\reports\report_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
 msgstr ""
@@ -311,4 +318,8 @@ msgstr ""
 #: .\reports\views.py:80
 msgid ""
 "You submitted too many reports recently. Please wait before filing another."
+msgstr ""
+
+#: .\reports\views.py:127
+msgid "Form"
 msgstr ""

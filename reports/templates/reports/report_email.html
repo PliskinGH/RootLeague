@@ -1,18 +1,13 @@
-{% load i18n %}{% autoescape off %}
-{% if report.match %}{% blocktranslate %}A new player report was submitted on match {{ report.match }}.{% endblocktranslate %}{% else %}{% blocktranslate %}A new player report was submitted.{% endblocktranslate %}{% endif %}
-
-{% translate 'Reason:' %} {{ report.get_reason_display }}
-{% translate 'Reporter:' %} {{ report.reporter }}{% if report.reported_player %}
-{% translate 'Reported player:' %} {{ report.reported_player }}{% endif %}{% if report.reference_player %}
-{% translate 'Witness:' %} {{ report.reference_player }}{% endif %}{% if report.description %}
-
-{{ report.description }}{% endif %}{% if report.evidences.all %}
-{% translate 'Evidence:' %}
+{% load i18n %}{% autoescape off %}{% if report.match %}{% blocktranslate %}A new match report was submitted.{% endblocktranslate %}{% else %}{% blocktranslate %}A new player report was submitted.{% endblocktranslate %}{% endif %}
+{% if report.match %}- {% translate 'Match:' %} {{ report.match }}
+{% endif %}- {% translate 'Reason:' %} {{ report.get_reason_display }}
+- {% translate 'Reporter:' %} {{ report.reporter }}
+{% if report.reported_player %}- {% translate 'Reported player:' %} {{ report.reported_player }}
+{% endif %}{% if report.reference_player %}- {% translate 'Witness:' %} {{ report.reference_player }}
+{% endif %}{% if report.description %}- {% translate 'Description:' %} {{ report.description }}
+{% endif %}{% if report.evidences.all %}- {% translate 'Evidence:' %}
 {% for evidence in report.evidences.all %}- {{ evidence.url }}
-{% endfor %}{% endif %}
-{% url 'admin:reports_report_change' report.pk as report_url %}{% translate 'Review it in the admin interface:' %}
-
+{% endfor %}{% endif %}{% url 'admin:reports_report_change' report.pk as report_url %}{% translate 'Review it in the admin interface:' %}
 {{ protocol }}://{{ domain }}{{ report_url }}
-
 {% blocktranslate %}The {{ site_name }} team{% endblocktranslate %}
 {% endautoescape %}
