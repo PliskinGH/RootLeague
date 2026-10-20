@@ -14,7 +14,8 @@ from league.constants import MAX_EDIT_TIMEFRAME
 from matchmaking.models import Match, Participant
 
 from .admin import MatchReportInline
-from .forms import ReportEvidenceFormSet, ReportGeneralForm, ReportMatchForm
+from .forms import (MAX_DESCRIPTION_LENGTH, ReportEvidenceFormSet,
+                    ReportGeneralForm, ReportMatchForm)
 from .models import Report, ReportEvidence
 from .views import MAX_OPEN_REPORTS_PER_DAY
 
@@ -156,6 +157,19 @@ class ReportFormTestCase(TestCase):
         form = ReportMatchForm(match=self.match, allow_void=True)
         self.assertIn('void_match', form.fields)
         self.assertFalse(form.fields['void_match'].required)
+
+    def test_overlong_description_rejected(self):
+        form = ReportMatchForm(match=self.match, data={
+            'reported_player': self.accused.pk, 'reason': Report.Reason.OTHER,
+            'description': 'x' * (MAX_DESCRIPTION_LENGTH + 1)})
+        self.assertFalse(form.is_valid())
+        self.assertIn('description', form.errors)
+
+    def test_max_length_description_accepted(self):
+        form = ReportMatchForm(match=self.match, data={
+            'reported_player': self.accused.pk, 'reason': Report.Reason.OTHER,
+            'description': 'x' * MAX_DESCRIPTION_LENGTH})
+        self.assertTrue(form.is_valid())
 
 
 class ReportViewTestCase(TestCase):
@@ -383,6 +397,16 @@ class ReportEmailTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn('- Description:\nLine one.\nLine two.\n', mail.outbox[0].body)
 
+    def test_description_comes_after_the_review_link(self):
+        self.grant_view_permission(self.moderator)
+        self.post_report()
+        self.assertEqual(len(mail.outbox), 1)
+        body = mail.outbox[0].body
+        self.assertLess(body.index('Review it in the admin interface:'),
+                        body.index('- Description:'))
+        self.assertLess(body.index('- Description:'),
+                        body.index('The example.com team'))
+
     def test_email_includes_witness_and_evidence(self):
         witness = Player.objects.create_user('Witness', 'witness@test.com', 'test',
                                              in_game_name='Witness', in_game_id=3)
@@ -400,6 +424,7 @@ class ReportEmailTestCase(TestCase):
         body = mail.outbox[0].body
         self.assertIn('Witness: Witness+3', body)
         self.assertIn('Evidence:\n- https://example.com/shot.png', body)
+        self.assertLess(body.index('- Description:'), body.index('Evidence:'))
         self.assertNotIn('\n\n\n', body)
 
     def test_staff_without_permission_gets_no_email(self):

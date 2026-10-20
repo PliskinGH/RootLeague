@@ -7,6 +7,8 @@ from authentification.widgets import PlayerWidget
 
 from .models import Report, ReportEvidence
 
+MAX_DESCRIPTION_LENGTH = 5000
+
 
 class ReportBaseForm(forms.ModelForm):
     """Shared fields and match-aware validation for report forms."""
@@ -39,6 +41,13 @@ class ReportBaseForm(forms.ModelForm):
             if not player.participations.filter(match=self.match).exists():
                 raise ValidationError(_('The witness is not part of this match.'))
         return player
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        if len(description) > MAX_DESCRIPTION_LENGTH:
+            raise ValidationError(_('Keep the description under %(limit)s characters.')
+                                  % {'limit': MAX_DESCRIPTION_LENGTH})
+        return description
 
 
 class ReportMatchForm(ReportBaseForm):

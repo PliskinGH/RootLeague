@@ -93,7 +93,7 @@ class ReportCreateBaseView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         if recipients:
             subject = ''.join(render_to_string(
                 'reports/report_email_subject.txt', context).splitlines())
-            message = render_to_string('reports/report_email.html', context)
+            message = render_to_string('reports/report_email.txt', context)
             send_mail(subject, message, None, recipients, fail_silently=True)
 
 

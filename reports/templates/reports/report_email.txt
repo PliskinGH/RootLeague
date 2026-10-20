@@ -5,14 +5,15 @@
 - {% translate 'Reporter:' %} {{ report.reporter }}
 {% if report.reported_player %}- {% translate 'Reported player:' %} {{ report.reported_player }}
 {% endif %}{% if report.reference_player %}- {% translate 'Witness:' %} {{ report.reference_player }}
-{% endif %}{% if report.description %}- {% translate 'Description:' %}
+{% endif %}
+{% url 'admin:reports_report_change' report.pk as report_url %}{% translate 'Review it in the admin interface:' %}
+{{ protocol }}://{{ domain }}{{ report_url }}
+{% if report.description %}
+- {% translate 'Description:' %}
 {{ report.description }}
 {% endif %}
 {% if report.evidences.all %}{% translate 'Evidence:' %}
 {% for evidence in report.evidences.all %}- {{ evidence.url }}
 {% endfor %}
-{% endif %}{% url 'admin:reports_report_change' report.pk as report_url %}{% translate 'Review it in the admin interface:' %}
-{{ protocol }}://{{ domain }}{{ report_url }}
-
-{% blocktranslate %}The {{ site_name }} team{% endblocktranslate %}
+{% endif %}{% blocktranslate %}The {{ site_name }} team{% endblocktranslate %}
 {% endautoescape %}
