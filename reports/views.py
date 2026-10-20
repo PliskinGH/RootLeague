@@ -111,7 +111,16 @@ class ReportMatchCreateView(ReportCreateBaseView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['match'] = self.match
+        kwargs['allow_void'] = self.match.is_editable_by(self.request.user)
         return kwargs
+
+    def forms_valid(self, form, evidence_formset):
+        response = super().forms_valid(form, evidence_formset)
+        if (form.cleaned_data.get('void_match')
+                and self.match.is_voidable_by(self.request.user)):
+            self.match.is_void = True
+            self.match.save()
+        return response
 
     def get_context_data(self, **kwargs):
         kwargs['match'] = self.match

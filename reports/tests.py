@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.admin.sites import site
 from django.contrib.auth.models import Permission
 from django.core import mail
@@ -8,6 +10,7 @@ from django.utils import timezone
 
 from authentification.models import Player
 from authentification.widgets import PlayerWidget
+from league.constants import MAX_EDIT_TIMEFRAME
 from matchmaking.models import Match, Participant
 
 from .admin import MatchReportInline
@@ -148,6 +151,12 @@ class ReportFormTestCase(TestCase):
         self.assertIn(self.accused, form.fields['reported_player'].queryset)
         self.assertIn(self.outsider, form.fields['reported_player'].queryset)
 
+    def test_void_checkbox_only_offered_when_allowed(self):
+        self.assertNotIn('void_match', ReportMatchForm(match=self.match).fields)
+        form = ReportMatchForm(match=self.match, allow_void=True)
+        self.assertIn('void_match', form.fields)
+        self.assertFalse(form.fields['void_match'].required)
+
 
 class ReportViewTestCase(TestCase):
     def setUp(self):
@@ -211,6 +220,34 @@ class ReportViewTestCase(TestCase):
     def test_report_without_player_nor_description_blocked(self):
         response = self.post_report(self.reporter, reported_player='', description='')
         self.assertEqual(Report.objects.count(), 0)
+
+    def test_form_offers_void_checkbox_for_editable_match(self):
+        self.client.force_login(self.reporter)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'name="void_match"')
+        self.assertFalse(response.context['form']['void_match'].value())
+
+    def test_void_checkbox_voids_the_match(self):
+        self.post_report(self.reporter, void_match='on')
+        self.match.refresh_from_db()
+        self.assertTrue(self.match.is_void)
+        self.assertEqual(Report.objects.count(), 1)
+
+    def test_report_without_void_checkbox_keeps_the_match(self):
+        self.post_report(self.reporter)
+        self.match.refresh_from_db()
+        self.assertFalse(self.match.is_void)
+
+    def test_old_closed_match_neither_offers_nor_applies_void(self):
+        self.match.date_closed = timezone.now() - MAX_EDIT_TIMEFRAME - timedelta(minutes=1)
+        self.match.save()
+        self.client.force_login(self.reporter)
+        response = self.client.get(self.url)
+        self.assertNotContains(response, 'name="void_match"')
+        self.post_report(self.reporter, void_match='on')
+        self.match.refresh_from_db()
+        self.assertFalse(self.match.is_void)
+        self.assertEqual(Report.objects.count(), 1)
 
 
 class ReportAdminTestCase(TestCase):
@@ -325,6 +362,7 @@ class ReportEmailTestCase(TestCase):
         self.assertIn('Reason: Timed out on purpose', email.body)
         self.assertIn('Reporter: Reporter', email.body)
         self.assertIn('Reported player: Accused', email.body)
+        self.assertIn('- Description:\nTimed out on purpose.', email.body)
         self.assertIn(f'/admin/reports/report/{report.pk}/change/', email.body)
         self.assertIn('http://example.com', email.body)
         self.assertIn('The example.com team', email.body)
@@ -338,6 +376,12 @@ class ReportEmailTestCase(TestCase):
         self.assertNotIn('Reported player:', body)
         self.assertNotIn('Witness:', body)
         self.assertIn('Submission error.', body)
+
+    def test_description_body_starts_on_a_new_line(self):
+        self.grant_view_permission(self.moderator)
+        self.post_report(description='Line one.\nLine two.')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('- Description:\nLine one.\nLine two.\n', mail.outbox[0].body)
 
     def test_email_includes_witness_and_evidence(self):
         witness = Player.objects.create_user('Witness', 'witness@test.com', 'test',
@@ -355,8 +399,8 @@ class ReportEmailTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         body = mail.outbox[0].body
         self.assertIn('Witness: Witness+3', body)
-        self.assertIn('Evidence:', body)
-        self.assertIn('https://example.com/shot.png', body)
+        self.assertIn('Evidence:\n- https://example.com/shot.png', body)
+        self.assertNotIn('\n\n\n', body)
 
     def test_staff_without_permission_gets_no_email(self):
         self.post_report()
@@ -384,16 +428,21 @@ class ReportEmailTestCase(TestCase):
         body = mail.outbox[0].body
         lines = body.splitlines()
         self.assertEqual(lines[0], 'A new match report was submitted.')
-        self.assertEqual(lines[1], '- Match: %s' % report.match)
+        self.assertEqual(lines[1], '')
+        self.assertEqual(lines[2], '- Match: %s' % report.match)
         self.assertIn('- Reason: Timed out on purpose', body)
         self.assertIn('- Reporter: Reporter', body)
         self.assertIn('- Reported player: Accused', body)
 
-    def test_email_has_no_blank_lines(self):
+    def test_email_separates_sections_with_single_blank_lines(self):
         self.grant_view_permission(self.moderator)
         self.post_report()
         self.assertEqual(len(mail.outbox), 1)
-        self.assertNotIn('\n\n', mail.outbox[0].body)
+        body = mail.outbox[0].body
+        self.assertNotIn('\n\n\n', body)
+        lines = body.splitlines()
+        self.assertEqual(lines[1], '')
+        self.assertEqual(lines[-2], '')
 
     def test_email_general_report_no_match_row(self):
         self.grant_view_permission(self.moderator)
@@ -409,6 +458,7 @@ class ReportEmailTestCase(TestCase):
         body = mail.outbox[0].body
         lines = body.splitlines()
         self.assertEqual(lines[0], 'A new player report was submitted.')
+        self.assertEqual(lines[1], '')
         self.assertNotIn('Match:', body)
         self.assertIn('- Reason: Timed out on purpose', body)
 

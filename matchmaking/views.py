@@ -350,7 +350,7 @@ class MatchDetailView(DetailView):
             kwargs['display_edit'] = match.is_editable_by(self.request.user)
             kwargs['display_delete'] = match.is_deletable_by(self.request.user)
             kwargs['display_report'] = match.is_reportable_by(self.request.user)
-            kwargs['display_void'] = match.is_editable_by(self.request.user)
+            kwargs['display_void'] = match.is_voidable_by(self.request.user)
         return super().get_context_data(*args, **kwargs)
 
 class ParticipantInline(InlineFormSetFactory):
@@ -480,6 +480,13 @@ class DeleteMatchPermissionsMixin(object):
             raise PermissionDenied()
         return match
 
+class VoidMatchPermissionsMixin(object):
+    def get_object(self, *args, **kwargs):
+        match = super().get_object(*args, **kwargs)
+        if not(match.is_voidable_by(self.request.user)):
+            raise PermissionDenied()
+        return match
+
 class CreateMatchView(LoginRequiredMixin, EditMatchViewMixin, SuccessMessageMixinWithInlines, CreateWithInlinesView):
     form_class = MatchForm
     success_message = _("Match successfully registered!")
@@ -568,7 +575,7 @@ class VoidMatchMixin:
         self.object.save()
         return redirect(self.get_success_url())
 
-class VoidMatchView(UpdateMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, VoidMatchMixin, DeleteView):
+class VoidMatchView(VoidMatchPermissionsMixin, LoginRequiredMixin, SuccessMessageMixin, VoidMatchMixin, DeleteView):
     model = Match
     form_class = ConfirmForm
     pk_url_kwarg = 'match_id'
@@ -576,7 +583,7 @@ class VoidMatchView(UpdateMatchPermissionsMixin, LoginRequiredMixin, SuccessMess
     success_message = _("Match successfully voided!")
 
     def get_context_data(self, **kwargs):
-        kwargs['confirm_message'] = _("Are you sure? Voiding is definitive and only admins can undo it. Please submit a report to explain the reason.")
+        kwargs['confirm_message'] = _("Are you sure? Voiding is definitive and only admins can undo it. The report on this match must explain the reason.")
         kwargs['upper_title'] = _("Void match")
         match = self.object
         if (match is not None):

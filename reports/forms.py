@@ -44,6 +44,14 @@ class ReportBaseForm(forms.ModelForm):
 class ReportMatchForm(ReportBaseForm):
     """Report scoped to the participants of one match."""
 
+    void_match = forms.BooleanField(required=False, label=_('Void the match'),
+                                    help_text=_('Only admins can undo a void.'))
+
+    def __init__(self, *args, allow_void=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not allow_void:
+            self.fields.pop('void_match', None)
+
 
 class ReportGeneralForm(ReportBaseForm):
     """Report filed without a match, with roster-wide player autocomplete."""

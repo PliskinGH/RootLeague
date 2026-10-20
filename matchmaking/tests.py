@@ -59,6 +59,27 @@ class MatchModelTestCase(TestCase):
         self.assertTrue(self.match.is_editable_by(self.user))
         self.assertFalse(self.match.is_deletable_by(self.user))
 
+    def test_match_without_reports_is_not_voidable(self):
+        self.assertFalse(self.match.is_voidable_by(self.user))
+
+    def test_match_with_a_report_is_voidable(self):
+        create_report(self.match, self.user)
+        self.assertTrue(self.match.is_voidable_by(self.user))
+
+    def test_unrelated_user_cannot_void_a_reported_match(self):
+        create_report(self.match, self.user)
+        self.assertFalse(self.match.is_voidable_by(self.other_user))
+
+    def test_anonymous_user_cannot_void_a_reported_match(self):
+        create_report(self.match, self.user)
+        self.assertFalse(self.match.is_voidable_by(None))
+
+    def test_void_match_is_not_voidable(self):
+        create_report(self.match, self.user)
+        self.match.is_void = True
+        self.match.save()
+        self.assertFalse(self.match.is_voidable_by(self.user))
+
     def test_players_lists_registered_participants_ordered_and_distinct(self):
         self.user.in_game_name = 'Mike'
         self.user.save()
@@ -407,6 +428,14 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertContains(response, reverse('match:void', args=(self.match.pk,)))
         self.assertContains(response, f'<a href="{reverse("match:void", args=(self.match.pk,))}"')
 
+    def test_unreported_match_detail_disables_the_void_button(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
+        self.assertContains(response, 'Void match')
+        self.assertContains(response, 'This match cannot be voided')
+        self.assertContains(response, 'aria-disabled="true"')
+        self.assertNotContains(response, reverse('match:void', args=(self.match.pk,)))
+
     def test_non_editor_cannot_see_void_button(self):
         self.client.force_login(self.other_user)
         response = self.client.get(reverse('match:detail', args=(self.match.pk,)))
@@ -420,6 +449,7 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertNotContains(response, 'Void match')
 
     def test_void_match_detail_confirmation_page(self):
+        create_report(self.match, self.user)
         self.client.force_login(self.user)
         response = self.client.get(reverse('match:void', args=(self.match.pk,)))
         self.assertEqual(response.status_code, 200)
@@ -428,6 +458,7 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertContains(response, 'report')
 
     def test_void_confirmation_page_does_not_void(self):
+        create_report(self.match, self.user)
         self.client.force_login(self.user)
         response = self.client.get(reverse('match:void', args=(self.match.pk,)))
         self.assertEqual(response.status_code, 200)
@@ -442,6 +473,7 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertNotContains(response, '&lt;strong&gt;')
 
     def test_submitter_can_void_match(self):
+        create_report(self.match, self.user)
         self.client.force_login(self.user)
         response = self.client.post(reverse('match:void', args=(self.match.pk,)), {})
         self.assertEqual(response.status_code, 302)
@@ -450,12 +482,21 @@ class MatchHtmlAccessTestCase(TestCase):
         self.assertTrue(self.match.is_void)
 
     def test_void_shows_success_message(self):
+        create_report(self.match, self.user)
         self.client.force_login(self.user)
         response = self.client.post(
             reverse('match:void', args=(self.match.pk,)), {}, follow=True)
         self.assertContains(response, 'Match successfully voided!')
 
+    def test_unreported_match_cannot_be_voided(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('match:void', args=(self.match.pk,)), {})
+        self.assertEqual(response.status_code, 403)
+        self.match.refresh_from_db()
+        self.assertFalse(self.match.is_void)
+
     def test_non_editor_cannot_void_match(self):
+        create_report(self.match, self.user)
         self.client.force_login(self.other_user)
         response = self.client.post(reverse('match:void', args=(self.match.pk,)), {})
         self.assertEqual(response.status_code, 403)
@@ -487,6 +528,16 @@ class MatchHtmlAccessTestCase(TestCase):
         view.object = self.match
         context = view.get_context_data()
         self.assertTrue(context['display_edit'])
+
+    def test_detail_context_display_void_follows_reports(self):
+        request = RequestFactory().get(reverse('match:detail', args=(self.match.pk,)))
+        request.user = self.user
+        view = MatchDetailView()
+        view.request = request
+        view.object = self.match
+        self.assertFalse(view.get_context_data()['display_void'])
+        create_report(self.match, self.user)
+        self.assertTrue(view.get_context_data()['display_void'])
 
 
 class MatchListingTestCase(TestCase):
@@ -594,6 +645,10 @@ class VoidMatchTestCase(TestCase):
 
     def test_void_match_is_not_editable_by_its_submitter(self):
         self.assertFalse(self.void_match.is_editable_by(self.user))
+
+    def test_void_match_is_not_voidable_even_with_a_report(self):
+        create_report(self.void_match, self.user)
+        self.assertFalse(self.void_match.is_voidable_by(self.user))
 
     def test_void_match_cannot_be_updated_by_its_submitter(self):
         self.client.force_login(self.user)

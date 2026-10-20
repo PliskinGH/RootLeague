@@ -46,6 +46,14 @@
       {{ _('Void match') }}
     </a>
   </div>
+  {% elif display_edit %}
+  <div class="dropdown col mx-auto">
+    <span title="{{ _('This match cannot be voided until a report is filed against it.') }}">
+      <a class="btn btn-outline-dark disabled" aria-disabled="true" tabindex="-1">
+        {{ _('Void match') }}
+      </a>
+    </span>
+  </div>
   {% endif %}
   {% if user.is_staff  %}
   <div class="dropdown col mx-auto">

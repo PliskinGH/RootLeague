@@ -143,6 +143,9 @@ class Match(models.Model):
     def is_deletable_by(self, user):
         return self.is_editable_by(user) and not(self.reports.exists())
 
+    def is_voidable_by(self, user):
+        return self.is_editable_by(user) and self.reports.exists()
+
     def is_reportable_by(self, user):
         reportable = False
         if user is not None and user.is_authenticated and user.pk is not None:
